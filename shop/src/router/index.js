@@ -41,27 +41,39 @@ export const constantRouterMap = [
     }]
   },
   {
-    path: '/documentation',
+    path: '',
     component: Layout,
-    redirect: '/documentation/index',
+    redirect: 'home',
     children: [{
-      path: 'index',
-      component: () => import('@/views/documentation/index'),
-      name: 'documentation',
-      meta: { title: 'documentation', icon: 'documentation', noCache: true }
-    }]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [{
-      path: 'index',
-      component: () => import('@/views/guide/index'),
-      name: 'guide',
-      meta: { title: 'guide', icon: 'guide', noCache: true }
+      path: 'home',
+      component: () => import('@/views/home/index'),
+      name: 'home',
+      meta: { title: '首页', icon: 'dashboard', noCache: true }
     }]
   }
+
+  // {
+  //   path: '/documentation',
+  //   component: Layout,
+  //   redirect: '/documentation/index',
+  //   children: [{
+  //     path: 'index',
+  //     component: () => import('@/views/documentation/index'),
+  //     name: 'documentation',
+  //     meta: { title: 'documentation', icon: 'documentation', noCache: true }
+  //   }]
+  // },
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   redirect: '/guide/index',
+  //   children: [{
+  //     path: 'index',
+  //     component: () => import('@/views/guide/index'),
+  //     name: 'guide',
+  //     meta: { title: 'guide', icon: 'guide', noCache: true }
+  //   }]
+  // }
 ]
 
 export default new Router({
@@ -71,6 +83,222 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
+  {
+    path: '/checkstand',
+    component: Layout,
+    redirect: '/checkstand/history',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '收银台',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [{
+      path: 'history',
+      component: () => import('@/views/checkstand/history'),
+      name: 'checkstandHistory',
+      meta: {
+        title: '收银历史'
+      }
+    }, {
+      path: 'statistics',
+      component: () => import('@/views/checkstand/statistics'),
+      name: 'checkstandStatistics',
+      meta: {
+        title: '收银统计'
+      }
+    }]
+  },
+
+  {
+    path: '/product',
+    component: Layout,
+    redirect: '/product/list',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '商品管理',
+      icon: 'clipboard',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [{
+      path: 'list',
+      component: () => import('@/views/product/list'),
+      name: 'productList',
+      meta: {
+        title: '商品列表'
+      }
+    }]
+  },
+
+  {
+    path: '/provider',
+    component: Layout,
+    redirect: '/provider/my',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '供应商管理',
+      icon: 'edit',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [{
+      path: 'my',
+      component: () => import('@/views/provider/my'),
+      name: 'providerMy',
+      meta: {
+        title: '我的供应商'
+      }
+    }, {
+      path: 'platform',
+      component: () => import('@/views/provider/platform'),
+      name: 'providerPlatform',
+      meta: {
+        title: '平台供应商'
+      }
+    }]
+  },
+
+  {
+    path: '/cargo',
+    component: Layout,
+    redirect: '/cargo/order',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '进退货管理',
+      icon: 'eye',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [{
+      path: 'order',
+      component: () => import('@/views/cargo/order'),
+      name: 'cargoOrder',
+      meta: {
+        title: '订单管理'
+      }
+    }, {
+      path: 'purchase',
+      component: () => import('@/views/cargo/purchase'),
+      name: 'cargoPurchase',
+      meta: {
+        title: '进货管理'
+      }
+    }, {
+      path: 'return',
+      component: () => import('@/views/cargo/return'),
+      name: 'cargoReturn',
+      meta: {
+        title: '退货管理'
+      }
+    }]
+  },
+
+  {
+    path: '/inventory',
+    component: Layout,
+    redirect: '/inventory/check',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '库存管理',
+      icon: 'guide',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [{
+      path: 'check',
+      component: () => import('@/views/inventory/check'),
+      name: 'inventoryCheck',
+      meta: {
+        title: '盘点管理'
+      }
+    }, {
+      path: 'alarm',
+      component: () => import('@/views/inventory/alarm'),
+      name: 'inventoryAlarm',
+      meta: {
+        title: '报溢报损'
+      }
+    }]
+  },
+
+  {
+    path: '/settlement',
+    component: Layout,
+    redirect: '/settlement/receive',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '结算管理',
+      icon: 'shoppingCard',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [{
+      path: 'receive',
+      component: () => import('@/views/settlement/receive'),
+      name: 'settlementReceive',
+      meta: {
+        title: '收货结算'
+      }
+    }]
+  },
+
+  {
+    path: '/history',
+    component: Layout,
+    redirect: '/history/purchase-price',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '历史查询',
+      icon: 'star',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [{
+      path: 'purchase-price',
+      component: () => import('@/views/history/purchasePrice'),
+      name: 'historyPurchasePrice',
+      meta: {
+        title: '历史进价'
+      }
+    }]
+  },
+
+  {
+    path: '/sales-statistics',
+    component: Layout,
+    redirect: '/sales-statistics/daily',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '销售统计',
+      icon: 'theme',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [{
+      path: 'daily',
+      component: () => import('@/views/sales-statistics/daily'),
+      name: 'salesStatisticsDaily',
+      meta: {
+        title: '日销售统计'
+      }
+    }, {
+      path: 'monthly',
+      component: () => import('@/views/sales-statistics/monthly'),
+      name: 'salesStatisticsMonthly',
+      meta: {
+        title: '月销售统计'
+      }
+    }, {
+      path: 'volume',
+      component: () => import('@/views/sales-statistics/volume'),
+      name: 'salesStatisticsVolume',
+      meta: {
+        title: '销售量排行'
+      }
+    }, {
+      path: 'sale',
+      component: () => import('@/views/sales-statistics/sale'),
+      name: 'salesStatisticsSale',
+      meta: {
+        title: '销售额排行'
+      }
+    }]
+  },
+
   {
     path: '/permission',
     component: Layout,
