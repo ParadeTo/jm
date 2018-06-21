@@ -21,62 +21,22 @@
         <el-button type="primary" v-waves icon="el-icon-search" @click="handleFilter">查询</el-button>
       </div>
 
-      <el-table :data="list" v-loading="listLoading" element-loading-text="loading" border fit highlight-current-row>
-        <el-table-column align="center" label="#" width="50">
+      <my-table
+        :cols="cols"
+        :updateListFunc="updateTableFunc"
+      >
+        <el-table-column slot="action" align="center" label="动作" min-width="60" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <span>{{scope.row.order}}</span>
+            <el-button type="primary" size="mini" @click="look(scope.row)">查看</el-button>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="交易单号" width="170">
-          <template slot-scope="scope">
-            <span>{{scope.row.code}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="商品" min-width="300">
-          <template slot-scope="scope">
-            <span>{{scope.row.name}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="SKU" width="60">
-          <template slot-scope="scope">
-            <span>{{scope.row.sku}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="数量" width="60">
-          <template slot-scope="scope">
-            <span>{{scope.row.number}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="交易时间" min-width="160">
-          <template slot-scope="scope">
-            <span>{{scope.row.time}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="收银员" width="60">
-          <template slot-scope="scope">
-            <span>{{scope.row.cashier}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="收款方式" min-width="60">
-          <template slot-scope="scope">
-            <span>{{scope.row.payType}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="销售额" width="80">
-          <template slot-scope="scope">
-            <span>{{scope.row.sale}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" :label="$t('table.actions')" min-width="60" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">查看</el-button>
-        </template>
-      </el-table-column>
-      </el-table>
+      </my-table>
   </div>
 </template>
 
 <script>
+import { fetchList } from '@/api/article'
+
 export default {
   data () {
     return {
@@ -100,6 +60,31 @@ export default {
         key: 1,
         label: '支付宝'
       }],
+      cols: [{
+        label: '交易单号',
+        key: 'code'
+      }, {
+        label: '商品',
+        key: 'name'
+      }, {
+        label: 'SKU',
+        key: 'sku'
+      }, {
+        label: '数量',
+        key: 'number'
+      }, {
+        label: '交易时间',
+        key: 'time'
+      }, {
+        label: '收银员',
+        key: 'cashier'
+      }, {
+        label: '收款方式',
+        key: 'type'
+      }, {
+        label: '销售额',
+        key: 'sale'
+      }],
       list: [{
         order: 1,
         code: '2017110814213015',
@@ -118,6 +103,16 @@ export default {
   methods: {
     handleFilter () {
       console.log(this.query)
+    },
+    async updateTableFunc ({page, limit}) {
+      const response = await fetchList({page, limit})
+      return {
+        list: response.data.items,
+        total: response.data.total
+      }
+    },
+    look () {
+
     }
   }
 }

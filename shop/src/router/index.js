@@ -127,6 +127,13 @@ export const asyncRouterMap = [
       meta: {
         title: '商品列表'
       }
+    }, {
+      path: 'add',
+      component: () => import('@/views/product/add'),
+      name: 'productAdd',
+      meta: {
+        title: '新增商品'
+      }
     }]
   },
 
