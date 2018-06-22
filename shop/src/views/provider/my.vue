@@ -8,7 +8,7 @@
         </el-option>
       </el-select>
       <el-button type="primary" v-waves icon="el-icon-search" @click="handleFilter">查询</el-button>
-      <el-button type="success" v-waves @click="add">新增供应商</el-button>
+      <el-button type="success" v-waves @click="openDialog">新增供应商</el-button>
     </div>
 
     <my-table
@@ -22,6 +22,18 @@
         </template>
       </el-table-column>
     </my-table>
+
+    <el-dialog title="新增供应商" :visible.sync="dialogVisible">
+      <el-form :rules="rules" ref="dataForm" :model="formModel" label-position="right" label-width="100px" style='width: 400px; margin-left:50px;'>
+        <el-form-item :key="index" v-for="(field, index) in formFields" :label="field.label" :prop="field.key">
+          <el-input style="width: 160px;" v-model="formModel[field.key]" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="add">确认</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -34,6 +46,37 @@ export default {
       query: {
         name: '',
         type: ''
+      },
+      dialogVisible: false,
+      formModel: {
+        name: '',
+        contact: '',
+        phone: '',
+        address: '',
+        scope: ''
+      },
+      formFields: [{
+        key: 'name',
+        label: '供应商名称'
+      }, {
+        key: 'contact',
+        label: '联系人'
+      }, {
+        key: 'phone',
+        label: '联系电话'
+      }, {
+        key: 'address',
+        label: '地址'
+      }, {
+        key: 'scope',
+        label: '经营范围'
+      }],
+      rules: {
+        name: [{ required: true, message: '请输入供应商名称', trigger: 'blur' }],
+        contact: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入联系电话', trigger: 'blur' }],
+        address: [{ required: true, message: '请输入地址', trigger: 'blur' }],
+        scope: [{ required: true, message: '请输入经营范围', trigger: 'blur' }],
       },
       typeList: [{
         key: 0,
@@ -66,13 +109,16 @@ export default {
 
     },
     view () {
-
+      this.$router.push({ name: 'providerDetail', params: { id: 1 } })
     },
     del () {
 
     },
     add () {
-
+      this.$refs['dataForm'].validate()
+    },
+    openDialog () {
+      this.dialogVisible = true
     },
     async updateTableFunc ({page, limit}) {
       const response = await fetchList({page, limit})

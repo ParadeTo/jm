@@ -15,11 +15,13 @@
 <script>
 export default {
   props: ['total'],
+
   data () {
     return {
       page: 1
     }
   },
+
   methods: {
     handleSizeChange (size) {
       this.$emit('size-change', size)

@@ -161,6 +161,14 @@ export const asyncRouterMap = [
       meta: {
         title: '平台供应商'
       }
+    }, {
+      path: 'detail/:id',
+      component: () => import('@/views/provider/detail'),
+      name: 'providerDetail',
+      hidden: true,
+      meta: {
+        title: '供应商详情'
+      }
     }]
   },
 
@@ -180,6 +188,38 @@ export const asyncRouterMap = [
       name: 'cargoOrder',
       meta: {
         title: '订单管理'
+      }
+    }, {
+      path: 'order/add',
+      component: () => import('@/views/cargo/order/add'),
+      name: 'cargoOrderAdd',
+      hidden: true,
+      meta: {
+        title: '新增订单'
+      }
+    }, {
+      path: 'order/detail/:id',
+      component: () => import('@/views/cargo/order/detail'),
+      name: 'cargoOrderDetail',
+      hidden: true,
+      meta: {
+        title: '查看订单'
+      }
+    }, {
+      path: 'order/temp',
+      component: () => import('@/views/cargo/order/temp'),
+      name: 'cargoOrderTemp',
+      hidden: true,
+      meta: {
+        title: '订单模板'
+      }
+    }, {
+      path: 'order/temp/add',
+      component: () => import('@/views/cargo/order/temp/add'),
+      name: 'cargoOrderTempAdd',
+      hidden: true,
+      meta: {
+        title: '新增模板'
       }
     }, {
       path: 'purchase',
