@@ -229,11 +229,35 @@ export const asyncRouterMap = [
         title: '进货管理'
       }
     }, {
-      path: 'return',
-      component: () => import('@/views/cargo/return'),
-      name: 'cargoReturn',
+      path: 'purchase/add',
+      component: () => import('@/views/cargo/purchase/add'),
+      name: 'cargoPurchaseAdd',
+      hidden: true,
+      meta: {
+        title: '新增进货单'
+      }
+    }, {
+      path: 'refund',
+      component: () => import('@/views/cargo/refund'),
+      name: 'cargoRefund',
       meta: {
         title: '退货管理'
+      }
+    }, {
+      path: 'refund/detail/:id',
+      component: () => import('@/views/cargo/refund/detail'),
+      name: 'cargoRefundDetail',
+      hidden: true,
+      meta: {
+        title: '退货单详情'
+      }
+    }, {
+      path: 'refund/add',
+      component: () => import('@/views/cargo/refund/detail'),
+      name: 'cargoRefundAdd',
+      hidden: true,
+      meta: {
+        title: '新增退货单'
       }
     }]
   },

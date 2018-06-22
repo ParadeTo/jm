@@ -1,20 +1,33 @@
 <template>
   <div class="app-container">
     <el-form :inline="true">
-      <el-form-item label="订单单号：">
+      <el-form-item label="退货单单号：">
         2017110814213007
       </el-form-item>
       <el-form-item label="供应商：">
         2017110814213007
+        <el-button v-waves type="primary">选择供应商</el-button>
       </el-form-item>
-      <el-form-item label="SKU数：">
+      <el-form-item label="计划SKU数：">
+        10
+      </el-form-item>
+      <el-form-item label="计划总数：">
+        100
+      </el-form-item>
+      <el-form-item label="计划总金额：">
+        230.00
+      </el-form-item>
+      <el-form-item label="进货单号：">
         2017110814213007
       </el-form-item>
-      <el-form-item label="总数：">
-        2017110814213007
+      <el-form-item label="实际SKU数：">
+        10
       </el-form-item>
-      <el-form-item label="总金额：">
-        2017110814213007
+      <el-form-item label="实际总数：">
+        100
+      </el-form-item>
+      <el-form-item label="实际总金额：">
+        230.00
       </el-form-item>
     </el-form>
 
@@ -47,18 +60,7 @@
         </el-row>
 
         <el-row>
-          <el-form-item label="门店商品信息">
-            --
-          </el-form-item>
-          <el-form-item label="进货价">
-            --
-          </el-form-item>
-        </el-row>
-
-        <el-row>
-          <el-button type="default" @click="del(scope.row)">选择供应商商品</el-button>
-          <el-button type="default" @click="del(scope.row)">匹配门店商品</el-button>
-          <el-button type="primary" @click="del(scope.row)">添加/保存</el-button>
+          <el-button type="primary" @click="saveOrAdd(scope.row)">添加/保存</el-button>
         </el-row>
       </el-form>
     </el-card>
@@ -66,6 +68,7 @@
 </template>
 
 <script>
+
 export default {
   data () {
     return {
@@ -89,6 +92,7 @@ export default {
   },
 
   methods: {
+    saveOrAdd () {}
   }
 }
 </script>
