@@ -25,13 +25,25 @@
               </el-form-item>
             </el-col>
             <el-col span="12">
-              <el-form-item label="商品类目">
+              <el-form-item label="一级类目">
                 <el-select v-model="baseInfoModel.category" placeholder="请选择">
                   <el-option v-for="item in categoryList" :key="item.key" :label="item.label" :value="item.key">
                   </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
+            <el-col span="12">
+              <el-form-item label="次级类目">
+                <el-select v-model="baseInfoModel.category" placeholder="请选择">
+                  <el-option v-for="item in categoryList" :key="item.key" :label="item.label" :value="item.key">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-button type="primary" v-waves @click="dialogVisible = true">新增分类</el-button>
+              <category-add :dialogVisible="dialogVisible" @close="dialogVisible = false" />
           </el-row>
         </el-form>
       </el-col>
@@ -129,8 +141,8 @@
       </el-col>
     </el-row>
 
-    <el-row style="text-align: right;">
-      <el-col span="4" offset="14">
+    <el-row style="text-align: rigxht;">
+      <el-col span="4" :offset="14">
         <el-button type="primary" v-waves @click="look(scope.row)">保存</el-button>
         <el-button type="default" v-waves @click="look(scope.row)">取消</el-button>
       </el-col>
@@ -139,7 +151,13 @@
 </template>
 
 <script>
+import CategoryAdd from './components/categoryAdd'
+
 export default {
+  components: {
+    CategoryAdd
+  },
+
   data () {
     return {
       baseInfoModel: {
@@ -167,7 +185,8 @@ export default {
       tableList: [{
 
       }],
-      tableLoading: false
+      tableLoading: false,
+      dialogVisible: false
     }
   }
 }

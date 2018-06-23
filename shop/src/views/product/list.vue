@@ -130,6 +130,9 @@ export default {
     edit () {
 
     },
+    setting () {
+      this.$router.push({ name: 'productSetting' })
+    },
     async updateTableFunc ({page, limit}) {
       const response = await fetchList({page, limit})
       return {
