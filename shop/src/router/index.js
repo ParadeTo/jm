@@ -84,6 +84,50 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
+    path: '/setting',
+    component: Layout,
+    redirect: '/setting/shop',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '系统设置',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [{
+      path: 'shop',
+      component: () => import('@/views/setting/shop'),
+      name: 'settingShop',
+      meta: {
+        title: '门店设置'
+      }
+    }, {
+      path: 'shop/basic',
+      component: () => import('@/views/setting/shop/basic'),
+      name: 'settingShopBasic',
+      hidden: true,
+      meta: {
+        title: '基本信息'
+      }
+    }, {
+      path: 'shop/withdraw',
+      component: () => import('@/views/setting/shop/withdraw'),
+      name: 'settingShopWithdraw',
+      hidden: true,
+      meta: {
+        title: '提现信息'
+      }
+    }, {
+      path: 'shop/certification',
+      component: () => import('@/views/setting/shop/certification'),
+      name: 'settingShopCertification',
+      hidden: true,
+      meta: {
+        title: '实名认证'
+      }
+    }]
+  },
+
+  {
     path: '/checkstand',
     component: Layout,
     redirect: '/checkstand/history',
@@ -377,6 +421,48 @@ export const asyncRouterMap = [
     }]
   },
 
+  {
+    path: '/client',
+    component: Layout,
+    redirect: '/client/my',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '客户管理',
+      icon: 'theme',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [{
+      path: 'my',
+      component: () => import('@/views/client/my'),
+      name: 'clientMy',
+      meta: {
+        title: '我的客户'
+      }
+    }, {
+      path: 'shop',
+      component: () => import('@/views/client/shop'),
+      name: 'clientShop',
+      meta: {
+        title: '平台门店'
+      }
+    }, {
+      path: 'provider',
+      component: () => import('@/views/client/provider'),
+      name: 'clientProvider',
+      meta: {
+        title: '平台供应商'
+      }
+    }, {
+      path: 'manufacturer',
+      component: () => import('@/views/client/manufacturer'),
+      name: 'clientManufacturer',
+      meta: {
+        title: '平台厂商'
+      }
+    }]
+  },
+
+  // vue-element
   {
     path: '/permission',
     component: Layout,

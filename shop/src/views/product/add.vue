@@ -43,7 +43,7 @@
               </el-form-item>
             </el-col>
             <el-button type="primary" v-waves @click="dialogVisible = true">新增分类</el-button>
-              <category-add :dialogVisible="dialogVisible" @close="dialogVisible = false" />
+            <category-add :dialogVisible="dialogVisible" @close="dialogVisible = false" />
           </el-row>
         </el-form>
       </el-col>

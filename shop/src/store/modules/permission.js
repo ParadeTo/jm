@@ -37,7 +37,7 @@ const permission = {
     addRouters: []
   },
   mutations: {
-    SET_ROUTERS: (state, routers) => {
+    SET_ROUTES: (state, routers) => {
       state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
     }
@@ -52,7 +52,7 @@ const permission = {
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         }
-        commit('SET_ROUTERS', accessedRouters)
+        commit('SET_ROUTES', accessedRouters)
         resolve()
       })
     }

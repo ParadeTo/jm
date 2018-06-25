@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="新增商品分类" :visible="dialogVisible" width="400px" @close="cancel">
+    <el-dialog title="新增客户" :visible="dialogVisible" width="400px" @close="cancel">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -9,29 +9,20 @@
         label-width="100px"
         style='width: 300px; margin-left:20px;'
       >
-        <el-form-item label="图片" prop="img">
-          <el-upload
-            style="width:300px;"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :limit="1"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="名称" prop="name">
+        <el-form-item label="客户名称" prop="name">
           <el-input style="width: 160px;" v-model="formModel.name" />
         </el-form-item>
-        <el-form-item label="所属类目" prop="category">
-          <el-select style="width: 130px" v-model="formModel.category">
-            <el-option v-for="item in categoryList" :key="item.key" :label="item.label" :value="item.key">
-            </el-option>
-          </el-select>
+        <el-form-item label="联系人" prop="category">
+          <el-input style="width: 160px;" v-model="formModel.name" />
         </el-form-item>
-        <el-form-item label="上级名称" prop="parent">
-          <el-select style="width: 130px" v-model="formModel.parent">
-            <el-option :style="`padding-left: ${item.level * 10 + 10}px`" v-for="item in treeList" :key="item.key" :label="item.label" :value="item.key" />
-          </el-select>
+        <el-form-item label="联系电话" prop="parent">
+          <el-input style="width: 160px;" v-model="formModel.name" />
+        </el-form-item>
+        <el-form-item label="公司地址" prop="parent">
+          <el-input style="width: 160px;" v-model="formModel.name" />
+        </el-form-item>
+        <el-form-item label="经营范围" prop="parent">
+          <el-input style="width: 160px;" v-model="formModel.name" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
