@@ -31,16 +31,6 @@ function filterAsyncRouter (asyncRouterMap, roles) {
   return accessedRouters
 }
 
-function generateHomeRoute (homeRoute, roles) {
-  if (hasPermission(roles, homeRoute)) {
-    homeRoute.redirect = 'home'
-  } else {
-    homeRoute.redirect = '/system'
-    delete homeRoute.children
-  }
-  return homeRoute
-}
-
 const permission = {
   state: {
     routers: constantRouterMap,

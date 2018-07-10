@@ -17,7 +17,7 @@
           <el-input style="width: 160px;" v-model="formModel[field.key]" />
         </el-form-item>
         <el-form-item label="权限">
-          <el-tree show-checkbox :data="permissionTree"></el-tree>
+          <el-tree show-checkbox :data="cityTree"></el-tree>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

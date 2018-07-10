@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 /* Layout */
-import Layout from '@/views/layout/Layout'
+// import Layout from '@/views/layout/Layout'
 // routes
 import home from './home'
 import setting from './setting'
@@ -17,6 +17,8 @@ import salesStatistics from './sales-statistics'
 import client from './client'
 import cityAgency from './city-agency'
 import system from './system'
+import weixin from './weixin'
+import shop from './shop'
 
 Vue.use(Router)
 
@@ -85,19 +87,19 @@ export const constantRouterMap = [
   // }
 ]
 
-export const homeRoute = {
-  path: '',
-  component: Layout,
-  meta: {
-    roles: ['shopAdmin', 'providerAdmin']
-  },
-  children: [{
-    path: 'home',
-    component: () => import('@/views/home/index'),
-    name: 'home',
-    meta: { title: '首页', icon: 'dashboard', noCache: true }
-  }]
-}
+// export const homeRoute = {
+//   path: '',
+//   component: Layout,
+//   meta: {
+//     roles: ['shopAdmin', 'providerAdmin']
+//   },
+//   children: [{
+//     path: 'home',
+//     component: () => import('@/views/home/index'),
+//     name: 'home',
+//     meta: { title: '首页', icon: 'dashboard', noCache: true }
+//   }]
+// }
 
 export default new Router({
   // mode: 'history', // require service support
@@ -119,7 +121,9 @@ export const asyncRouterMap = [
   salesStatistics,
   client,
   cityAgency,
-  system
+  system,
+  weixin,
+  shop
 
   // vue-element
   // {
