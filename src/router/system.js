@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '系统管理',
     icon: 'shoppingCard',
-    roles: ['cmsAdmin'] // you can set roles in root nav
+    roles: ['bmsAdmin'] // you can set roles in root nav
   },
   children: [{
     path: 'system/role',

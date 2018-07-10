@@ -24,13 +24,26 @@
 
       <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
 
-      <div class="tips">
+      <!-- <div class="tips">
         <span>{{$t('login.username')}} : admin</span>
         <span>{{$t('login.password')}} : {{$t('login.any')}}</span>
       </div>
       <div class="tips">
         <span style="margin-right:18px;">{{$t('login.username')}} : editor</span>
         <span>{{$t('login.password')}} : {{$t('login.any')}}</span>
+      </div> -->
+
+      <div class="tips">
+        <span>门店系统用户 : shopadmin</span>
+        <span>密码 : 随便填</span>
+      </div>
+      <div class="tips">
+        <span>供应商系统用户 : provideradmin</span>
+        <span>密码 : 随便填</span>
+      </div>
+      <div class="tips">
+        <span>后台管理系统用户 : bmsadmin</span>
+        <span>密码 : 随便填</span>
       </div>
 
       <!-- <el-button class="thirdparty-button" type="primary" @click="showDialog=true">{{$t('login.thirdparty')}}</el-button> -->
@@ -72,7 +85,7 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
+        username: 'bmsadmin',
         password: '1111111'
       },
       loginRules: {

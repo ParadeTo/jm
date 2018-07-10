@@ -29,9 +29,9 @@ const userMap = {
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: '供应商管理员'
   },
-  cmsadmin: {
-    roles: ['cmsAdmin'],
-    token: 'cmsadmin',
+  bmsadmin: {
+    roles: ['bmsAdmin'],
+    token: 'bmsadmin',
     introduction: '系统管理员',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: '系统管理员'

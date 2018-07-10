@@ -7,7 +7,7 @@ import home from './home'
 import setting from './setting'
 import checkstand from './checkstand'
 import product from './product'
-import provider from './provider'
+import shopProvider from './shop-provider'
 import cargo from './cargo'
 import sales from './sales'
 import inventory from './inventory'
@@ -19,6 +19,7 @@ import cityAgency from './city-agency'
 import system from './system'
 import weixin from './weixin'
 import shop from './shop'
+import bmsProvider from './bms-provider'
 
 Vue.use(Router)
 
@@ -112,7 +113,7 @@ export const asyncRouterMap = [
   setting,
   checkstand,
   product,
-  provider,
+  shopProvider,
   cargo,
   sales,
   inventory,
@@ -123,7 +124,8 @@ export const asyncRouterMap = [
   cityAgency,
   system,
   weixin,
-  shop
+  shop,
+  bmsProvider
 
   // vue-element
   // {

@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '微信管理',
     icon: 'clipboard',
-    roles: ['cmsAdmin'] // you can set roles in root nav
+    roles: ['bmsAdmin'] // you can set roles in root nav
   },
   children: [{
     path: 'user',
