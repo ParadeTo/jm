@@ -8,8 +8,8 @@
     </el-tabs>
 
     <el-form :inline="true" :model="query" class="demo-form-inline">
-      <el-form-item label="店铺名称">
-        <el-input v-model="query.store" placeholder="" />
+      <el-form-item label="供应商名称">
+        <el-input v-model="query.provider" placeholder="" />
       </el-form-item>
       <el-form-item label="推荐人">
         <el-input v-model="query.referee" placeholder="" style="width: 100px;" />
@@ -22,7 +22,7 @@
       <el-form-item label="城市">
         <my-address />
       </el-form-item>
-      <el-form-item label="门店状态" v-if="type==1">
+      <el-form-item label="供应商状态" v-if="type==1">
         <el-select clearable @change='handleFilter' style="width: 130px" v-model="query.status">
           <el-option v-for="item in statusList" :key="item.key" :label="item.label" :value="item.key" />
         </el-select>
@@ -30,9 +30,9 @@
       <el-button type="primary" v-waves icon="el-icon-search" @click="handleFilter">查询</el-button>
     </el-form>
 
-    <el-row v-if="type==1">
+    <!-- <el-row v-if="type==1">
       <el-button type="danger" v-waves @click="dialogVisible=true">停止营业</el-button>
-    </el-row>
+    </el-row> -->
 
     <my-table
       v-if="type==0"
@@ -73,7 +73,7 @@ export default {
       dialogVisible: false,
       type: 0,
       query: {
-        store: '',
+        provider: '',
         referee: ''
       },
       industryList: [{
@@ -92,10 +92,10 @@ export default {
       }],
       colsUnAudit: [{
         key: 'logo',
-        label: '店铺logo'
+        label: '供应商logo'
       }, {
         key: 'name',
-        label: '店铺名称'
+        label: '供应商名称'
       }, {
         key: 'city',
         label: '省市区'
@@ -103,14 +103,17 @@ export default {
         key: 'address',
         label: '详细地址'
       }, {
-        key: 'industry',
-        label: '所属行业'
+        key: 'category',
+        label: '代理类目'
       }, {
-        key: 'contact',
-        label: '联系人'
+        key: 'zone',
+        label: '代理区域'
       }, {
         key: 'referee',
         label: '推荐人'
+      }, {
+        key: 'contact',
+        label: '联系人'
       }, {
         key: 'phone',
         label: '联系电话'
@@ -125,17 +128,17 @@ export default {
         label: '提现认证'
       }, {
         key: 'status',
-        label: '门店状态'
+        label: '供应商状态'
       }, {
         key: 'time',
         label: '提交时间'
       }],
       colsAudit: [{
         key: 'logo',
-        label: '店铺logo'
+        label: '供应商logo'
       }, {
         key: 'name',
-        label: '店铺名称'
+        label: '供应商名称'
       }, {
         key: 'city',
         label: '省市区'
@@ -143,8 +146,11 @@ export default {
         key: 'address',
         label: '详细地址'
       }, {
-        key: 'industry',
-        label: '所属行业'
+        key: 'category',
+        label: '代理类目'
+      }, {
+        key: 'zone',
+        label: '代理区域'
       }, {
         key: 'contact',
         label: '联系人'
