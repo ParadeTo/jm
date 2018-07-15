@@ -1,20 +1,14 @@
 <template>
   <div class="app-container">
-    <!-- <el-form :inline="true" :model="query" class="demo-form-inline">
-      <el-form-item label="角色名称">
-        <el-input v-model="query.code" placeholder="" />
-      </el-form-item>
-      <el-button type="primary" v-waves icon="el-icon-search" @click="handleFilter">查询</el-button>
-    </el-form> -->
-
     <el-row>
-      <el-button type="primary" v-waves icon="el-icon-plus" @click="dialogVisible=true">新增行业</el-button>
+      <el-button type="primary" v-waves icon="el-icon-tickets">申请列表</el-button>
+      <el-button type="primary" v-waves icon="el-icon-">城市代理商管理</el-button>
     </el-row>
 
-    <el-dialog title="新增行业" :visible.sync="dialogVisible">
+    <!-- <el-dialog title="城市代理商审核设置" :visible.sync="dialogVisible">
       <el-form :rules="rules" ref="dataForm" :model="formModel" label-position="right" label-width="100px" style='width: 400px; margin-left:50px;'>
         <el-form-item label-width="150px" :key="index" v-for="(field, index) in formFields" :label="field.label" :prop="field.key">
-          <el-input style="width: 160px;" v-model="formModel[field.key]" />
+          <span style="width: 160px;">{{formModel[field.key]}}</span>
         </el-form-item>
         <el-form-item label="商品品类（多选）" label-width="150px">
           <el-select multiple clearable @change='handleFilter' style="width: 180px" v-model="query.type">
@@ -31,7 +25,7 @@
         <el-button type="primary" @click="add">确认</el-button>
         <el-button @click="dialogVisible = false">取消</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
 
     <my-table
       :cols="cols"
@@ -40,9 +34,9 @@
     >
       <el-table-column slot="action" align="center" label="动作" min-width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <!-- <el-button type="text" size="mini" @click="view(scope.row)">查看</el-button> -->
-          <el-button type="text" size="mini" @click="edit(scope.row)">修改</el-button>
-          <el-button type="text" size="mini" @click="del(scope.row)">删除</el-button>
+          <el-button type="text" size="mini" @click="view(scope.row)">查看</el-button>
+          <!-- <el-button type="text" size="mini" @click="edit(scope.row)">修改</el-button> -->
+          <!-- <el-button type="text" size="mini" @click="del(scope.row)">删除</el-button> -->
         </template>
       </el-table-column>
     </my-table>
@@ -76,24 +70,39 @@ export default {
         key: '1'
       }],
       cols: [{
-        key: 'name',
-        label: '行业名称'
+        key: 'time',
+        label: '时间'
       }, {
-        key: 'charge',
-        label: '提现手续费'
+        key: 'corporate',
+        label: '公司名称'
+      }, {
+        key: 'name',
+        label: '姓名'
+      }, {
+        key: 'method',
+        label: '联系方式'
       }, {
         key: 'status',
         label: '状态'
-      }, {
-        key: 'time',
-        label: '创建时间'
       }],
       formFields: [{
-        label: '名称',
-        key: 'name'
+        label: '申请时间',
+        key: 'time'
       }, {
-        label: '提现手续费',
-        key: 'charge'
+        label: '公司',
+        key: 'corporate'
+      }, {
+        label: '联系人',
+        key: 'contact'
+      }, {
+        label: '联系方式',
+        key: 'method'
+      }, {
+        label: '',
+        key: 'corporate'
+      }, {
+        label: '公司',
+        key: 'corporate'
       }],
       formModel: {
 
@@ -109,7 +118,7 @@ export default {
       this.dialogVisible = true
     },
     view () {
-      this.dialogVisible = true
+      this.$router.push({ name: 'bmsCityAgencyAudit', params: { id: 1 } })
     },
     del () {},
     async updateTableFunc ({page, limit}) {

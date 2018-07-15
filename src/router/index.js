@@ -20,6 +20,8 @@ import system from './system'
 import weixin from './weixin'
 import shop from './shop'
 import bmsProvider from './bms-provider'
+import manufacturer from './manufacturer'
+import bmsCityAgency from './bms-city-agency'
 
 Vue.use(Router)
 
@@ -125,7 +127,9 @@ export const asyncRouterMap = [
   system,
   weixin,
   shop,
-  bmsProvider
+  bmsProvider,
+  manufacturer,
+  bmsCityAgency
 
   // vue-element
   // {
