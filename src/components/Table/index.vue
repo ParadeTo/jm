@@ -20,7 +20,8 @@
       </el-table-column>
       <el-table-column :key="k" v-for="(col, k) in cols" align="center" :label="col.label">
         <template slot-scope="scope">
-          <span>{{scope.row[col.key]}}</span>
+          <img :src="scope.row[col.key]" v-if="col.img">
+          <span v-else>{{scope.row[col.key]}}</span>
         </template>
       </el-table-column>
       <slot name="action"></slot>

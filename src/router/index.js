@@ -22,6 +22,7 @@ import shop from './shop'
 import bmsProvider from './bms-provider'
 import manufacturer from './manufacturer'
 import bmsCityAgency from './bms-city-agency'
+import advertisement from './advertisement'
 
 Vue.use(Router)
 
@@ -129,7 +130,8 @@ export const asyncRouterMap = [
   shop,
   bmsProvider,
   manufacturer,
-  bmsCityAgency
+  bmsCityAgency,
+  advertisement
 
   // vue-element
   // {
