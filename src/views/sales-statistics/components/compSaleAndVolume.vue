@@ -1,5 +1,4 @@
 <template>
-  <!-- todo 这是公共的页面 -->
   <div class="app-container">
     <el-form :inline="true" :model="query" class="demo-form-inline">
       <el-form-item label="时间">
@@ -25,7 +24,6 @@
 <script>
 import { fetchList } from '@/api/article'
 
-// 改造成公共的组件
 export default {
   data () {
     return {
@@ -37,10 +35,16 @@ export default {
         label: '全部'
       }],
       cols: [{
-        key: 'date',
-        label: '日期'
+        key: 'code',
+        label: '条码'
       }, {
-        key: 'volumn',
+        key: 'name',
+        label: '商品名称'
+      }, {
+        key: 'sale',
+        label: '销量'
+      }, {
+        key: 'volume',
         label: '销售额'
       }]
     }

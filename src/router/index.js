@@ -122,7 +122,6 @@ export const asyncRouterMap = [
   inventory,
   settlement,
   history,
-  salesStatistics,
   client,
   cityAgency,
   system,
@@ -131,8 +130,8 @@ export const asyncRouterMap = [
   bmsProvider,
   manufacturer,
   bmsCityAgency,
-  advertisement
-
+  advertisement,
+  salesStatistics
   // vue-element
   // {
   //   path: '/permission',

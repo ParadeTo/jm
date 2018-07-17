@@ -1,10 +1,14 @@
 <template>
-  <div>销售额排行</div>
+  <!-- 销售额 -->
+  <comp />
 </template>
 
 <script>
+import Comp from './components/compSaleAndVolume'
 export default {
-  
+  components: {
+    Comp
+  }
 }
 </script>
 
