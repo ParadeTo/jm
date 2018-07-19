@@ -4,10 +4,10 @@
       <el-form-item label="隐私设置" label-width="150px">
         <el-checkbox style="margin-left: 24px;" v-model="formModel.addMe">添加我为客户时需要验证</el-checkbox>
         <el-tree ref="searchTree" node-key="id" show-checkbox :data="searchTree" @check="handleCheckChange1"></el-tree>
-        <el-tree ref="searchTree" node-key="id" show-checkbox :data="viewProductTree" @check="handleCheckChange2"></el-tree>      
+        <el-tree ref="searchTree" node-key="id" show-checkbox :data="viewProductTree" @check="handleCheckChange2"></el-tree>
       </el-form-item>
       <el-form-item label="系统托盘" label-width="150px">
-        <el-tree ref="searchTree" node-key="id" show-checkbox :data="systemTrayTree" @check="handleCheckChange2"></el-tree>      
+        <el-tree ref="searchTree" node-key="id" show-checkbox :data="systemTrayTree" @check="handleCheckChange2"></el-tree>
       </el-form-item>
       <el-form-item label="其他" label-width="150px" style="width: 800px">
         <el-checkbox style="margin-left: 24px;" v-model="formModel.providerUpdate">供应商商品信息更新提醒</el-checkbox>
