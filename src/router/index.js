@@ -10,19 +10,19 @@ import product from './product'
 import shopProvider from './shop-provider'
 import cargo from './cargo'
 import sales from './sales'
-import inventory from './inventory'
-import settlement from './settlement'
-import history from './history'
+// import inventory from './inventory'
+// import settlement from './settlement'
+// import history from './history'
 import salesStatistics from './sales-statistics'
 import client from './client'
-import cityAgency from './city-agency'
+// import cityAgency from './city-agency'
 import system from './system'
-import weixin from './weixin'
-import shop from './shop'
-import bmsProvider from './bms-provider'
-import manufacturer from './manufacturer'
-import bmsCityAgency from './bms-city-agency'
-import advertisement from './advertisement'
+// import weixin from './weixin'
+// import shop from './shop'
+// import bmsProvider from './bms-provider'
+// import manufacturer from './manufacturer'
+// import bmsCityAgency from './bms-city-agency'
+// import advertisement from './advertisement'
 
 Vue.use(Router)
 
@@ -119,19 +119,20 @@ export const asyncRouterMap = [
   shopProvider,
   cargo,
   sales,
-  inventory,
-  settlement,
-  history,
+  // inventory,
+  // settlement,
+  // history,
   client,
-  cityAgency,
+  // cityAgency,
   system,
-  weixin,
-  shop,
-  bmsProvider,
-  manufacturer,
-  bmsCityAgency,
-  advertisement,
+  // weixin,
+  // shop,
+  // bmsProvider,
+  // manufacturer,
+  // bmsCityAgency
+  // advertisement
   salesStatistics
+
   // vue-element
   // {
   //   path: '/permission',

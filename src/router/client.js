@@ -18,26 +18,28 @@ export default {
     meta: {
       title: '我的客户'
     }
-  }, {
-    path: 'shop',
-    component: () => import('@/views/client/shop'),
-    name: 'clientShop',
-    meta: {
-      title: '平台门店'
-    }
-  }, {
-    path: 'provider',
-    component: () => import('@/views/client/provider'),
-    name: 'clientProvider',
-    meta: {
-      title: '平台供应商'
-    }
-  }, {
-    path: 'manufacturer',
-    component: () => import('@/views/client/manufacturer'),
-    name: 'clientManufacturer',
-    meta: {
-      title: '平台厂商'
-    }
-  }]
+  }
+  // {
+  //   path: 'shop',
+  //   component: () => import('@/views/client/shop'),
+  //   name: 'clientShop',
+  //   meta: {
+  //     title: '平台门店'
+  //   }
+  // }, {
+  //   path: 'provider',
+  //   component: () => import('@/views/client/provider'),
+  //   name: 'clientProvider',
+  //   meta: {
+  //     title: '平台供应商'
+  //   }
+  // }, {
+  //   path: 'manufacturer',
+  //   component: () => import('@/views/client/manufacturer'),
+  //   name: 'clientManufacturer',
+  //   meta: {
+  //     title: '平台厂商'
+  //   }
+  // }
+  ]
 }

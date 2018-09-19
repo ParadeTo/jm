@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '商品管理',
     icon: 'clipboard',
-    roles: ['shopAdmin', 'providerAdmin'] // you can set roles in root nav
+    roles: ['bmsAdmin', 'providerAdmin'] // you can set roles in root nav
   },
   children: [{
     path: 'list',

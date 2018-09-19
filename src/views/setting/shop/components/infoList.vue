@@ -11,7 +11,7 @@
         </div>
       </el-card>
     </el-col>
-    <el-col :span="8" class="col">
+    <!-- <el-col :span="8" class="col">
       <el-card>
         <div class="card-content" @click="to('settingShopWithdraw')">
           <svg-icon icon-class="wallet" class-name="card-icon" />
@@ -32,7 +32,7 @@
           </div>
         </div>
       </el-card>
-    </el-col>
+    </el-col> -->
   </el-row>
 </template>
 

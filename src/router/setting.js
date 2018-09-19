@@ -42,33 +42,37 @@ export default {
     meta: {
       title: '实名认证'
     }
-  }, {
-    path: 'basic',
-    component: () => import('@/views/setting/basic'),
-    name: 'settingBasic',
-    meta: {
-      title: '基本设置'
-    }
-  }, {
+  },
+  // {
+  //   path: 'basic',
+  //   component: () => import('@/views/setting/basic'),
+  //   name: 'settingBasic',
+  //   meta: {
+  //     title: '基本设置'
+  //   }
+  // },
+  {
     path: 'staff',
     component: () => import('@/views/setting/staff'),
     name: 'settingStaff',
     meta: {
       title: '员工设置'
     }
-  }, {
-    path: 'operation',
-    component: () => import('@/views/setting/operation'),
-    name: 'settingOperation',
-    meta: {
-      title: '操作记录'
-    }
-  }, {
-    path: 'violation',
-    component: () => import('@/views/setting/violation'),
-    name: 'settingViolation',
-    meta: {
-      title: '违规记录'
-    }
-  }]
+  }
+  // {
+  //   path: 'operation',
+  //   component: () => import('@/views/setting/operation'),
+  //   name: 'settingOperation',
+  //   meta: {
+  //     title: '操作记录'
+  //   }
+  // }, {
+  //   path: 'violation',
+  //   component: () => import('@/views/setting/violation'),
+  //   name: 'settingViolation',
+  //   meta: {
+  //     title: '违规记录'
+  //   }
+  // }
+  ]
 }
