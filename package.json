@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "axios": "0.17.1",
+    "axios-cache-plugin": "^0.1.0",
     "clipboard": "1.7.1",
     "codemirror": "5.32.0",
     "driver.js": "0.5.2",

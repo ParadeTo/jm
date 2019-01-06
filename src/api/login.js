@@ -1,11 +1,11 @@
-import request from '@/utils/request'
+import { productService } from '@/utils/request'
 
 export function loginByUsername (username, password) {
   const data = {
     username,
     password
   }
-  return request({
+  return productService({
     url: '/login/login',
     method: 'post',
     data
@@ -13,14 +13,14 @@ export function loginByUsername (username, password) {
 }
 
 export function logout () {
-  return request({
+  return productService({
     url: '/login/logout',
     method: 'post'
   })
 }
 
 export function getUserInfo (token) {
-  return request({
+  return productService({
     url: '/user/info',
     method: 'get',
     params: { token }

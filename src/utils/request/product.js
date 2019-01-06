@@ -4,13 +4,13 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 
 // create an axios instance
-const service = axios.create({
-  baseURL: process.env.BASE_API, // api的base_url
+const productService = axios.create({
+  baseURL: '/product', // process.env.BASE_API, // api的base_url
   timeout: 5000 // request timeout
 })
 
 // request interceptor
-service.interceptors.request.use(config => {
+productService.interceptors.request.use(config => {
   // Do something before request is sent
   if (store.getters.token) {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
@@ -24,7 +24,7 @@ service.interceptors.request.use(config => {
 })
 
 // respone interceptor
-service.interceptors.response.use(
+productService.interceptors.response.use(
   response => response,
   /**
    * 下面的注释为通过在response里，自定义code来标示请求状态
@@ -69,4 +69,4 @@ service.interceptors.response.use(
     return Promise.reject(error)
   })
 
-export default service
+export default productService

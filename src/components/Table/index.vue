@@ -21,7 +21,7 @@
       <el-table-column :key="k" v-for="(col, k) in cols" align="center" :label="col.label">
         <template slot-scope="scope">
           <img :src="scope.row[col.key]" v-if="col.img">
-          <span v-else>{{scope.row[col.key]}}</span>
+          <span v-else>{{getValue(col, scope.row)}}</span>
         </template>
       </el-table-column>
       <slot name="action"></slot>
@@ -38,6 +38,14 @@ export default {
   },
 
   props: {
+    list: {
+      type: Array,
+      required: true
+    },
+    total: {
+      type: Number,
+      require: true
+    },
     cols: {
       type: Array,
       required: true
@@ -62,10 +70,8 @@ export default {
 
   data () {
     return {
-      page: 1,
-      limit: 10,
-      list: [],
-      total: 0,
+      currentPage: 1,
+      pageSize: 10,
       listLoading: false
     }
   },
@@ -75,25 +81,23 @@ export default {
   },
 
   methods: {
+    getValue (col, row) {
+      const value = row[col.key]
+      return col.transform ? col.transform(value) : value
+    },
     async _updateListFunc () {
       this.listLoading = true
-
-      const { page, limit } = this
-      const data = await this.updateListFunc({page, limit})
-      const { list, total } = data
-
+      const { currentPage, pageSize } = this
+      this.updateListFunc({currentPage, pageSize})
       this.listLoading = false
-
-      this.list = list
-      this.total = total
     },
     handleSizeChange (size) {
-      this.limit = size
-      this.page = 1
+      this.pageSize = size
+      this.currentPage = 1
       this._updateListFunc()
     },
     handleCurrentChange (current) {
-      this.page = current
+      this.currentPage = current
       this._updateListFunc()
     },
     handleSelectionChange (val) {
