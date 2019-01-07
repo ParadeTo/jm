@@ -1,12 +1,14 @@
 import { productService } from '@/utils/request'
 
-export function getAllCategory ({
+export function getAllClassify ({
+  cateId,
   keyword
 }) {
   return productService({
-    url: '/category/all',
+    url: '/classify/all',
     method: 'get',
     params: {
+      cateId,
       keyword
     }
   })

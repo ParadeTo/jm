@@ -1,15 +1,15 @@
 import { productService } from '@/utils/request'
 
-export function getProductSkuList ({
-  currentPage,
+export function getAttributeList ({
+  currentPage = 1,
   isCountTotal = true,
   keyword,
   orderBy,
   orderByExp,
-  pageSize
+  pageSize = 100
 }) {
   return productService({
-    url: '/sku',
+    url: '/attribute',
     method: 'get',
     params: {
       currentPage,
@@ -18,7 +18,6 @@ export function getProductSkuList ({
       orderBy,
       orderByExp,
       pageSize
-    },
-    maxAge: 5 * 60 // 秒
+    }
   })
 }

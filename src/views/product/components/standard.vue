@@ -4,6 +4,7 @@
       <el-button type="primary" v-waves icon="el-icon-plus" @click="addCategory">新增</el-button>
 
     </el-row>
+    <!-- TODO: 类目过滤， 类目字段要显示 -->
     <my-table
       :cols="cols"
       :updateListFunc="updateTableFunc"

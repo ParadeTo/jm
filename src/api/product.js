@@ -1,24 +1,38 @@
 import { productService } from '@/utils/request'
 
 export function getProductList ({
+  barcode,
+  brandId,
+  cateId,
+  classifyId,
   currentPage,
-  isCountTotal=true,
   keyword,
-  orderBy,
-  orderByExp,
-  pageSize
+  orderByClause, // { "orderBy" : "xxx", "orderByExp" : "DESC"}
+  pageSize,
+  productType
 }) {
   return productService({
-    url: '/',
-    method: 'get',
-    params: {
+    url: '/page',
+    method: 'post',
+    data: {
+      barcode,
+      brandId,
+      cateId,
+      classifyId,
       currentPage,
-      isCountTotal,
       keyword,
-      orderBy,
-      orderByExp,
-      pageSize
+      orderByClause,
+      pageSize,
+      productType
     }
   })
 }
 
+export function saveProduct (data) {
+  return productService({
+    url: '/',
+    method: 'post',
+    data,
+    showLoading: true
+  })
+}

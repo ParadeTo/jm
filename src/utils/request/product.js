@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import loadingInterceptor from './interceptors/loading'
 
 // create an axios instance
 const productService = axios.create({
@@ -9,23 +10,32 @@ const productService = axios.create({
   timeout: 5000 // request timeout
 })
 
+productService.interceptors.request.use(
+  loadingInterceptor.request.onSuccess,
+  loadingInterceptor.request.onError
+)
+
 // request interceptor
-productService.interceptors.request.use(config => {
+productService.interceptors.request.use(req => {
   // Do something before request is sent
   if (store.getters.token) {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    config.headers['X-Token'] = getToken()
+    req.headers['X-Token'] = getToken()
   }
-  return config
+  return req
 }, error => {
   // Do something with request error
   console.log(error) // for debug
   Promise.reject(error)
 })
 
+productService.interceptors.response.use(
+  loadingInterceptor.response.onSuccess,
+  loadingInterceptor.response.onError
+)
 // respone interceptor
 productService.interceptors.response.use(
-  response => response,
+  rsp => rsp,
   /**
    * 下面的注释为通过在response里，自定义code来标示请求状态
    * 当code返回如下情况则说明权限有问题，登出并返回到登录页

@@ -4,8 +4,8 @@
       <el-input
         @keyup.enter.native="handleFilter"
         style="width: 200px;"
-        placeholder="商品名称"
-        v-model="query.name"
+        placeholder="关键字"
+        v-model="query.keyword"
       />
       <el-input
         @keyup.enter.native="handleFilter"
@@ -13,33 +13,9 @@
         placeholder="商品条码"
         v-model="query.barcode"
       />
-      <el-select
-        @change="handleFilter"
-        style="width: 130px"
-        v-model="query.category"
-        placeholder="商品类目"
-        filterable
-      >
-        <el-option v-for="item in category" :key="item.key" :label="item.name" :value="item.id"></el-option>
-      </el-select>
-      <el-select
-        @change="handleFilter"
-        style="width: 130px"
-        v-model="query.brand"
-        placeholder="商品品牌"
-        filterable
-      >
-        <el-option v-for="item in brandList" :key="item.key" :label="item.label" :value="item.key"></el-option>
-      </el-select>
-      <el-select
-        @change="handleFilter"
-        style="width: 130px"
-        v-model="query.type"
-        placeholder="商品类型"
-        filterable
-      >
-        <el-option v-for="item in typeList" :key="item.key" :label="item.label" :value="item.key"></el-option>
-      </el-select>
+      <select-category v-model="query.category" @change="handleFilter" />
+      <select-brand v-model="query.brand" @change="handleFilter" />
+      <select-classify v-model="query.classify" @change="handleFilter" />
       <!-- <el-select @change='handleFilter' style="width: 130px" v-model="query.status" placeholder="上/下架">
         <el-option v-for="item in statusList" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
@@ -75,39 +51,22 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { getProductSkuList } from "@/api/sku";
+import { getProductList } from "@/api/product"
 
 export default {
   data() {
     return {
+      pageSize: 10,
       list: [],
       total: 0,
       query: {
-        name: "",
+        keyword: "",
         barcode: "",
         category: "",
         brand: "",
-        type: "",
+        classify: "",
         status: ""
       },
-      typeList: [
-        {
-          key: 0,
-          label: "全部"
-        }
-      ],
-      brandList: [
-        {
-          key: 0,
-          label: "全部"
-        }
-      ],
-      typeList: [
-        {
-          key: 0,
-          label: "全部"
-        }
-      ],
       statusList: [
         {
           key: 0,
@@ -125,7 +84,7 @@ export default {
         },
         {
           label: "商品名称",
-          key: "name"
+          key: "skuName"
         },
         {
           label: "商品品牌",
@@ -160,25 +119,16 @@ export default {
     };
   },
 
-  computed: {
-    ...mapGetters([
-      'category',
-    ])
-  },
-
-  async mounted () {
-    if (this.category.length === 0) {
-      this.updateCategory()
-    }
-    console.log(this.category)
-  },
-
   methods: {
     ...mapActions([
-      'updateCategory'
+      'updateCategory',
+      'updateBrand',
+      'updateClassify'
     ]),
-    handleFilter() {
-      console.log(this.query);
+    async handleFilter() {
+      const response = await getProductList({ currentPage: 1, pageSize: this.pageSize, ...this.query })
+      this.list = response.data.items
+      this.total = response.data.pageInfo.totalCount
     },
     add() {
       this.$router.push({ name: "productAdd" });
@@ -191,7 +141,8 @@ export default {
       this.$router.push({ name: "productSetting" });
     },
     async updateTableFunc({ currentPage, pageSize }) {
-      const response = await getProductSkuList({ currentPage, pageSize })
+      this.pageSize = pageSize
+      const response = await getProductList({ currentPage, pageSize, ...this.query })
       this.list = response.data.items
       this.total = response.data.pageInfo.totalCount
     }
