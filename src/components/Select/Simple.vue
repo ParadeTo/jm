@@ -4,25 +4,47 @@
     @input="$listeners.input"
     :value="value"
     :placeholder="placeholder"
+    :multiple="multiple"
+    value-key="id"
     filterable
   >
     <el-option
       v-for="item in list"
       :key="item.id"
-      :label="item.name"
-      :value="item.id"
+      :label="item[labelTrack]"
+      :value="getValueTrack(item)"
     />
   </el-select>
 </template>
 
 <script>
 export default {
-  props: [
-    'value',
-    'list',
-    'placeholder'
-  ],
+  props: {
+    value: {
+      type: [String, Number, Object, Array]
+    },
+    list: {
+      type: Array
+    },
+    placeholder: {
+      type: String
+    },
+    valueTrack: {
+      type: [String, Object],
+      default: 'id'
+    },
+    labelTrack: {
+      type: String,
+      default: 'name'
+    },
+    multiple: {
+      type: Boolean
+    }
+  },
   methods: {
+    getValueTrack (item) {
+      return typeof this.valueTrack === 'object' ? item : item[this.valueTrack]
+    },
     onChange (value) {
       this.$emit('change', value)
     }

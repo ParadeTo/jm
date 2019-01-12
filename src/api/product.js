@@ -12,7 +12,7 @@ export function getProductList ({
   productType
 }) {
   return productService({
-    url: '/page',
+    url: '/product/page',
     method: 'post',
     data: {
       barcode,
@@ -30,7 +30,7 @@ export function getProductList ({
 
 export function saveProduct (data) {
   return productService({
-    url: '/',
+    url: '/product',
     method: 'post',
     data,
     showLoading: true

@@ -1,23 +1,27 @@
 import { productService } from '@/utils/request'
 
 export function getAttributeList ({
-  currentPage = 1,
-  isCountTotal = true,
-  keyword,
-  orderBy,
-  orderByExp,
-  pageSize = 100
+  cateId,
+  keyword
 }) {
   return productService({
-    url: '/attribute',
-    method: 'get',
-    params: {
-      currentPage,
-      isCountTotal,
-      keyword,
-      orderBy,
-      orderByExp,
-      pageSize
+    url: '/attribute/page',
+    method: 'post',
+    data: {
+      cateId,
+      keyword
+    }
+  })
+}
+
+export function getAttributeAndValueList ({
+  cateId
+}) {
+  return productService({
+    url: '/attribute/attrvalues/page',
+    method: 'post',
+    data: {
+      cateId
     }
   })
 }

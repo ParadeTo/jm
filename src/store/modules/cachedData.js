@@ -1,44 +1,37 @@
 import { getAllCategory } from '@/api/category'
+import { getUnitList } from '@/api/unit'
 import { getAllBrand } from '@/api/brand'
 import { getAllClassify } from '@/api/classify'
-import { getAttributeList } from '@/api/attribute'
-import { getUnitList } from '@/api/unit'
 
 const cachedData = {
   state: {
     category: [],
+    unit: [],
     brand: [],
-    classify: [],
-    attribute: [],
-    unit: []
+    classify: []
   },
   mutations: {
-    UPDATE_CATEGORY: (state, category) => { state.category = category },
-    UPDATE_BRAND: (state, brand) => { state.brand = brand },
-    UPDATE_CLASSIFY: (state, classify) => { state.classify = classify },
-    UPDATE_ATTRIBUTE: (state, attribute) => { state.attribute = attribute },
-    UPDATE_UNIT: (state, unit) => { state.unit = unit }
+    UPDATE_CATEGORY (state, category) { state.category = category },
+    UPDATE_UNIT (state, unit) { state.unit = unit },
+    UPDATE_BRAND (state, brand) { state.brand = brand },
+    UPDATE_CLASSIFY (state, classify) { state.classify = classify }
   },
   actions: {
-    updateCategory: async ({ commit }) => {
-      const rsp = await getAllCategory({})
-      rsp.data.length && commit('UPDATE_CATEGORY', rsp.data)
+    async updateCategory ({ commit }) {
+      const { data } = await getAllCategory({})
+      data.data.length && commit('UPDATE_CATEGORY', data.data)
     },
-    updateBrand: async ({ commit }, { cateId }) => {
-      const rsp = await getAllBrand({ cateId })
-      Array.isArray(rsp.data) && commit('UPDATE_BRAND', rsp.data)
+    async updateUnit ({ commit }) {
+      const { data } = await getUnitList({})
+      data.data.items && commit('UPDATE_UNIT', data.data.items)
     },
-    updateClassify: async ({ commit }) => {
-      const rsp = await getAllClassify({})
-      rsp.data.length && commit('UPDATE_CLASSIFY', rsp.data)
+    async updateBrand ({ commit }, cateId) {
+      const { data } = await getAllBrand({ cateId })
+      Array.isArray(data.data) && commit('UPDATE_BRAND', data.data)
     },
-    updateAttribute: async ({ commit }) => {
-      const rsp = await getAttributeList({})
-      commit('UPDATE_ATTRIBUTE', rsp.data)
-    },
-    updateUnit: async ({ commit }) => {
-      const rsp = await getUnitList({})
-      rsp.data.items && commit('UPDATE_UNIT', rsp.data.items)
+    async updateClassify ({ commit }, cateId) {
+      const { data } = await getAllClassify({ cateId })
+      Array.isArray(data.data) && commit('UPDATE_CLASSIFY', data.data)
     }
   }
 }

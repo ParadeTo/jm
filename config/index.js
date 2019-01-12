@@ -47,7 +47,7 @@ module.exports = {
     cssSourceMap: false,
     proxyTable: {
       '/product': {
-        target: 'http://product.jmybuy.com',
+        target: 'http://api.jmybuy.com',
         changeOrigin: true
       }
     }

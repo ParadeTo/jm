@@ -13,9 +13,9 @@
         placeholder="商品条码"
         v-model="query.barcode"
       />
-      <select-category v-model="query.category" @change="handleFilter" />
-      <select-brand v-model="query.brand" @change="handleFilter" />
-      <select-classify v-model="query.classify" @change="handleFilter" />
+      <category-select v-model="query.category" @change="handleCategoryChange" />
+      <brand-select v-model="query.brand" @change="handleFilter" />
+      <classify-select v-model="query.classify" @change="handleFilter" />
       <!-- <el-select @change='handleFilter' style="width: 130px" v-model="query.status" placeholder="上/下架">
         <el-option v-for="item in statusList" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
@@ -121,14 +121,20 @@ export default {
 
   methods: {
     ...mapActions([
-      'updateCategory',
       'updateBrand',
       'updateClassify'
     ]),
+    handleCategoryChange (cateId) {
+      this.updateBrand(cateId)
+      this.updateClassify(cateId)
+    },
     async handleFilter() {
+      console.log(this.query.brand)
       const response = await getProductList({ currentPage: 1, pageSize: this.pageSize, ...this.query })
-      this.list = response.data.items
-      this.total = response.data.pageInfo.totalCount
+      if (response.data.data) {
+        this.list = response.data.data.items
+        this.total = response.data.data.pageInfo.totalCount
+      }
     },
     add() {
       this.$router.push({ name: "productAdd" });
@@ -143,8 +149,10 @@ export default {
     async updateTableFunc({ currentPage, pageSize }) {
       this.pageSize = pageSize
       const response = await getProductList({ currentPage, pageSize, ...this.query })
-      this.list = response.data.items
-      this.total = response.data.pageInfo.totalCount
+      if (response.data.data) {
+        this.list = response.data.data.items
+        this.total = response.data.data.pageInfo.totalCount
+      }
     }
   }
 };
