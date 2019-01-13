@@ -33,7 +33,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="商品品牌">
-                <brand-select v-model="model.brandId"/>
+                <brand-select v-model="model.brand" :valueTrack="{}"/>
               </el-form-item>
             </el-col>
             <el-button
@@ -45,7 +45,7 @@
             <category-add :dialogVisible="dialogVisible" @close="dialogVisible = false"/>
           </el-row>
         </el-col>
-        <el-col :span="6">上传图片</el-col>
+        <!-- <el-col :span="6">上传图片</el-col> -->
       </el-row>
 
       <el-row>
@@ -60,6 +60,7 @@
               <!-- <el-radio :label="3">称重商品</el-radio> -->
             </el-radio-group>
           </el-form-item>
+
           <!-- 标准商品 -->
           <div v-if="model.productType===1">
             <el-form-item label="商品规格">
@@ -181,6 +182,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import CategoryAdd from './components/categoryAdd'
 import CartesianTable from './components/cartesianTable'
 import { saveProduct } from '@/api/product'
@@ -215,7 +217,7 @@ export default {
         attrValue: "",
         productType: 1,
         owncode: "",
-        brandId: "",
+        brand: null,
         cateId: "",
         classifyId: "",
         unitId: "", // 多规格商品需要
@@ -258,6 +260,10 @@ export default {
   },
 
   methods: {
+    ...mapActions([
+      'updateBrand',
+      'updateClassify'
+    ]),
     onTypeChange() {},
     handleUnitOperation(operation, scope) {
       const len = this.skuReqListBasic.length
@@ -278,10 +284,33 @@ export default {
       }
     },
     save() {
-      const data = { ...this.model, skuReqList: [] }
-      this.skuReqListBasic.forEach(s => {
-        data.skuReqList.push(s.model)
-      })
+      const { id, name } = this.model.brand
+      const data = {
+        ...this.model,
+        brandId: id,
+        brandName: name,
+        skuReqList: []
+      }
+      delete data.brand
+      if (this.model.productType === 1) {
+        this.skuReqListBasic.forEach(s => {
+          data.skuReqList.push(s.model)
+        })
+      } else if (this.model.productType === 2) {
+        this.cartesianData.forEach(c => {
+          const row = {
+            barcode: c.barcode,
+            price: c.price,
+            attrValueList: []
+          }
+          for (let k in c) {
+            if (c[k].attrId) {
+              row.attrValueList.push(c[k])
+            }
+          }
+          data.skuReqList.push(row)
+        })
+      }
       saveProduct(data)
     },
     cancel() {},
@@ -301,6 +330,8 @@ export default {
       this.model.brandId = ""
       this.model.classifyId = ""
       this.updateAttributeList(cateId)
+      this.updateBrand(cateId)
+      this.updateClassify(cateId)
     },
     findAttrValue (attrId) {
       const attr = this.attrList.find(attr => attr.id === attrId)
@@ -309,25 +340,6 @@ export default {
     handleAttrChange(attr) {
       attr.attrValueList = this.findAttrValue(attr.attr.id)
     },
-          // testCols: [{
-      //   label: '口味',
-      //   key: '5'
-      // }, {
-      //   label: '尺寸',
-      //   key: '6'
-      // }, {
-      //   label: '条码',
-      //   input: true,
-      //   key: 'barcode'
-      // }, {
-      //   label: '价格',
-      //   input: true,
-      //   key: 'price'
-      // }],
-      // testCartesian: [
-      //   {'5': '草莓味', '6': '大', barcode: '', price: ''},
-      //   {'5': '奶油味', '6': '小', barcode: '', price: ''}
-      // ],
     getCartesian(attrListSelected, list = [], idx = 0, cols = []) {
       const {
         attr,
@@ -383,50 +395,6 @@ export default {
       const { cartesian, cols } = this.getCartesian(this.attrListSelected)
       this.cartesianData = cartesian
       this.cartesianCols = cols
-      console.log(this.cartesianData, cols)
-      // console.log(attr.attrValueListSelected)
-      // attrId: (...)
-      // creator: (...)
-      // creatorName: (...)
-      // delFlag: (...)
-      // gmtCreated: (...)
-      // gmtModified: (...)
-      // id: (...)
-      // modifier: (...)
-      // modifierName: (...)
-      // name: (...)
-      // orderNo: (...)
-      // pinyinAbbr: (...)
-      // pinyinFull: (...)
-      // for (let i = 0; i < this.attrListSelected.length; i++) {
-      //   for
-      // }
-      // attrListSelected: [
-      //   {
-      //     attrId: "",
-      //     attrValueList: [],
-      //     attrValueListSelected: []
-      //   }
-      // ],
-      // testCols: [{
-      //   label: '口味',
-      //   key: '5'
-      // }, {
-      //   label: '尺寸',
-      //   key: '6'
-      // }, {
-      //   label: '条码',
-      //   input: true,
-      //   key: 'barcode'
-      // }, {
-      //   label: '价格',
-      //   input: true,
-      //   key: 'price'
-      // }],
-      // testCartesian: [
-      //   {'5': '草莓味', '6': '大', barcode: '', price: ''},
-      //   {'5': '奶油味', '6': '小', barcode: '', price: ''}
-      // ],
     },
     async updateAttributeList(cateId) {
       const { data } = await getAttributeAndValueList({ cateId })

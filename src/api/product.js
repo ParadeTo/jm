@@ -33,6 +33,8 @@ export function saveProduct (data) {
     url: '/product',
     method: 'post',
     data,
-    showLoading: true
+    showLoading: true,
+    showError: true,
+    showSuccess: true
   })
 }

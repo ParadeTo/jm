@@ -13,9 +13,9 @@
         placeholder="商品条码"
         v-model="query.barcode"
       />
-      <category-select v-model="query.category" @change="handleCategoryChange" />
-      <brand-select v-model="query.brand" @change="handleFilter" />
-      <classify-select v-model="query.classify" @change="handleFilter" />
+      <category-select v-model="query.cateId" @change="handleCategoryChange" />
+      <brand-select v-model="query.brandId" @change="handleFilter" />
+      <classify-select v-model="query.classifyId" @change="handleFilter" />
       <!-- <el-select @change='handleFilter' style="width: 130px" v-model="query.status" placeholder="上/下架">
         <el-option v-for="item in statusList" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
@@ -62,9 +62,9 @@ export default {
       query: {
         keyword: "",
         barcode: "",
-        category: "",
-        brand: "",
-        classify: "",
+        cateId: "",
+        brandId: "",
+        classifyId: "",
         status: ""
       },
       statusList: [
@@ -129,7 +129,6 @@ export default {
       this.updateClassify(cateId)
     },
     async handleFilter() {
-      console.log(this.query.brand)
       const response = await getProductList({ currentPage: 1, pageSize: this.pageSize, ...this.query })
       if (response.data.data) {
         this.list = response.data.data.items

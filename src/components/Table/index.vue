@@ -76,8 +76,8 @@ export default {
     }
   },
 
-  async beforeMount () {
-    await this._updateListFunc()
+  mounted () {
+    this._updateListFunc()
   },
 
   methods: {
@@ -88,7 +88,7 @@ export default {
     async _updateListFunc () {
       this.listLoading = true
       const { currentPage, pageSize } = this
-      this.updateListFunc({currentPage, pageSize})
+      await this.updateListFunc({currentPage, pageSize})
       this.listLoading = false
     },
     handleSizeChange (size) {
