@@ -8,7 +8,7 @@ import setting from './setting'
 import checkstand from './checkstand'
 import product from './product'
 import shopProvider from './shop-provider'
-import cargo from './cargo'
+// import cargo from './cargo'
 import sales from './sales'
 // import inventory from './inventory'
 // import settlement from './settlement'
@@ -117,7 +117,7 @@ export const asyncRouterMap = [
   checkstand,
   product,
   shopProvider,
-  cargo,
+  // cargo,
   sales,
   // inventory,
   // settlement,

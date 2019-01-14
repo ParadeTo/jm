@@ -35,20 +35,42 @@ export default {
       title: '查看订单'
     }
   }, {
-    path: 'order/temp',
-    component: () => import('@/views/sales/order/temp'),
-    name: 'salesOrderTemp',
-    hidden: true,
+    path: 'sales-ticket',
+    component: () => import('@/views/sales/sales-ticket'),
+    name: 'salesTicket',
     meta: {
-      title: '订单模板'
+      title: '销售单管理'
     }
   }, {
-    path: 'order/temp/add',
-    component: () => import('@/views/sales/order/temp/add'),
-    name: 'salesOrderTempAdd',
+    path: 'sales-ticket/add',
+    component: () => import('@/views/sales/sales-ticket/add'),
+    name: 'salesTicketAdd',
     hidden: true,
     meta: {
-      title: '新增模板'
+      title: '新增销售单'
+    }
+  }, {
+    path: 'sales-ticket/detail/:id',
+    component: () => import('@/views/sales/sales-ticket/detail'),
+    name: 'salesTicketDetail',
+    hidden: true,
+    meta: {
+      title: '查看销售单'
+    }
+  }, {
+    path: 'template',
+    component: () => import('@/views/sales/template'),
+    name: 'salesTemplate',
+    meta: {
+      title: '销售模板'
+    }
+  }, {
+    path: 'template/add',
+    component: () => import('@/views/sales/template/add'),
+    name: 'salesTemplateAdd',
+    hidden: true,
+    meta: {
+      title: '新增销售模板'
     }
   }, {
     path: 'refund',
