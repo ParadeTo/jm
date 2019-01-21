@@ -185,12 +185,12 @@
 import { mapGetters, mapActions } from 'vuex'
 import CategoryAdd from './components/categoryAdd'
 import CartesianTable from './components/cartesianTable'
-import { saveProduct } from '@/api/product'
-import { getAllCategory } from '@/api/category'
-import { getAllBrand } from '@/api/brand'
-import { getAllClassify } from '@/api/classify'
-import { getAttributeAndValueList } from '@/api/attribute'
-import { getUnitList } from '@/api/unit'
+import { saveProduct } from '@/api/product/index'
+import { getAllCategory } from '@/api/product/category'
+import { getAllBrand } from '@/api/product/brand'
+import { getAllClassify } from '@/api/product/classify'
+import { getAttributeAndValueList } from '@/api/product/attribute'
+import { getUnitList } from '@/api/product/unit'
 
 export default {
   components: {

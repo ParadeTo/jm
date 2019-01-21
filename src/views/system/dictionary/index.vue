@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
+
 
 export default {
   data () {
@@ -102,11 +102,7 @@ export default {
     },
     del () {},
     async updateTableFunc ({page, limit}) {
-      const response = await fetchList({page, limit})
-      return {
-        list: response.data.items,
-        total: response.data.total
-      }
+      
     },
   }
 }

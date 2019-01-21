@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
 import staffAdd from './components/staffAdd'
 
 export default {
@@ -63,11 +62,11 @@ export default {
     },
     view () {},
     async updateTableFunc ({page, limit}) {
-      const response = await fetchList({page, limit})
-      return {
-        list: response.data.items,
-        total: response.data.total
-      }
+      // const response = await fetchList({page, limit})
+      // return {
+      //   list: response.data.items,
+      //   total: response.data.total
+      // }
     },
   }
 }

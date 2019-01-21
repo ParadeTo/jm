@@ -46,7 +46,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import MyTable from '@/components/Table'
-import { fetchList } from '@/api/article'
+
 
 export default {
   components: {
@@ -119,18 +119,10 @@ export default {
       console.log(tab, event);
     },
     async updateDailyTableFunc ({page, limit}) {
-      const response = await fetchList({page, limit})
-      return {
-        list: response.data.items,
-        total: response.data.total
-      }
+      
     },
     async updateStatisticsTableFunc ({page, limit}) {
-      const response = await fetchList({page, limit})
-      return {
-        list: response.data.items,
-        total: response.data.total
-      }
+      
     },
     handleFilter () {
       console.log(this.query)

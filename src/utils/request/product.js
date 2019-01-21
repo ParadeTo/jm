@@ -1,6 +1,6 @@
 import axios from 'axios'
-import store from '@/store'
-import { getToken } from '@/utils/auth'
+// import store from '@/store'
+// import { getToken } from '@/utils/auth'
 import loadingInterceptor from './interceptors/loading'
 import toastInterceptor from './interceptors/toast'
 
@@ -10,39 +10,44 @@ const productService = axios.create({
   timeout: 5000 // request timeout
 })
 
-productService.interceptors.request.use(
-  loadingInterceptor.request.onSuccess,
-  loadingInterceptor.request.onError
-)
-
-productService.interceptors.request.use(
-  toastInterceptor.request.onSuccess,
-  toastInterceptor.request.onError
-)
-
-// request interceptor
-productService.interceptors.request.use(req => {
-  // Do something before request is sent
-  if (store.getters.token) {
-    // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    req.headers['X-Token'] = getToken()
-  }
-  return req
-}, error => {
-  // Do something with request error
-  console.log(error) // for debug
-  Promise.reject(error)
+// interceptors
+;[
+  loadingInterceptor,
+  toastInterceptor
+].forEach(interceptor => {
+  productService.interceptors.request.use(
+    interceptor.request.onSuccess,
+    interceptor.request.onError
+  )
+  productService.interceptors.response.use(
+    interceptor.response.onSuccess,
+    interceptor.response.onError
+  )
 })
 
-productService.interceptors.response.use(
-  loadingInterceptor.response.onSuccess,
-  loadingInterceptor.response.onError
-)
+// request interceptor
+// productService.interceptors.request.use(req => {
+//   // Do something before request is sent
+//   if (store.getters.token) {
+//     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
+//     req.headers['X-Token'] = getToken()
+//   }
+//   return req
+// }, error => {
+//   // Do something with request error
+//   console.log(error) // for debug
+//   Promise.reject(error)
+// })
 
-productService.interceptors.response.use(
-  toastInterceptor.response.onSuccess,
-  toastInterceptor.response.onError
-)
+// productService.interceptors.response.use(
+//   loadingInterceptor.response.onSuccess,
+//   loadingInterceptor.response.onError
+// )
+
+// productService.interceptors.response.use(
+//   toastInterceptor.response.onSuccess,
+//   toastInterceptor.response.onError
+// )
 // respone interceptor
 // productService.interceptors.response.use(
 // rsp => rsp,

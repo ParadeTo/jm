@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
+
 import pickOptions from './pickOptions.js'
 
 export default {
@@ -75,11 +75,7 @@ export default {
 
     },
     async updateTableFunc ({page, limit}) {
-      const response = await fetchList({page, limit})
-      return {
-        list: response.data.items,
-        total: response.data.total
-      }
+      
     }
   }
 }

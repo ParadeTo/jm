@@ -51,7 +51,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { getProductList } from "@/api/product"
+import { getProductList } from "@/api/product/index"
 
 export default {
   data() {

@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
 
 // 改造成公共的组件
 export default {
@@ -57,11 +56,7 @@ export default {
       this.$router.push({ name: 'cargoOrderTemp' })
     },
     async updateTableFunc ({page, limit}) {
-      const response = await fetchList({page, limit})
-      return {
-        list: response.data.items,
-        total: response.data.total
-      }
+
     }
   }
 }

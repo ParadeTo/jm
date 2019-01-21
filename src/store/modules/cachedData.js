@@ -1,7 +1,7 @@
-import { getAllCategory } from '@/api/category'
-import { getUnitList } from '@/api/unit'
-import { getAllBrand } from '@/api/brand'
-import { getAllClassify } from '@/api/classify'
+import { getAllCategory } from '@/api/product/category'
+import { getUnitList } from '@/api/product/unit'
+import { getAllBrand } from '@/api/product/brand'
+import { getAllClassify } from '@/api/product/classify'
 
 const cachedData = {
   state: {
