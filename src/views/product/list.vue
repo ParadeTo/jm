@@ -3,13 +3,13 @@
     <el-row>
       <el-input
         @keyup.enter.native="handleFilter"
-        style="width: 200px;"
+        style="width: 200px"
         placeholder="关键字"
         v-model="query.keyword"
       />
       <el-input
         @keyup.enter.native="handleFilter"
-        style="width: 200px;"
+        style="width: 200px"
         placeholder="商品条码"
         v-model="query.barcode"
       />
@@ -23,7 +23,7 @@
       <el-button type="primary" v-waves icon="el-icon-search" @click="handleFilter">查询</el-button>
     </el-row>
 
-    <el-row style="margin-top: 10px; margin-bottom: 10px;">
+    <el-row style="margin-top: 10px margin-bottom: 10px">
       <el-button type="primary" v-waves @click="add">新增商品</el-button>
       <el-button type="danger" v-waves @click="del">删除商品</el-button>
       <el-button type="success" v-waves @click="impt">导入商品</el-button>
@@ -32,7 +32,7 @@
       <el-button type="default" v-waves @click="setting">参数设置</el-button>
     </el-row>
 
-    <my-table :cols="cols" :list="list" :total="total" :updateListFunc="updateTableFunc">
+    <my-table :cols="cols" :list="list" :total="total" :updateTableFunc="updateTableFunc">
       <el-table-column
         slot="action"
         align="center"
@@ -116,45 +116,50 @@ export default {
           transform: value => (value === 1 ? "已删除" : "可用")
         }
       ]
-    };
+    }
   },
 
   methods: {
-    ...mapActions([
-      'updateBrand',
-      'updateClassify'
-    ]),
-    handleCategoryChange (cateId) {
+    ...mapActions(["updateBrand", "updateClassify"]),
+    handleCategoryChange(cateId) {
       this.updateBrand(cateId)
       this.updateClassify(cateId)
     },
     async handleFilter() {
-      const response = await getProductList({ currentPage: 1, pageSize: this.pageSize, ...this.query })
+      const response = await getProductList({
+        currentPage: 1,
+        pageSize: this.pageSize,
+        ...this.query
+      })
       if (response.data.data) {
         this.list = response.data.data.items
         this.total = response.data.data.pageInfo.totalCount
       }
     },
     add() {
-      this.$router.push({ name: "productAdd" });
+      this.$router.push({ name: "productAdd" })
     },
     view() {},
     impt() {},
     edit() {},
     del() {},
     setting() {
-      this.$router.push({ name: "productSetting" });
+      this.$router.push({ name: "productSetting" })
     },
     async updateTableFunc({ currentPage, pageSize }) {
       this.pageSize = pageSize
-      const response = await getProductList({ currentPage, pageSize, ...this.query })
+      const response = await getProductList({
+        currentPage,
+        pageSize,
+        ...this.query
+      })
       if (response.data.data) {
         this.list = response.data.data.items
         this.total = response.data.data.pageInfo.totalCount
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

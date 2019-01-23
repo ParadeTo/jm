@@ -1,2 +1,3 @@
 export { default as productService } from './product'
-export { default as pdosService } from './pdos'
+export { pdosSupplyService } from './pdos'
+export { pdosMarketerService } from './pdos'

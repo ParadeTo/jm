@@ -5,8 +5,13 @@ import loadingInterceptor from './interceptors/loading'
 import toastInterceptor from './interceptors/toast'
 
 // create an axios instance
-const productService = axios.create({
-  baseURL: '/pdos', // process.env.BASE_API, // api的base_url
+export const pdosSupplyService = axios.create({
+  baseURL: '/pdos/supply/pdos',
+  timeout: 5000 // request timeout
+})
+
+export const pdosMarketerService = axios.create({
+  baseURL: '/pdos/marketer/pdos',
   timeout: 5000 // request timeout
 })
 
@@ -15,12 +20,14 @@ const productService = axios.create({
   loadingInterceptor,
   toastInterceptor
 ].forEach(interceptor => {
-  productService.interceptors.request.use(
-    interceptor.request.onSuccess,
-    interceptor.request.onError
-  )
-  productService.interceptors.response.use(
-    interceptor.response.onSuccess,
-    interceptor.response.onError
-  )
+  ;[pdosSupplyService, pdosMarketerService].forEach(service => {
+    service.interceptors.request.use(
+      interceptor.request.onSuccess,
+      interceptor.request.onError
+    )
+    service.interceptors.response.use(
+      interceptor.response.onSuccess,
+      interceptor.response.onError
+    )
+  })
 })

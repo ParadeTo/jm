@@ -1,5 +1,5 @@
 <template>
-  <!-- todo 这是公共的页面 -->
+  <!-- 销售订单 -->
   <div class="app-container">
     <div class="filter-container">
         <el-input @keyup.enter.native="handleFilter" style="width: 200px;" placeholder="订单单号" v-model="query.number" />
@@ -24,7 +24,8 @@
 
     <my-table
       :cols="cols"
-      :updateListFunc="updateTableFunc"
+      :query="query"
+      :getListApi="getProductList"
     >
       <el-table-column slot="action" align="center" label="操作" min-width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -43,6 +44,9 @@
 export default {
   data () {
     return {
+      pageSize: 10,
+      list: [],
+      total: 0,
       query: {
         number: '',
         daterange: '',
@@ -88,8 +92,13 @@ export default {
     orderTemp () {
       this.$router.push({ name: 'cargoOrderTemp' })
     },
-    async updateTableFunc ({page, limit}) {
-      
+    async updateTableFunc ({ currentPage, pageSize }) {
+      this.pageSize = pageSize
+      const response = await getProductList({ currentPage, pageSize, ...this.query })
+      if (response.data.data) {
+        this.list = response.data.data.items
+        this.total = response.data.data.pageInfo.totalCount
+      }
     }
   }
 }

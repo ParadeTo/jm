@@ -50,7 +50,7 @@ export default {
       type: Array,
       required: true
     },
-    updateListFunc: {
+    updateTableFunc: {
       type: Function,
       required: true
     },
@@ -88,7 +88,7 @@ export default {
     async _updateListFunc () {
       this.listLoading = true
       const { currentPage, pageSize } = this
-      await this.updateListFunc({currentPage, pageSize})
+      await this.updateTableFunc({currentPage, pageSize})
       this.listLoading = false
     },
     handleSizeChange (size) {
