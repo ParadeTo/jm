@@ -9,24 +9,24 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import SimpleSelect from "./Simple";
+import { mapGetters, mapActions } from 'vuex';
+import SimpleSelect from './Simple';
 
 export default {
   components: {
     SimpleSelect
   },
-  props: ["value"],
-  computed: mapGetters(["category"]),
+  props: ['value'],
+  computed: mapGetters(['category']),
   mounted() {
     if (this.category.length === 0) this.updateCategory();
   },
   methods: {
     ...mapActions([
-      "updateCategory"
+      'updateCategory'
     ]),
     onChange(value) {
-      this.$emit("change", value);
+      this.$emit('change', value);
     }
   }
 };

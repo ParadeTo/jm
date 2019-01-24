@@ -1,5 +1,5 @@
 <template>
-  <!-- 销售订单 -->
+  <!-- 销售单，！不是销售订单 -->
   <div class="app-container">
     <div class="filter-container">
         <el-input @keyup.enter.native="handleFilter" style="width: 200px;" placeholder="订单单号" v-model="query.number" />
@@ -23,9 +23,10 @@
     </el-row>
 
     <my-table
+      :list="list"
+      :total="total"
+      :updateTableFunc="updateTableFunc"
       :cols="cols"
-      :query="query"
-      :getListApi="getProductList"
     >
       <el-table-column slot="action" align="center" label="操作" min-width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -38,7 +39,7 @@
 </template>
 
 <script>
-
+import { getPurchaseOrder } from '@/api/pdos/supply/purchase'
 
 // 改造成公共的组件
 export default {
@@ -94,7 +95,7 @@ export default {
     },
     async updateTableFunc ({ currentPage, pageSize }) {
       this.pageSize = pageSize
-      const response = await getProductList({ currentPage, pageSize, ...this.query })
+      const response = await getPurchaseOrder({ currentPage, pageSize, ...this.query })
       if (response.data.data) {
         this.list = response.data.data.items
         this.total = response.data.data.pageInfo.totalCount

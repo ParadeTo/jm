@@ -34,17 +34,32 @@ export function getPurchaseOrder ({
   pageSize = 10,
   keyword,
   orderByClause,
+  orderNo,
+  status,
+  gmtCreatedBegin,
+  gmtCreatedEnd,
   ...rest
 }) {
   return pdosSupplyService({
     url: '/pdosPurchaseOrder/page',
     method: 'post',
-    params: {
+    data: {
       currentPage,
       pageSize,
       keyword,
       orderByClause,
+      orderNo,
+      status,
+      gmtCreatedBegin,
+      gmtCreatedEnd,
       ...rest
     }
+  })
+}
+
+export function getPurchaseOrderParams () {
+  return pdosSupplyService({
+    url: '/pdosPurchaseOrder/api/parameters',
+    method: 'get'
   })
 }

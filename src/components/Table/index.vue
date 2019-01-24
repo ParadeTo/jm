@@ -38,13 +38,16 @@ export default {
   },
 
   props: {
-    list: {
-      type: Array,
-      required: true
-    },
-    total: {
-      type: Number,
-      require: true
+    // list: {
+    //   type: Array,
+    //   required: true
+    // },
+    // total: {
+    //   type: Number,
+    //   require: true
+    // },
+    query: {
+      type: Object
     },
     cols: {
       type: Array,
@@ -52,7 +55,10 @@ export default {
     },
     updateTableFunc: {
       type: Function,
-      required: true
+      // required: true
+    },
+    getListApi: {
+      type: Function
     },
     hasSelection: {
       type: Boolean,
@@ -70,6 +76,8 @@ export default {
 
   data () {
     return {
+      list: [],
+      total: 0,
       currentPage: 1,
       pageSize: 10,
       listLoading: false
@@ -77,7 +85,7 @@ export default {
   },
 
   mounted () {
-    this._updateListFunc()
+    this.updateListFunc()
   },
 
   methods: {
@@ -85,10 +93,16 @@ export default {
       const value = row[col.key]
       return col.transform ? col.transform(value) : value
     },
-    async _updateListFunc () {
+    async updateListFunc () {
       this.listLoading = true
       const { currentPage, pageSize } = this
-      await this.updateTableFunc({currentPage, pageSize})
+      // await this.updateTableFunc({currentPage, pageSize})
+      // this.pageSize = pageSize
+      const response = await this.getListApi({ currentPage, pageSize, ...this.query })
+      if (response.data.data) {
+        this.list = response.data.data.items
+        this.total = response.data.data.pageInfo.totalCount
+      }
       this.listLoading = false
     },
     handleSizeChange (size) {

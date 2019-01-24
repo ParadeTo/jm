@@ -3,7 +3,8 @@ import { getUnitList } from '@/api/product/unit'
 import { getAllBrand } from '@/api/product/brand'
 import { getAllClassify } from '@/api/product/classify'
 
-const cachedData = {
+export default {
+  namespace: true,
   state: {
     category: [],
     unit: [],
@@ -33,7 +34,11 @@ const cachedData = {
       const { data } = await getAllClassify({ cateId })
       Array.isArray(data.data) && commit('UPDATE_CLASSIFY', data.data)
     }
+  },
+  getters: {
+    category: state => state.category,
+    brand: state => state.brand,
+    classify: state => state.classify,
+    unit: state => state.unit
   }
 }
-
-export default cachedData

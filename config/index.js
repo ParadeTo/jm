@@ -49,6 +49,10 @@ module.exports = {
       '/product': {
         target: 'http://api.jmybuy.com',
         changeOrigin: true
+      },
+      '/pdos': {
+        target: 'http://api.jmybuy.com',
+        changeOrigin: true
       }
     }
   },

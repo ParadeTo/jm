@@ -5,7 +5,8 @@ import errorLog from './modules/errorLog'
 import permission from './modules/permission'
 import tagsView from './modules/tagsView'
 import user from './modules/user'
-import cachedData from './modules/cachedData'
+import product from './modules/product'
+import pdos from './modules/pdos'
 import getters from './getters'
 
 Vue.use(Vuex)
@@ -16,7 +17,8 @@ const store = new Vuex.Store({
     errorLog,
     permission,
     tagsView,
-    cachedData,
+    pdos,
+    product,
     user
   },
   getters
