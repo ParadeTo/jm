@@ -102,6 +102,9 @@ export default {
       if (response.data.data) {
         this.list = response.data.data.items
         this.total = response.data.data.pageInfo.totalCount
+      } else {
+        this.list = []
+        this.total = 0
       }
       this.listLoading = false
     },

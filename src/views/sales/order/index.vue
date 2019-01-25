@@ -6,7 +6,7 @@
         @keyup.enter.native="handleFilter"
         placeholder="订单单号"
         style="width: 200px;"
-        v-model="query.number"
+        v-model="query.orderNo"
       />
       <el-date-picker
         end-placeholder="结束日期"
@@ -14,7 +14,7 @@
         range-separator="至"
         start-placeholder="开始日期"
         type="daterange"
-        v-model="query.daterange"
+        v-model="daterange"
       ></el-date-picker>
       <el-select
         @change="handleFilter"
@@ -27,7 +27,7 @@
           :key="item.code"
           :label="item.desc"
           :value="item.code"
-          v-for="item in purchaseOrderParams.status"
+          v-for="item in ((purchaseOrderParams && purchaseOrderParams.status) || {})"
         />
       </el-select>
       <el-button @click="handleFilter" icon="el-icon-search" type="primary" v-waves>查询</el-button>
@@ -37,7 +37,7 @@
       <el-button @click="orderTemp" icon="el-icon-tickets" type="success" v-waves>订单模板</el-button>
     </el-row>
 
-    <my-table :cols="cols" :getListApi="getPurchaseOrder" :query="query">
+    <my-table :cols="cols" :getListApi="getPurchaseOrder" :query="query" ref="table">
       <el-table-column
         align="center"
         class-name="small-padding fixed-width"
@@ -55,8 +55,9 @@
 </template>
 
 <script>
+import { mapGetters,mapActions } from 'vuex'
 import { getPurchaseOrder } from '@/api/pdos/supply/purchase'
-import { mapGetters, mapActions } from 'vuex'
+import { parseTime } from '@/utils'
 
 // 改造成公共的组件
 export default {
@@ -64,9 +65,11 @@ export default {
     return {
       query: {
         orderNo: '',
-        daterange: '',
+        gmtCreatedBegin: '',
+        gmtCreatedEnd: '',
         status: ''
       },
+      daterange: '',
       statusList: [{
         key: 0,
         label: '全部'
@@ -96,15 +99,24 @@ export default {
     }
   },
 
+  watch: {
+    daterange(val) {
+      if (val.length > 0) {
+        this.query.gmtCreatedBegin=parseTime(val[0],'{y}-{m}-{d}')
+        this.query.gmtCreatedEnd=parseTime(val[1],'{y}-{m}-{d}')
+      }
+    }
+  },
+
   computed: mapGetters(['purchaseOrderParams']),
 
-  mounted () {
-    !this.purchaseOrderParams && this.updatePurchaseOrder()
+  mounted() {
+    !this.purchaseOrderParams&&this.updatePurchaseOrder()
   },
 
   methods: {
     ...mapActions(['updatePurchaseOrder']),
-    handleFilter() { },
+    handleFilter() { this.$refs.table.updateListFunc() },
     addOrder() {
       this.$router.push({ name: 'cargoOrderAdd' })
     },
