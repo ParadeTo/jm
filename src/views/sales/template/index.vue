@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :inline="true" :model="query" class="demo-form-inline">
-      <el-form-item label="订单单号">
+      <el-form-item label="模板名称">
         <el-input v-model="query.code" placeholder="" />
       </el-form-item>
       <el-form-item label="订单时间">
@@ -13,7 +13,7 @@
           end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="订单状态">
+      <el-form-item label="客户">
         <el-select clearable @change='handleFilter' style="width: 130px" v-model="query.cashier" placeholder="">
           <el-option v-for="item in statusList" :key="item.key" :label="item.label" :value="item.key" />
         </el-select>
@@ -82,7 +82,7 @@ export default {
 
     },
     addOrderTemp () {
-      this.$router.push({ name: 'cargoOrderTempAdd' })
+      this.$router.push({ name: 'salesTemplateAdd' })
     },
     edit () {
 

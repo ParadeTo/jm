@@ -32,7 +32,14 @@
       <el-button @click="setting" type="default" v-waves>参数设置</el-button>
     </el-row>
 
-    <my-table :cols="cols" :getListApi="getProductList" :query="query" ref="table">
+    <my-table
+      :cols="cols"
+      :getListApi="getProductList"
+      :hasSelection="forSelect"
+      :query="query"
+      ref="table"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column
         align="center"
         class-name="small-padding fixed-width"
@@ -50,10 +57,17 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters,mapActions } from 'vuex'
 import { getProductList } from "@/api/product/index"
+import { productCols } from '@/const/product'
 
 export default {
+  props: {
+    forSelect: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       query: {
@@ -70,49 +84,7 @@ export default {
           label: '上架'
         }
       ],
-      cols: [
-        {
-          label: '条码',
-          key: 'barcode'
-        },
-        {
-          label: '商品图片',
-          key: 'images'
-        },
-        {
-          label: '商品名称',
-          key: 'skuName'
-        },
-        {
-          label: '商品品牌',
-          key: 'brand'
-        },
-        {
-          label: '商品类目',
-          key: 'img'
-        },
-        {
-          label: '商品分类',
-          key: 'img'
-        },
-        {
-          label: '单位',
-          key: 'img'
-        },
-        {
-          label: '库存',
-          key: 'img'
-        },
-        {
-          label: '销售价',
-          key: 'price'
-        },
-        {
-          label: '上下架状态',
-          key: 'delFlag',
-          transform: value => (value===1? '已删除':'可用')
-        }
-      ]
+      cols: productCols
     }
   },
 
@@ -122,7 +94,11 @@ export default {
       this.updateBrand(cateId)
       this.updateClassify(cateId)
     },
-    async handleFilter() {
+    handleSelectionChange (selection) {
+      this.$emit('selection-change', selection)
+      console.log(selection)
+    },
+    handleFilter() {
       this.$refs.table.updateListFunc()
     },
     add() {

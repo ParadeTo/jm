@@ -40,9 +40,7 @@
           </el-form-item>
           <el-form-item label="商品数量">
             <el-input style="width: 80px" v-model="formModel.number" placeholder="" />
-            <el-select clearable style="width: 80px" v-model="formModel.unit" placeholder="单位">
-              <el-option v-for="item in unitList" :key="item.key" :label="item.label" :value="item.key" />
-            </el-select>
+            <unit-select v-model="formModel.unit"/>
           </el-form-item>
         </el-row>
 
@@ -56,19 +54,54 @@
         </el-row>
 
         <el-row>
-          <el-button type="default" @click="del(scope.row)">选择供应商商品</el-button>
-          <el-button type="default" @click="del(scope.row)">匹配门店商品</el-button>
-          <el-button type="primary" @click="del(scope.row)">添加/保存</el-button>
+          <el-button type="default" @click="dialogVisible=true">选择商品</el-button>
+          <!-- <el-button type="default" @click="del(scope.row)">匹配门店商品</el-button> -->
+          <!-- <el-button type="primary" @click="del(scope.row)">添加/保存</el-button> -->
         </el-row>
       </el-form>
+    </el-card>
+
+    <el-dialog title="导入商品" :visible.sync="dialogVisible" width="80%">
+      <product-list :forSelect="true" @selection-change="handleSelectionChange"/>
+    </el-dialog>
+
+    <el-card style="margin-top: 20px;">
+      <el-table
+      :data="products"
+      element-loading-text="loading"
+      border
+      fit
+      highlight-current-row
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column
+        type="index"
+        width="50">
+      </el-table-column>
+      <el-table-column :key="k" v-for="(col, k) in cols" align="center" :label="col.label">
+        <template slot-scope="scope">
+          <img :src="scope.row[col.key]" v-if="col.img">
+          <span v-else>{{getValue(col, scope.row)}}</span>
+        </template>
+      </el-table-column>
+      <slot name="action"></slot>
+    </el-table>
     </el-card>
   </div>
 </template>
 
 <script>
+import ProductList from '@/views/product/list'
+import { productCols } from '@/const/product'
+
 export default {
+  components: {
+    ProductList
+  },
   data () {
     return {
+      dialogVisible: false,
+      products: [],
       formModel: {
         code: '',
         brand: '',
@@ -84,11 +117,19 @@ export default {
       unitList: [{
         key: 0,
         label: '瓶'
-      }]
+      }],
+      cols: productCols
     }
   },
 
   methods: {
+    handleSelectionChange (selection) {
+      this.products = selection
+    },
+    getValue (col, row) {
+      const value = row[col.key]
+      return col.transform ? col.transform(value) : value
+    },
   }
 }
 </script>

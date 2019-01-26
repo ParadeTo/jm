@@ -118,10 +118,10 @@ export default {
     ...mapActions(['updatePurchaseOrder']),
     handleFilter() { this.$refs.table.updateListFunc() },
     addOrder() {
-      this.$router.push({ name: 'cargoOrderAdd' })
+      this.$router.push({ name: 'salesOrderAdd' })
     },
     orderTemp() {
-      this.$router.push({ name: 'cargoOrderTemp' })
+      this.$router.push({ name: 'salesTemplate' })
     },
     getPurchaseOrder
   }
