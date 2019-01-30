@@ -7,6 +7,7 @@
     :multiple="multiple"
     value-key="id"
     filterable
+    clearable
   >
     <el-option
       v-for="item in list"

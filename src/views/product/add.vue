@@ -80,7 +80,7 @@
                     <span>{{scope.row.name}}</span>
                   </template>
                 </el-table-column>
-                <el-table-column align="center" label="条码">
+                <el-table-column align="center" label="条码" min-width="180">
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.model.barcode"/>
                   </template>
@@ -354,6 +354,7 @@ export default {
       if (attrListSelected.length - 1 === idx) {
         cols.push({
           label: '条码',
+          minWidth: 180,
           input: true,
           key: 'barcode'
         }, {

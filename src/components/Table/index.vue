@@ -10,6 +10,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column
+        v-if="hasIndex"
         type="index"
         width="50">
       </el-table-column>
@@ -18,7 +19,14 @@
         type="selection"
         width="55">
       </el-table-column>
-      <el-table-column :key="k" v-for="(col, k) in cols" align="center" :label="col.label">
+      <el-table-column
+        :key="k"
+        v-for="(col, k) in cols"
+        align="center"
+        :label="col.label"
+        :width="col.width"
+        :min-width="col.minWidth"
+      >
         <template slot-scope="scope">
           <img :src="scope.row[col.key]" v-if="col.img">
           <span v-else>{{getValue(col, scope.row)}}</span>
@@ -59,6 +67,10 @@ export default {
     },
     getListApi: {
       type: Function
+    },
+    hasSelection: {
+      type: Boolean,
+      default: false
     },
     hasSelection: {
       type: Boolean,

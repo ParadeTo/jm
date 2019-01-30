@@ -44,12 +44,13 @@
         align="center"
         class-name="small-padding fixed-width"
         label="动作"
-        min-width="140"
+        min-width="80"
         slot="action"
       >
         <template slot-scope="scope">
-          <el-button @click="view(scope.row)" size="mini" type="primary">查看</el-button>
-          <el-button @click="edit(scope.row)" size="mini" type="default">修改</el-button>
+          <!-- <i class="el-icon-view" @click="view(scope.row)" /> -->
+          <el-button circle icon="el-icon-view" @click="view(scope.row)" type="primary"></el-button>
+          <el-button circle icon="el-icon-edit" @click="edit(scope.row)" type="default"></el-button>
         </template>
       </el-table-column>
     </my-table>

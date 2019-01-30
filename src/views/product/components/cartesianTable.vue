@@ -1,6 +1,13 @@
 <template>
   <el-table :data="list" border fit highlight-current-row>
-    <el-table-column v-for="col in cols" :key="col.key" align="center" :label="col.label">
+    <el-table-column
+      v-for="col in cols"
+      :key="col.key"
+      align="center"
+      :label="col.label"
+      :width="col.width"
+      :min-width="col.minWidth"
+    >
       <template slot-scope="scope">
         <el-input v-if="col.input" v-model="scope.row[col.key]" @input="handleInput" />
         <span v-else>{{scope.row[col.key].attrValueName}}</span>
