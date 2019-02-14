@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item label="规格排序" prop="category">
           <el-select style="width: 130px" v-model="formModel.category">
-            <el-option v-for="item in categoryList" :key="item.key" :label="item.label" :value="item.key">
+            <el-option v-for="item in rankList" :key="item.key" :label="item.label" :value="item.key">
             </el-option>
           </el-select>
         </el-form-item>
@@ -37,6 +37,7 @@ export default {
   props: ['dialogVisible'],
   data () {
     return {
+      rankList: [],
       formModel: {
         img: '',
         name: '',

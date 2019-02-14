@@ -54,6 +54,10 @@ export default {
     //   type: Number,
     //   require: true
     // },
+    hasIndex: {
+      type: Boolean,
+      default: false
+    },
     query: {
       type: Object
     },

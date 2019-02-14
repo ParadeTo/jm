@@ -15,13 +15,17 @@ export function getAttributeList ({
 }
 
 export function getAttributeAndValueList ({
-  cateId
+  cateId,
+  currentPage,
+  pageSize
 }) {
   return productService({
     url: '/attribute/attrvalues/page',
     method: 'post',
     data: {
-      cateId
+      cateId,
+      currentPage,
+      pageSize
     }
   })
 }

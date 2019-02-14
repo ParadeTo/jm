@@ -1,13 +1,15 @@
 <template>
     <div>
     <el-row style="margin-bottom: 20px;">
-      <el-button type="primary" v-waves icon="el-icon-plus" @click="addCategory">新增</el-button>
-
+      <el-button type="primary" v-waves icon="el-icon-plus" @click="dialogVisible=true">新增</el-button>
+      <category-select v-model="query.cateId" @change="handleCateChange"/>
     </el-row>
     <!-- TODO: 类目过滤， 类目字段要显示 -->
     <my-table
       :cols="cols"
-      :updateListFunc="updateTableFunc"
+      :getListApi="getAttributeAndValueList"
+      :query="query"
+      ref="table"
     >
       <el-table-column slot="action" align="center" label="动作" min-width="140" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -16,11 +18,14 @@
         </template>
       </el-table-column>
     </my-table>
+
+    <standard-add :dialogVisible="dialogVisible" />
   </div>
 </template>
 
 <script>
 import StandardAdd from './StandardAdd'
+import { getAttributeAndValueList } from '@/api/product/attribute'
 
 export default {
   components: {
@@ -29,17 +34,30 @@ export default {
 
   data () {
     return {
+      dialogVisible: false,
+      query: {
+        cateId: ''
+      },
       cols: [{
         label: '规格',
-        key: 'standard'
+        key: 'name'
       }, {
         label: '规格值',
-        key: 'value'
+        key: 'attrValueList',
+        transform: value => value.map(v => v.name).join(' ')
       }, {
         label: '创建时间',
-        key: 'time'
+        key: 'gmtCreated'
       }]
     }
+  },
+
+  methods: {
+    handleCateChange () {
+      this.$refs.table.updateListFunc()
+    },
+    add () {},
+    getAttributeAndValueList
   }
 }
 </script>

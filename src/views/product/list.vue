@@ -35,7 +35,7 @@
     <my-table
       :cols="cols"
       :getListApi="getProductList"
-      :hasSelection="forSelect"
+      :hasSelection="isForSelect"
       :query="query"
       ref="table"
       @selection-change="handleSelectionChange"
@@ -64,7 +64,7 @@ import { productCols } from '@/const/product'
 
 export default {
   props: {
-    forSelect: {
+    isForSelect: {
       type: Boolean,
       default: false
     }
