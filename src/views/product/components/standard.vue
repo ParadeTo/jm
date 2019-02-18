@@ -19,7 +19,7 @@
       </el-table-column>
     </my-table>
 
-    <standard-add :dialogVisible="dialogVisible" />
+    <standard-add :dialogVisible="dialogVisible" @close="dialogVisible=false" :id="attributeId" />
   </div>
 </template>
 
@@ -35,6 +35,7 @@ export default {
   data () {
     return {
       dialogVisible: false,
+      attributeId: '',
       query: {
         cateId: ''
       },
@@ -53,6 +54,10 @@ export default {
   },
 
   methods: {
+    view (row) {
+      this.dialogVisible = true
+      this.attributeId = row.id
+    },
     handleCateChange () {
       this.$refs.table.updateListFunc()
     },

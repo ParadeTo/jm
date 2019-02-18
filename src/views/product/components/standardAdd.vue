@@ -1,27 +1,37 @@
 <template>
   <div>
-    <el-dialog title="新增商品规格" :visible="dialogVisible" width="400px" @close="cancel">
+    <el-dialog title="新增商品规格" :visible="dialogVisible" width="800px" @close="cancel">
       <el-form
         ref="dataForm"
-        :rules="rules"
         :model="formModel"
         label-position="right"
         label-width="100px"
-        style='width: 300px; margin-left:20px;'
+        style='width: 600px; margin-left:20px;'
       >
+        <el-form-item label="类别" prop="name">
+          <category-select v-model="formModel.cateId" />
+        </el-form-item>
         <el-form-item label="规格名称" prop="name">
           <el-input style="width: 160px;" v-model="formModel.name" />
         </el-form-item>
-        <el-form-item label="规格排序" prop="category">
+        <!-- <el-form-item label="规格排序" prop="category">
           <el-select style="width: 130px" v-model="formModel.category">
-            <el-option v-for="item in rankList" :key="item.key" :label="item.label" :value="item.key">
-            </el-option>
+            <el-option v-for="item in rankList" :key="item" :label="item" :value="item" />
           </el-select>
-        </el-form-item>
-        <el-form-item label="上级名称" prop="parent">
-          <el-select style="width: 130px" v-model="formModel.parent">
-            <el-option :style="`padding-left: ${item.level * 10 + 10}px`" v-for="item in treeList" :key="item.key" :label="item.label" :value="item.key" />
-          </el-select>
+        </el-form-item> -->
+        <el-form-item label="添加规格值">
+          <el-row :key="index" v-for="(attr, index) in attrValueList" style="margin-top: 10px;">
+            <el-col :span="12">
+              值：<el-input style="width: 160px;" v-model="attr.name" />
+            </el-col>
+            <el-col :span="12">
+              排序:
+              <el-select style="width: 130px" v-model="attr.orderNo">
+                <el-option v-for="item in rankList" :key="item" :label="item" :value="item" />
+              </el-select>
+            </el-col>
+          </el-row>
+          <i class="el-icon-circle-plus icon" @click="addAttr">新增规格值</i>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -33,26 +43,31 @@
 </template>
 
 <script>
+import { addAttribute, editAttribute, getAttribute } from '@/api/product/attribute'
+
 export default {
-  props: ['dialogVisible'],
+  props: ['dialogVisible', 'id'],
   data () {
     return {
-      rankList: [],
+      rankList: [1, 2, 3, 4, 5],
       formModel: {
-        img: '',
+        cateId: '',
         name: '',
-        sort: '',
-        parent: ''
+
       },
       rules: {
         name: [{ required: true, message: '请输入商品名称', trigger: ['blur', 'change'] }],
-        category: [{ required: true, message: '请选择类目', trigger: 'change' }],
-        parent: [{ required: true, message: '请选择上级类目', trigger: 'change' }]
+        // category: [{ required: true, message: '请选择类目', trigger: 'change' }],
+        // parent: [{ required: true, message: '请选择上级类目', trigger: 'change' }]
         // category: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
         // parent: [{ required: true, message: '请输入联系电话', trigger: 'blur' }],
         // address: [{ required: true, message: '请输入地址', trigger: 'blur' }],
         // scope: [{ required: true, message: '请输入经营范围', trigger: 'blur' }],
       },
+      attrValueList: [{
+        name: '',
+        orderNo: 1
+      }],
       forFields: [{
         key: 'name',
         label: '名称'
@@ -80,7 +95,21 @@ export default {
     }
   },
 
+  watch: {
+    dialogVisible (val) {
+      if (val) {
+        getAttribute(this.id)
+      }
+    }
+  },
+
   methods: {
+    addAttr () {
+      this.attrValueList.push({
+        name: '',
+        rank: 1
+      })
+    },
     setInVisible (type) {
       this.$emit('close', type)
     },
@@ -90,8 +119,21 @@ export default {
     confirm () {
       this.$refs['dataForm'].validate()
       this.setInVisible('confirm')
+      const { formModel, attrValueList } = this
+      console.log(this.formModel)
+      console.log(this.attrValueList)
+      addAttribute({ ...formModel, attrValueList })
     }
   }
 }
 </script>
+<style scoped>
+.icon {
+  font-size: 1rem;
+}
 
+.icon:hover {
+  cursor: pointer;
+  color: #409EFF;
+}
+</style>

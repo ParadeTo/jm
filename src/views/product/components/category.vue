@@ -163,7 +163,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .icon {
   font-size: 1.2rem;
 }

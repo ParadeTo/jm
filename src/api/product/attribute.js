@@ -29,3 +29,42 @@ export function getAttributeAndValueList ({
     }
   })
 }
+
+export function addAttribute ({
+  cateId,
+  name,
+  attrValueList
+}) {
+  return productService({
+    url: '/attribute',
+    method: 'post',
+    data: {
+      cateId,
+      name,
+      attrValueList
+    }
+  })
+}
+
+export function editAttribute ({
+  id,
+  name,
+  attrValueList
+}) {
+  return productService({
+    url: '/attribute',
+    method: 'put',
+    data: {
+      id,
+      name,
+      attrValueList
+    }
+  })
+}
+
+export function getAttribute (id) {
+  return productService({
+    url: `/attribute/${id}`,
+    method: 'get'
+  })
+}
