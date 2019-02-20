@@ -19,7 +19,12 @@
       </el-table-column>
     </my-table>
 
-    <standard-add :dialogVisible="dialogVisible" @close="dialogVisible=false" :id="attributeId" />
+    <standard-add
+      :dialogVisible="dialogVisible"
+      :id="attributeId"
+      :isView="isView"
+      @close="onClose"
+    />
   </div>
 </template>
 
@@ -34,6 +39,7 @@ export default {
 
   data () {
     return {
+      isView: false,
       dialogVisible: false,
       attributeId: '',
       query: {
@@ -56,12 +62,24 @@ export default {
   methods: {
     view (row) {
       this.dialogVisible = true
+      this.isView = true
+      this.attributeId = row.id
+    },
+    edit (row) {
+      this.dialogVisible = true
+      this.isView = false
       this.attributeId = row.id
     },
     handleCateChange () {
       this.$refs.table.updateListFunc()
     },
     add () {},
+    onClose (type) {
+      if (type === 'confirm') {
+        this.$refs.table.updateListFunc()
+      }
+      this.dialogVisible = false
+    },
     getAttributeAndValueList
   }
 }
