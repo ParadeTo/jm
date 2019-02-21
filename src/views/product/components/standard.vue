@@ -1,7 +1,7 @@
 <template>
-    <div>
+  <div>
     <el-row style="margin-bottom: 20px;">
-      <el-button type="primary" v-waves icon="el-icon-plus" @click="dialogVisible=true">新增</el-button>
+      <el-button type="primary" v-waves icon="el-icon-plus" @click="handleAdd">新增</el-button>
       <category-select v-model="query.cateId" @change="handleCateChange"/>
     </el-row>
     <!-- TODO: 类目过滤， 类目字段要显示 -->
@@ -22,14 +22,14 @@
     <standard-add
       :dialogVisible="dialogVisible"
       :id="attributeId"
-      :isView="isView"
+      :action="action"
       @close="onClose"
     />
   </div>
 </template>
 
 <script>
-import StandardAdd from './StandardAdd'
+import StandardAdd from './standardAdd'
 import { getAttributeAndValueList } from '@/api/product/attribute'
 
 export default {
@@ -39,7 +39,7 @@ export default {
 
   data () {
     return {
-      isView: false,
+      action: '',
       dialogVisible: false,
       attributeId: '',
       query: {
@@ -62,23 +62,27 @@ export default {
   methods: {
     view (row) {
       this.dialogVisible = true
-      this.isView = true
+      this.action = 'view'
       this.attributeId = row.id
     },
     edit (row) {
       this.dialogVisible = true
-      this.isView = false
+      this.action = 'edit'
       this.attributeId = row.id
     },
     handleCateChange () {
       this.$refs.table.updateListFunc()
     },
-    add () {},
+    handleAdd () {
+      this.action = 'add'
+      this.dialogVisible = true
+    },
     onClose (type) {
       if (type === 'confirm') {
         this.$refs.table.updateListFunc()
       }
       this.dialogVisible = false
+      this.action = ''
     },
     getAttributeAndValueList
   }

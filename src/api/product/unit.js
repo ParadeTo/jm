@@ -21,3 +21,36 @@ export function getUnitList ({
     }
   })
 }
+
+export function getUnit (id) {
+  return productService({
+    url: `/unit/${id}`,
+    method: 'get'
+  })
+}
+
+export function addUnit ({
+  name
+}) {
+  return productService({
+    url: '/unit',
+    method: 'post',
+    data: {
+      name
+    }
+  })
+}
+
+export function editUnit ({
+  id,
+  name
+}) {
+  return productService({
+    url: '/unit',
+    method: 'put',
+    data: {
+      id,
+      name
+    }
+  })
+}

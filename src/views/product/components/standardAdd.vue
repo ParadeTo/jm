@@ -8,33 +8,33 @@
         label-width="100px"
         style='width: 600px; margin-left:20px;'
       >
-        <el-form-item label="类别" prop="name" v-if="!id">
+        <el-form-item label="类别" prop="name" v-if="action==='add'">
           <category-select v-model="formModel.cateId" />
         </el-form-item>
         <el-form-item label="规格名称" prop="name">
-          <el-input style="width: 160px;" v-model="formModel.name" :readonly="isView" />
+          <el-input style="width: 160px;" v-model="formModel.name" :readonly="action==='view'" />
         </el-form-item>
         <!-- <el-form-item label="规格排序" prop="category">
           <el-select style="width: 130px" v-model="formModel.category">
             <el-option v-for="item in rankList" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item> -->
-        <el-form-item :label="isView ? '规格值' : '添加规格值'">
+        <el-form-item :label="action==='view' ? '规格值' : '添加规格值'">
           <el-row :key="index" v-for="(attr, index) in attrValueList" style="margin-top: 10px;">
             <el-col :span="12">
-              值：<el-input style="width: 160px;" v-model="attr.name" :readonly="isView" />
+              值：<el-input style="width: 160px;" v-model="attr.name" :readonly="action==='view'" />
             </el-col>
             <el-col :span="12">
               排序:
-              <el-select style="width: 130px" v-model="attr.orderNo" :disabled="isView">
+              <el-select style="width: 130px" v-model="attr.orderNo" :disabled="action==='view'">
                 <el-option v-for="item in rankList" :key="item" :label="item" :value="item" />
               </el-select>
             </el-col>
           </el-row>
-          <i class="el-icon-circle-plus icon" @click="addAttr" v-if="!isView">新增规格值</i>
+          <i class="el-icon-circle-plus icon" @click="addAttr" v-if="action!=='view'">新增规格值</i>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer" v-if="!isView">
+      <div slot="footer" class="dialog-footer" v-if="action!=='view'">
         <el-button type="primary" @click="confirm">确认</el-button>
         <el-button @click="cancel">取消</el-button>
       </div>
@@ -46,7 +46,7 @@
 import { addAttribute, editAttribute, getAttribute } from '@/api/product/attribute'
 
 export default {
-  props: ['dialogVisible', 'id', 'isView'],
+  props: ['dialogVisible', 'id', 'action'],
   data () {
     return {
       rankList: [1, 2, 3, 4, 5],
@@ -96,7 +96,17 @@ export default {
 
   watch: {
     async dialogVisible (val) {
-      if (val) {
+      if (this.action === 'add') {
+        this.formModel = {
+          cateId: '',
+          name: '',
+        }
+        this.attrValueList = [{
+          name: '',
+          orderNo: 1
+        }]
+      }
+      if (val && this.action !== 'add') {
         const rsp = await getAttribute(this.id)
         const data = rsp.data.data
         this.formModel.name = data.name
@@ -108,11 +118,7 @@ export default {
 
   computed: {
     title() {
-      return this.id
-        ? this.isView
-          ? '查看商品规格'
-          : '修改商品规格'
-        : '新增商品规格'
+      return {'edit':'修改','add':'新增','view':'查看'}[this.action] + '商品规格'
     }
   },
 
@@ -132,7 +138,7 @@ export default {
     async confirm () {
       this.$refs['dataForm'].validate()
       const { formModel, attrValueList, id } = this
-      if (this.id) {
+      if (this.action === 'edit') {
         await editAttribute({ id, ...formModel, attrValueList })
       } else {
         await addAttribute({ ...formModel, attrValueList })
