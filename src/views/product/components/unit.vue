@@ -2,7 +2,8 @@
   <div>
     <el-row style="margin-bottom: 20px;">
       <el-button type="primary" v-waves icon="el-icon-plus" @click="handleAdd">新增</el-button>
-      <el-input v-model="query.keyword" @change="handleChange" style="width: 200px" />
+      <!-- TODO: debounce -->
+      <el-input v-model="query.keyword" @input="handleChange" style="width: 200px" />
     </el-row>
     <my-table
       :cols="cols"
@@ -57,7 +58,7 @@ export default {
   methods: {
     getUnitList,
     handleChange() {
-
+      this.$refs.table.updateListFunc()
     },
     handleAdd () {
       this.action = 'add'
