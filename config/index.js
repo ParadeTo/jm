@@ -53,6 +53,10 @@ module.exports = {
       '/pdos': {
         target: 'http://api.jmybuy.com',
         changeOrigin: true
+      },
+      '/ma': {
+        target: 'http://api.jmybuy.com',
+        changeOrigin: true
       }
     }
   },

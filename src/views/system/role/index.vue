@@ -11,7 +11,7 @@
       <el-button type="primary" v-waves icon="el-icon-plus" @click="dialogVisible=true">新增</el-button>
     </el-row>
 
-    <el-dialog title="新增角色" :visible.sync="dialogVisible">
+    <!-- <el-dialog title="新增角色" :visible.sync="dialogVisible">
       <el-form :rules="rules" ref="dataForm" :model="formModel" label-position="right" label-width="100px" style='width: 400px; margin-left:50px;'>
         <el-form-item :key="index" v-for="(field, index) in formFields" :label="field.label" :prop="field.key">
           <el-input style="width: 160px;" v-model="formModel[field.key]" />
@@ -24,11 +24,13 @@
         <el-button type="primary" @click="add">确认</el-button>
         <el-button @click="dialogVisible = false">取消</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
 
     <my-table
       :cols="cols"
-      :updateListFunc="updateTableFunc"
+      :getListApi="getRoleByPage"
+      :query="query"
+      ref="table"
       style="margin-top: 20px;"
     >
       <el-table-column slot="action" align="center" label="动作" min-width="100" class-name="small-padding fixed-width">
@@ -43,14 +45,15 @@
 </template>
 
 <script>
-
+import { getRoleByPage } from '@/api/ma/role'
+import { systemMap } from '@/const'
 
 export default {
   data () {
     return {
       dialogVisible: false,
       query: {
-        name: '',
+        systemId: '',
       },
       permissionTree: [{
         label: '一级 1',
@@ -88,14 +91,15 @@ export default {
         }]
       }],
       cols: [{
+        key: 'systemId',
+        label: '所属平台',
+        transform: value => systemMap[value]
+      }, {
+        key: 'roleCode',
+        label: '角色编码'
+      }, {
         key: 'name',
         label: '角色名称'
-      }, {
-        key: 'provider',
-        label: '是否系统默认'
-      }, {
-        key: 'sku',
-        label: '创建时间'
       }],
       formFields: [{
         label: '角色编码',
@@ -111,6 +115,7 @@ export default {
   },
 
   methods: {
+    getRoleByPage,
     handleFilter () {
 
     },

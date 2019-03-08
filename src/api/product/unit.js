@@ -37,7 +37,8 @@ export function addUnit ({
     method: 'post',
     data: {
       name
-    }
+    },
+    showSuccess: true
   })
 }
 
@@ -51,6 +52,7 @@ export function editUnit ({
     data: {
       id,
       name
-    }
+    },
+    showSuccess: true
   })
 }

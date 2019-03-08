@@ -49,11 +49,12 @@ export function addBrand ({
 }) {
   return productService({
     url: '/brand',
-    method: 'put',
+    method: 'post',
     data: {
       cateId,
       name
-    }
+    },
+    showSuccess: true
   })
 }
 
@@ -67,6 +68,7 @@ export function editBrand ({
     data: {
       id,
       name
-    }
+    },
+    showSuccess: true
   })
 }
