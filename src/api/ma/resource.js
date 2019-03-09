@@ -1,6 +1,6 @@
 import { maService } from '@/utils/request'
 
-export function getRoleByPage ({
+export function getResourceByPage ({
   currentPage,
   isCountTotal = true,
   keyword,
@@ -10,7 +10,7 @@ export function getRoleByPage ({
   pageSize = 900
 }) {
   return maService({
-    url: '/role/page',
+    url: '/resources/page',
     method: 'post',
     data: {
       currentPage,
@@ -21,22 +21,5 @@ export function getRoleByPage ({
       systemId,
       pageSize
     }
-  })
-}
-
-export function addRole ({
-  systemId,
-  roleCode,
-  name
-}) {
-  return maService({
-    url: '/role',
-    method: 'post',
-    data: {
-      systemId,
-      roleCode,
-      name
-    },
-    showSuccess: true
   })
 }

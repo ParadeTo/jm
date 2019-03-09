@@ -42,7 +42,7 @@
 
     <my-table
       :cols="cols"
-      :getListApi="getRoleByPage"
+      :getListApi="getResourceByPage"
       :query="query"
       ref="table"
       style="margin-top: 20px;"
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { getRoleByPage } from '@/api/ma/role'
+import { getResourceByPage } from '@/api/ma/resource'
 import { systemMap } from '@/const'
 import Add from './add'
 
@@ -100,7 +100,7 @@ export default {
   },
 
   methods: {
-    getRoleByPage,
+    getResourceByPage,
     onClose (type) {
       if (type === 'confirm') {
         this.$refs.table.updateListFunc()

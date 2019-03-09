@@ -7,6 +7,7 @@ import CategorySelect from './Select/Category'
 import UnitSelect from './Select/unit'
 import BrandSelect from './Select/Brand'
 import ClassifySelect from './Select/Classify'
+import SystemSelect from './Select/System'
 
 Vue.component('my-table', MyTabel)
 Vue.component('tree-table', TreeTabel)
@@ -16,3 +17,4 @@ Vue.component('category-select', CategorySelect)
 Vue.component('unit-select', UnitSelect)
 Vue.component('brand-select', BrandSelect)
 Vue.component('classify-select', ClassifySelect)
+Vue.component('system-select', SystemSelect)

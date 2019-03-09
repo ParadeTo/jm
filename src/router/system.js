@@ -19,6 +19,13 @@ export default {
       title: '角色管理'
     }
   }, {
+    path: 'system/resource',
+    component: () => import('@/views/system/resource'),
+    name: 'systemResource',
+    meta: {
+      title: '资源管理'
+    }
+  }, {
     path: 'system/user',
     component: () => import('@/views/system/user'),
     name: 'systemUser',

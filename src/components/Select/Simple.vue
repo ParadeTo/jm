@@ -5,9 +5,9 @@
     :value="value"
     :placeholder="placeholder"
     :multiple="multiple"
+    :clearable="clearable"
     value-key="id"
     filterable
-    clearable
   >
     <el-option
       v-for="item in list"
@@ -39,6 +39,9 @@ export default {
       default: 'name'
     },
     multiple: {
+      type: Boolean
+    },
+    clearable: {
       type: Boolean
     }
   },
