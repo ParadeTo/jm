@@ -23,3 +23,17 @@ export function getResourceByPage ({
     }
   })
 }
+
+export function getResourceTree ({
+  parentId = -1,
+  systemId
+} = {}) {
+  return maService({
+    url: '/resources/all',
+    method: 'get',
+    params: {
+      parentId,
+      systemId
+    }
+  })
+}

@@ -4,18 +4,25 @@
       <el-form
         ref="dataForm"
         :model="formModel"
+        :rules="rules"
         label-position="right"
         label-width="100px"
         style='width: 600px; margin-left:20px;'
       >
-        <el-form-item label="所属平台" prop="systemId" v-if="action==='add'">
-          <system-select v-model="formModel.systemId" />
+        <el-form-item label="资源编码" prop="code">
+          <el-input style="width: 160px;" v-model="formModel.code" :readonly="view" />
         </el-form-item>
-        <el-form-item label="角色编码" prop="roleCode">
-          <el-input style="width: 160px;" v-model="formModel.roleCode" :readonly="action==='view'" />
+        <el-form-item label="资源名称" prop="name">
+          <el-input style="width: 160px;" v-model="formModel.name" :readonly="view" />
         </el-form-item>
-        <el-form-item label="角色名称" prop="name">
-          <el-input style="width: 160px;" v-model="formModel.name" :readonly="action==='view'" />
+        <el-form-item label="资源类型" prop="type" :readonly="view">
+          <system-select v-model="formModel.type" />
+        </el-form-item>
+        <el-form-item label="资源路径" prop="path">
+          <el-input style="width: 160px;" v-model="formModel.path" :readonly="view" />
+        </el-form-item>
+        <el-form-item label="资源样式" prop="path">
+          <el-input style="width: 160px;" v-model="formModel.icon" :readonly="view" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" v-if="action!=='view'">
@@ -30,27 +37,26 @@
 import { addRole, editRole } from '@/api/ma/role'
 
 export default {
-  props: ['dialogVisible', 'id', 'action'],
+  props: ['dialogVisible', 'resource', 'action'],
   data () {
+    const trigger = ['blur', 'change']
     return {
       formModel: {
-        systemId: '',
-        roleCode: '',
-        name: ''
+        code: '',
+        name: '',
+        type: ''
       },
       rules: {
-        name: [{ required: true, message: '请输入商品名称', trigger: ['blur', 'change'] }],
-        // category: [{ required: true, message: '请选择类目', trigger: 'change' }],
-        // parent: [{ required: true, message: '请选择上级类目', trigger: 'change' }]
-        // category: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
-        // parent: [{ required: true, message: '请输入联系电话', trigger: 'blur' }],
-        // address: [{ required: true, message: '请输入地址', trigger: 'blur' }],
-        // scope: [{ required: true, message: '请输入经营范围', trigger: 'blur' }],
+        code: [{ required: true, message: '请输入资源编码', trigger }],
+        name: [{ required: true, message: '请输入资源名称', trigger }],
       }
     }
   },
 
   watch: {
+    resource (val) {
+      if (val) this.formModel = val
+    },
     async dialogVisible (val) {
       // if (this.action === 'add') {
       //   this.formModel = {
@@ -73,7 +79,10 @@ export default {
 
   computed: {
     title() {
-      return {'edit':'修改','add':'新增','view':'查看'}[this.action] + '角色'
+      return {'edit':'修改','add':'新增','view':'查看'}[this.action] + '资源'
+    },
+    view() {
+      return this.action === 'view'
     }
   },
 

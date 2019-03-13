@@ -1,127 +1,106 @@
 <template>
-  <div class="app-container">
-    <el-row>
-      <el-button type="primary" v-waves icon="el-icon-plus" @click="dialogVisible=true">新增</el-button>
-      所属系统：
-      <system-select
-        :clearble="false"
-        v-model="query.systemId"
-        @change="handleSelectChange"
-      />
-      <!-- <el-select
-        
-        
-        value-key="id"
-        filterable
-      >
-        <el-option
-          v-for="item in systemList"
-          :key="item.id"
-          :label="item.label"
-          :value="item.id"
-        />
-      </el-select> -->
+  <div>
+    <el-row style="margin-bottom: 20px;">
+      <el-button type="primary" v-waves icon="el-icon-plus" @click="dialogVisible = true">新增</el-button>
     </el-row>
+    <el-tree
+      :data="data"
+      :props="treeProps"
+      node-key="id"
+      default-expand-all
+      :expand-on-click-node="false">
+      <span slot-scope="{ node, data }" @dblclick="() => onDoubleClick(node, data)">
+        {{ data.name }}
+      </span>
+    </el-tree>
 
-
-    <!-- <el-form :inline="true" :model="query" class="demo-form-inline">
-      <el-form-item label="角色名称">
-        <el-input v-model="query.code" placeholder="" />
-      </el-form-item>
-      <el-button type="primary" v-waves icon="el-icon-search" @click="handleFilter">查询</el-button>
-    </el-form> -->
-
-
-
-    <add
+    <resource-add
       :dialogVisible="dialogVisible"
-      :id="roleId"
+      :resource="resource"
       :action="action"
       @close="onClose"
     />
-
-    <my-table
-      :cols="cols"
-      :getListApi="getResourceByPage"
-      :query="query"
-      ref="table"
-      style="margin-top: 20px;"
-    >
-      <!-- <el-table-column slot="action" align="center" label="动作" min-width="100" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="view(scope.row)">查看</el-button>
-          <el-button type="text" size="mini" @click="edit(scope.row)">修改</el-button>
-          <el-button type="text" size="mini" @click="del(scope.row)">删除</el-button>
-        </template>
-      </el-table-column> -->
-    </my-table>
   </div>
 </template>
 
 <script>
-import { getResourceByPage } from '@/api/ma/resource'
-import { systemMap } from '@/const'
-import Add from './add'
+import { getResourceTree } from '@/api/ma/resource'
+import ResourceAdd from './add'
 
 export default {
   components: {
-    Add
+    ResourceAdd
   },
+
   data () {
     return {
       dialogVisible: false,
-      query: {
-        systemId: 1,
+      resource: null,
+      action: 'view',
+      treeProps: {
+        label: 'name',
+        children: 'childrenList'
       },
-      roleId: '',
-      action: 'add',
-      cols: [{
-        key: 'systemId',
-        label: '所属平台',
-        transform: value => systemMap[value]
-      }, {
-        key: 'roleCode',
-        label: '角色编码'
-      }, {
-        key: 'name',
-        label: '角色名称'
-      }],
-      systemList: [{
-        id: 1,
-        label: '平台'
-      }, {
-        id: 2,
-        label: '供应商'
-      }, {
-        id: 3,
-        label: '门店'
-      }]
+      data: []
+    }
+  },
+
+  async mounted () {
+    const rsp = await getResourceTree()
+    if (rsp.data && rsp.data.data) {
+      this.data = rsp.data.data
     }
   },
 
   methods: {
-    getResourceByPage,
-    onClose (type) {
-      if (type === 'confirm') {
-        this.$refs.table.updateListFunc()
-      }
+    onClose () {
       this.dialogVisible = false
-      this.action = ''
     },
-    handleSelectChange () {
-      this.$refs.table.updateListFunc()
-    },
-    edit () {
+    onDoubleClick (node, data) {
+      console.log(data)
+      this.resource = data
       this.dialogVisible = true
     },
-    view () {
-      this.dialogVisible = true
+    edit (row) {
+      console.log(row)
     },
-    del () {},
-    async updateTableFunc ({page, limit}) {
-      
+    view (row) {
+      console.log(row)
     },
+    findIndex (arr, row) {
+      let index
+      for (let i = 0, len = arr.length; i < len; i++) {
+        if (row.id === arr[i].id) {
+          index = i
+        }
+      }
+      return index
+    },
+    up (row) {
+      const arr = row.parent.children
+      const index = this.findIndex(arr, row)
+      arr.splice(index, 1)
+      arr.splice(index - 1, 0, row)
+    },
+    down (row) {
+      const arr = row.parent.children
+      const index = this.findIndex(arr, row)
+      arr.splice(index, 1)
+      arr.splice(index + 1, 0, row)
+    }
   }
 }
 </script>
+
+<style scoped>
+.icon {
+  font-size: 1.2rem;
+}
+
+.icon:hover {
+  cursor: pointer;
+  color: #409EFF;
+}
+</style>
+
 
