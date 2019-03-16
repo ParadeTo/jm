@@ -37,3 +37,53 @@ export function getResourceTree ({
     }
   })
 }
+
+export function addResource ({
+  parentId,
+  name,
+  code,
+  systemId,
+  type,
+  path,
+  icon
+}) {
+  return maService({
+    url: '/resources',
+    method: 'post',
+    data: {
+      parentId,
+      name,
+      code,
+      systemId,
+      type,
+      path,
+      icon
+    }
+  })
+}
+
+export function editResource ({
+  id,
+  parentId,
+  name,
+  code,
+  systemId,
+  type,
+  path,
+  icon
+}) {
+  return maService({
+    url: '/resources',
+    method: 'put',
+    data: {
+      id,
+      parentId,
+      name,
+      code,
+      systemId,
+      type,
+      path,
+      icon
+    }
+  })
+}

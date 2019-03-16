@@ -60,7 +60,7 @@
 
 <script>
 import { getRoleByPage } from '@/api/ma/role'
-import { systemMap } from '@/const'
+import { system } from '@/const'
 import Add from './add'
 
 export default {
@@ -78,7 +78,7 @@ export default {
       cols: [{
         key: 'systemId',
         label: '所属平台',
-        transform: value => systemMap[value]
+        transform: value => system.map[value]
       }, {
         key: 'roleCode',
         label: '角色编码'

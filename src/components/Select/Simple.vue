@@ -6,6 +6,7 @@
     :placeholder="placeholder"
     :multiple="multiple"
     :clearable="clearable"
+    :disabled="disabled"
     value-key="id"
     filterable
   >
@@ -42,6 +43,9 @@ export default {
       type: Boolean
     },
     clearable: {
+      type: Boolean
+    },
+    disabled: {
       type: Boolean
     }
   },

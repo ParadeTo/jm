@@ -9,14 +9,35 @@
         label-width="100px"
         style='width: 600px; margin-left:20px;'
       >
+        <el-form-item label="父节点" v-if="parent && parent.id !== -1">
+          {{parent.name}}
+        </el-form-item>
+        <el-form-item label="资源类型" prop="type">
+          <resource-type-select v-model="formModel.type" :disabled="view" />
+        </el-form-item>
+        <!-- <el-form-item label="父节点" prop="parentId">
+          <el-tree
+            :data="treeData"
+            :props="treeProps"
+            :expand-on-click-node="false"
+            node-key="id"
+            ref="tree"
+          >
+            <span slot-scope="{ node, data }">
+              <input
+                type="checkbox"
+                :ref="`node${data.id}`"
+                :checked="resource.parentId === data.id"
+                @change="() => onCheckChange(node, data)">
+              {{ data.name }}
+            </span>
+          </el-tree>
+        </el-form-item> -->
         <el-form-item label="资源编码" prop="code">
           <el-input style="width: 160px;" v-model="formModel.code" :readonly="view" />
         </el-form-item>
         <el-form-item label="资源名称" prop="name">
           <el-input style="width: 160px;" v-model="formModel.name" :readonly="view" />
-        </el-form-item>
-        <el-form-item label="资源类型" prop="type" :readonly="view">
-          <system-select v-model="formModel.type" />
         </el-form-item>
         <el-form-item label="资源路径" prop="path">
           <el-input style="width: 160px;" v-model="formModel.path" :readonly="view" />
@@ -34,21 +55,37 @@
 </template>
 
 <script>
-import { addRole, editRole } from '@/api/ma/role'
+import { addResource } from '@/api/ma/resource'
+import { resourceType } from '@/const'
 
 export default {
-  props: ['dialogVisible', 'resource', 'action'],
+  props: [
+    'dialogVisible',
+    'resource',
+    'action',
+    // 'treeProps',
+    // 'treeData',
+    'parent',
+    'systemId'
+  ],
   data () {
     const trigger = ['blur', 'change']
     return {
       formModel: {
         code: '',
         name: '',
-        type: ''
+        type: '',
+        icon: '',
+        path: '',
+        systemId: 1,
       },
       rules: {
+        systemId: [{ required: true, message: '请选择所属平台' }],
         code: [{ required: true, message: '请输入资源编码', trigger }],
         name: [{ required: true, message: '请输入资源名称', trigger }],
+        type: [{ required: true, message: '请选择资源类型', trigger }],
+        path: [{ required: true, message: '请输入资源路径', trigger }],
+        icon: [{ required: true, message: '请输入资源样式', trigger }]
       }
     }
   },
@@ -87,6 +124,24 @@ export default {
   },
 
   methods: {
+    traveseData (data, callback) {
+      data.forEach(d => {
+        callback(d)
+        if (Array.isArray(d.childrenList)) {
+          this.traveseData(d.childrenList, callback)
+        }
+      })
+    },
+    onCheckChange (node, data) {
+      let checked = this.$refs[`node${data.id}`].checked
+      this.formModel.parentId = checked ? data.id : null
+      this.traveseData(this.treeData, item => {
+        if (item.id !== data.id && this.$refs[`node${item.id}`]) {
+          this.$refs[`node${item.id}`].checked = false
+        }
+      })
+      this.$refs['dataForm'].validateField('parentId')
+    },
     addAttr () {
       this.attrValueList.push({
         name: '',
@@ -100,14 +155,18 @@ export default {
       this.setInVisible('cancel')
     },
     async confirm () {
-      this.$refs['dataForm'].validate()
-      const { formModel, id } = this
-      if (this.action === 'edit') {
-        await editBrand({ id, ...formModel })
-      } else {
-        await addRole({ ...formModel })
+      try {
+        if(!await this.$refs['dataForm'].validate()) return
+        const { formModel, id, parentId } = this
+        if (this.action === 'edit') {
+          await editBrand({ id, ...formModel })
+        } else {
+          await addResource({ ...formModel, parentId })
+        }
+        this.setInVisible('confirm')
+      } catch (error) {
+        console.log(error)
       }
-      this.setInVisible('confirm')
     }
   }
 }

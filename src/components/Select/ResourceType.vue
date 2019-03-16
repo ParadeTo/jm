@@ -1,7 +1,7 @@
 <template>
   <simple-select
-    placeholder="所属系统"
-    :list="systemList"
+    placeholder="资源类型"
+    :list="resourceTypeList"
     :value="value"
     :clearable="false"
     :disabled="disabled"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { system } from '@/const'
+import { resourceType } from '@/const'
 import SimpleSelect from "./Simple"
 
 export default {
@@ -30,7 +30,7 @@ export default {
   },
   data () {
     return {
-      systemList: system.list
+      resourceTypeList: resourceType.list
     }
   },
   methods: {
