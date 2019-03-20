@@ -43,6 +43,10 @@ export default {
     },
     evalFunc: Function,
     evalArgs: Array,
+    childrenTrack: {
+      type: String,
+      default: 'children'
+    },
     expandAll: {
       type: Boolean,
       default: false
@@ -58,7 +62,7 @@ export default {
         tmp = this.data
       }
       const func = this.evalFunc || treeToArray
-      const args = this.evalArgs ? Array.concat([tmp, this.expandAll], this.evalArgs) : [tmp, this.expandAll]
+      const args = this.evalArgs ? Array.concat([tmp, this.expandAll, this.childrenTrack], this.evalArgs) : [tmp, this.expandAll, this.childrenTrack]
       return func.apply(null, args)
     }
   },
@@ -75,7 +79,7 @@ export default {
     },
     // 图标显示
     iconShow(index, record) {
-      return (index === 0 && record.children && record.children.length > 0)
+      return (index === 0 && record[this.childrenTrack] && record[this.childrenTrack].length > 0)
     }
   }
 }

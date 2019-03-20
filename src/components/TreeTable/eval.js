@@ -4,7 +4,7 @@
 */
 'use strict'
 import Vue from 'vue'
-export default function treeToArray (data, expandAll, parent = null, level = null) {
+export default function treeToArray (data, expandAll, childrenTrack, parent = null, level = null) {
   let tmp = []
   Array.from(data).forEach(function (record) {
     if (record._expanded === undefined) {
@@ -20,8 +20,8 @@ export default function treeToArray (data, expandAll, parent = null, level = nul
       Vue.set(record, 'parent', parent)
     }
     tmp.push(record)
-    if (record.children && record.children.length > 0) {
-      const children = treeToArray(record.children, expandAll, record, _level)
+    if (record[childrenTrack] && record[childrenTrack].length > 0) {
+      const children = treeToArray(record[childrenTrack], expandAll, childrenTrack, record, _level)
       tmp = tmp.concat(children)
     }
   })

@@ -183,7 +183,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import CategoryAdd from './components/categoryAdd'
+import ClassifyAdd from './components/classifyAdd'
 import CartesianTable from './components/cartesianTable'
 import { saveProduct } from '@/api/product/index'
 import { getAllCategory } from '@/api/product/category'
@@ -194,7 +194,7 @@ import { getUnitList } from '@/api/product/unit'
 
 export default {
   components: {
-    CategoryAdd,
+    ClassifyAdd,
     CartesianTable
   },
 

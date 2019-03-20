@@ -9,7 +9,7 @@
         label-width="100px"
         style='width: 300px; margin-left:20px;'
       >
-        <el-form-item label="图片" prop="img">
+        <!-- <el-form-item label="图片" prop="img">
           <el-upload
             style="width:300px;"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -18,7 +18,7 @@
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="名称" prop="name">
           <el-input style="width: 160px;" v-model="formModel.name" />
         </el-form-item>
@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  props: ['dialogVisible'],
+  props: ['dialogVisible', 'classify'],
   data () {
     return {
       formModel: {

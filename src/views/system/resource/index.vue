@@ -48,6 +48,7 @@
 
 <script>
 import { getResourceTree } from '@/api/ma/resource'
+import { traverseTree, findParentInTree } from '@/utils'
 import ResourceAdd from './add'
 
 export default {
@@ -75,18 +76,10 @@ export default {
   },
 
   methods: {
-    traveseData (data, callback) {
-      data.forEach(d => {
-        callback(d)
-        if (Array.isArray(d.childrenList)) {
-          this.traveseData(d.childrenList, callback)
-        }
-      })
-    },
     onCheckChange (node, data) {
       let checked = this.$refs[`node${data.id}`].checked
       this.parentResource = checked ? data : null
-      this.traveseData(this.data, item => {
+      traverseTree(this.data, item => {
         if (item.id !== data.id && this.$refs[`node${item.id}`]) {
           this.$refs[`node${item.id}`].checked = false
         }
@@ -107,15 +100,16 @@ export default {
     },
     findParent (item) {
       const vm = this
-      this.traveseData(this.data, _item => {
+      traverseTree(this.data, _item => {
         if (_item.childrenList.find(i => i.id === item.id)) {
           vm.parentResource = _item
+          return true
         }
       })
     },
     onDoubleClick (node, data) {
       this.resource = data
-      this.findParent(data)
+      this.parentResource = findParentInTree(this.data, data)
       this.action = 'view'
       this.dialogVisible = true
     },
