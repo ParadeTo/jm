@@ -279,7 +279,7 @@ export function traverseTree (tree = [], callback, childrenTrack = 'childrenList
     const res = callback(item)
     if (res) return res // 返回 true 表示处理结束
     const children = item[childrenTrack]
-    children && children.length && children.forEach(child => q.push({ parent: item,  ...child }))
+    children && children.length && children.forEach(child => q.push({ parent: item, ...child }))
   }
 }
 
@@ -303,6 +303,7 @@ export function findAncestorInTree (
   check = (a, item) => a.id === item.id
 ) {
   let parent = findParentInTree(tree, item, childrenTrack, check)
+  if (!parent) return null
   while (parent.parent) {
     parent = parent.parent
   }

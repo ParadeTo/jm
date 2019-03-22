@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-row style="margin-bottom: 20px;">
+    <!-- <el-row style="margin-bottom: 20px;">
       <el-button type="primary" v-waves icon="el-icon-plus" @click="dialogVisible = true">新增</el-button>
       <category-select v-model="category" />
-    </el-row>
+    </el-row> -->
     <tree-table
       :data="tree"
       :columns="columns"
@@ -19,7 +19,7 @@
       </el-table-column> -->
       <el-table-column label="操作" width="200">
         <template slot-scope="scope" v-if="scope.row.id !== -1">
-          <el-button type="text" @click="edit(scope.row)">新增子类</el-button>
+          <el-button type="text" @click="add(scope.row)">新增子类</el-button>
           <el-button type="text" @click="edit(scope.row)" v-if="scope.row.id !== -1">修改</el-button>
           <el-button type="text" @click="view(scope.row)" v-if="scope.row.id !== -1">查看</el-button>
         </template>
@@ -31,7 +31,8 @@
       :classify="classify"
       :parentClassify="parentClassify"
       :ancestorClassify="ancestorClassify"
-      @close="dialogVisible = false"
+      :action="action"
+      @close="onClose"
     />
 
   </div>
@@ -57,6 +58,7 @@ export default {
           width: 200
         }
       ],
+      action: 'view',
       tree: [],
       classify: null,
       parentClassify: null,
@@ -75,14 +77,29 @@ export default {
         this.tree = rsp.data.data
       }
     },
+    onClose () {
+      this.dialogVisible = false
+      this.refreshTree()
+    },
+    add (row) {
+      this.action = 'add'
+      this.classify = row
+      this.parentClassify = row
+      this.dialogVisible = true
+    },
     edit (row) {
-      console.log(row)
+      this.action = 'edit'
+      this.classify = row
+      this.dialogVisible = true
+      this.parentClassify = findParentInTree(this.tree, row)
     },
     view (row) {
-      this.dialogVisible = true
+      this.action = 'view'
       this.classify = row
+      this.dialogVisible = true
       this.parentClassify = findParentInTree(this.tree, row)
       this.ancestorClassify = findAncestorInTree(this.tree, row)
+
     },
     findIndex (arr, row) {
       let index

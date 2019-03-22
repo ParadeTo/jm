@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="新增商品分类" :visible="dialogVisible" width="400px" @close="cancel">
+    <el-dialog :title="title" :visible="dialogVisible" width="400px" @close="cancel">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -20,18 +20,13 @@
           </el-upload>
         </el-form-item> -->
         <el-form-item label="名称" prop="name">
-          <el-input style="width: 160px;" v-model="formModel.name" />
+          <el-input style="width: 160px;" v-model="formModel.name" :readonly="view" />
         </el-form-item>
-        <el-form-item label="所属类目" prop="category">
-          <el-select style="width: 130px" v-model="formModel.category">
-            <el-option v-for="item in categoryList" :key="item.key" :label="item.label" :value="item.key">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="上级名称" prop="parent">
-          <el-select style="width: 130px" v-model="formModel.parent">
-            <el-option :style="`padding-left: ${item.level * 10 + 10}px`" v-for="item in treeList" :key="item.key" :label="item.label" :value="item.key" />
-          </el-select>
+        <!-- <el-form-item label="所属类目" prop="category">
+          <category-select style="width: 130px" v-model="ancestorClassify.id" />
+        </el-form-item> -->
+        <el-form-item label="上级名称" prop="parent" v-if="parentClassify && parentClassify.name">
+          <el-input type="text" readonly v-model="parentClassify.name" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -43,20 +38,41 @@
 </template>
 
 <script>
+import { addClassify, editClassify } from '@/api/product/classify'
+
 export default {
-  props: ['dialogVisible', 'classify'],
+  props: {
+    'dialogVisible': {
+      type: Boolean
+    },
+    'classify': {
+      type: Object,
+      default: () => ({})
+    },
+    'parentClassify': {
+      type: Object,
+      default: () => ({})
+    },
+    'ancestorClassify': {
+      type: Object,
+      default: () => ({})
+    },
+    'action': {
+      type: String,
+      default: 'view'
+    }
+  },
   data () {
     return {
       formModel: {
-        img: '',
-        name: '',
-        category: '',
-        parent: ''
+        name: this.action !== 'add' ? (this.classify && this.classify.name) : '',
+        // category: '',
+        // parent: ''
       },
       rules: {
         name: [{ required: true, message: '请输入商品名称', trigger: ['blur', 'change'] }],
-        category: [{ required: true, message: '请选择类目', trigger: 'change' }],
-        parent: [{ required: true, message: '请选择上级类目', trigger: 'change' }]
+        // category: [{ required: true, message: '请选择类目', trigger: 'change' }],
+        // parent: [{ required: true, message: '请选择上级类目', trigger: 'change' }]
         // category: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
         // parent: [{ required: true, message: '请输入联系电话', trigger: 'blur' }],
         // address: [{ required: true, message: '请输入地址', trigger: 'blur' }],
@@ -92,6 +108,25 @@ export default {
     }
   },
 
+  watch: {
+    classify (val) {
+      if (this.action !== 'add') {
+        if(val) this.formModel.name = val.name
+      } else {
+        this.formModel.name = ''
+      }
+    }
+  },
+
+  computed: {
+    title() {
+      return {'edit':'修改','add':'新增','view':'查看'}[this.action] + '分类'
+    },
+    view() {
+      return this.action === 'view'
+    }
+  },
+
   methods: {
     setInVisible (type) {
       this.$emit('close', type)
@@ -99,9 +134,19 @@ export default {
     cancel () {
       this.setInVisible('cancel')
     },
-    confirm () {
-      this.$refs['dataForm'].validate()
-      this.setInVisible('confirm')
+    async confirm () {
+      try {
+        if(!await this.$refs['dataForm'].validate()) return
+        const { formModel, classify: { id } } = this
+        if (this.action === 'edit') {
+          await editClassify({ id, ...formModel })
+        } else {
+          await addClassify({ ...formModel, parentId: id })
+        }
+        this.setInVisible('confirm')
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
