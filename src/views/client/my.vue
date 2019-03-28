@@ -20,7 +20,7 @@
 
     <my-table
       :cols="cols"
-      :updateListFunc="updateTableFunc"
+      :getListApi="getMyMemberByPage"
     >
       <el-table-column slot="action" align="center" label="动作" min-width="140" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -34,6 +34,7 @@
 
 <script>
 import ClientAdd from './components/clientAdd'
+import { getMyMemberByPage } from '@/api/ma/member'
 
 export default {
   components: {
@@ -56,16 +57,16 @@ export default {
         key: 'name'
       }, {
         label: '联系人',
-        key: 'contact'
+        key: 'contacts'
       }, {
         label: '联系电话',
-        key: 'phone'
+        key: 'contactNumber'
       }, {
         label: '行业',
-        key: 'industry'
+        key: 'scopeOfBusiness'
       }, {
         label: '类型',
-        key: 'type'
+        key: 'businessType'
       }, {
         label: '应付',
         key: 'img'
@@ -74,6 +75,7 @@ export default {
   },
 
   methods: {
+    getMyMemberByPage,
     handleFilter () {
 
     },

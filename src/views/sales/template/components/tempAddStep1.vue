@@ -4,9 +4,9 @@
       <el-form-item label="模板名称" prop="name">
         <el-input style="width: 160px;" v-model="formModel.name" />
       </el-form-item>
-      <el-form-item label="供应商" prop="provider">
-        <el-input style="width: 160px;" v-model="formModel.provider" />
-        <el-button type="default" @click="pickProvider">选择供应商</el-button>
+      <el-form-item label="门店" prop="provider">
+        <el-input style="width: 160px;" v-model="formModel.customer" />
+        <el-button type="default" @click="pickProvider">选择门店</el-button>
       </el-form-item>
     </el-form>
     <div>
@@ -22,14 +22,14 @@ export default {
     return {
       formModel: {
         name: '',
-        provider: ''
+        customer: ''
       }
     }
   },
 
   methods: {
     pickTemp () {},
-    pickProvider () {},
+    pickCustomer () {},
     next () {
       this.$emit('next')
     },

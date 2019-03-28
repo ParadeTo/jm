@@ -27,7 +27,7 @@
 
     <my-table
       :cols="cols"
-      :updateListFunc="updateTableFunc"
+      :getListApi="getPurchaseOrderTemplateByPage"
       style="margin-top: 20px;"
     >
       <el-table-column slot="action" align="center" label="动作" min-width="100" class-name="small-padding fixed-width">
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-
+import { getPurchaseOrderTemplateByPage } from '@/api/pdos/template'
 
 export default {
   data () {
@@ -56,28 +56,29 @@ export default {
         label: '全部'
       }],
       cols: [{
-        key: 'name',
+        key: 'templateName',
         label: '模板名称'
       }, {
-        key: 'provider',
+        key: 'supplierName',
         label: '供应商名称'
       }, {
-        key: 'sku',
+        key: 'skus',
         label: 'SKU数'
       }, {
-        key: 'number',
+        key: 'quantitys',
         label: '总数量'
       }, {
         key: 'amount',
         label: '总金额'
       }, {
-        key: 'createTime',
+        key: 'gmtCreated',
         label: '创建时间'
       }]
     }
   },
 
   methods: {
+    getPurchaseOrderTemplateByPage,
     handleFilter () {
 
     },

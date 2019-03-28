@@ -127,11 +127,11 @@ export default {
     handleSizeChange (size) {
       this.pageSize = size
       this.currentPage = 1
-      this._updateListFunc()
+      this.updateListFunc()
     },
     handleCurrentChange (current) {
       this.currentPage = current
-      this._updateListFunc()
+      this.updateListFunc()
     },
     handleSelectionChange (val) {
       this.$emit('selection-change', val)

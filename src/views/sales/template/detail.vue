@@ -61,8 +61,12 @@
       </el-form>
     </el-card>
 
-    <el-dialog title="导入商品" :visible.sync="dialogVisible" width="80%">
-      <product-list :forSelect="true" @selection-change="handleSelectionChange"/>
+    <el-dialog title="导入商品" :visible.sync="dialogVisible" width="80%" style="max-height: 90vh;">
+      <product-list isForSelect @selection-change="handleSelectionChange"/>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirm">确认</el-button>
+        <el-button @click="cancel">取消</el-button>
+      </div>
     </el-dialog>
 
     <el-card style="margin-top: 20px;">
@@ -123,6 +127,12 @@ export default {
   },
 
   methods: {
+    confirm () {
+
+    },
+    cancel () {
+
+    },
     handleSelectionChange (selection) {
       this.products = selection
     },

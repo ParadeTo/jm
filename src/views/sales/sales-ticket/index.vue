@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { getPurchaseOrder } from '@/api/pdos/supply/purchase'
+import { getPurchaseOrderByPage } from '@/api/pdos/purchase'
 
 // 改造成公共的组件
 export default {
@@ -95,7 +95,7 @@ export default {
     },
     async updateTableFunc ({ currentPage, pageSize }) {
       this.pageSize = pageSize
-      const response = await getPurchaseOrder({ currentPage, pageSize, ...this.query })
+      const response = await getPurchaseOrderByPage({ currentPage, pageSize, ...this.query })
       if (response.data.data) {
         this.list = response.data.data.items
         this.total = response.data.data.pageInfo.totalCount

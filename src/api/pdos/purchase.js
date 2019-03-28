@@ -1,5 +1,5 @@
 /** 销售订单 */
-import { pdosSupplyService } from '@/utils/request'
+import { pdosService } from '@/utils/request'
 
 // 销售订单列表
 /*
@@ -25,11 +25,19 @@ import { pdosSupplyService } from '@/utils/request'
   "orderByClause": "",//排序字段
   "orderNo": "",//订单号
   "status": "1",//订单状态（从参数接口获取）
+    [
+      {"desc": "暂存", "name": "SAVE", "code": 100},
+      {"desc": "待审核", "name": "PENDING", "code": 200},
+      {"desc": "已审核", "name": "VERIFIED", "code": 300},
+      {"desc": "待确认", "name": "CONFIRM", "code": 400},
+      {"desc": "已确认", "name": "CONFIRMED", "code": 500},
+      {"desc": "取消", "name": "CANCEL", "code": 999}
+    ]
   "gmtCreatedBegin": "2019-01-01",
   "gmtCreatedEnd": "2019-01-31"
 }
 */
-export function getPurchaseOrder ({
+export function getPurchaseOrderByPage ({
   currentPage = 1,
   pageSize = 10,
   keyword,
@@ -40,8 +48,8 @@ export function getPurchaseOrder ({
   gmtCreatedEnd,
   ...rest
 }) {
-  return pdosSupplyService({
-    url: '/pdosPurchaseOrder/page',
+  return pdosService({
+    url: '/pdos/pdosPurchaseOrder/page',
     method: 'post',
     data: {
       currentPage,
@@ -58,8 +66,8 @@ export function getPurchaseOrder ({
 }
 
 export function getPurchaseOrderParams () {
-  return pdosSupplyService({
-    url: '/pdosPurchaseOrder/api/parameters',
+  return pdosService({
+    url: '/pdos/pdosPurchaseOrder/api/parameters',
     method: 'get'
   })
 }

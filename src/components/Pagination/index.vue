@@ -25,12 +25,10 @@ export default {
   methods: {
     handleSizeChange (size) {
       this.$emit('size-change', size)
-      console.log(size)
     },
     handleCurrentChange (current) {
       this.page = current
       this.$emit('current-change', current)
-      console.log(current)
     }
   }
 }

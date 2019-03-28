@@ -1,4 +1,4 @@
-import { getPurchaseOrderParams } from '@/api/pdos/supply/purchase'
+import { getPurchaseOrderParams } from '@/api/pdos/purchase'
 
 export default {
   state: {

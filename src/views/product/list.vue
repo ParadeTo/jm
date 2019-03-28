@@ -23,7 +23,7 @@
       <el-button @click="handleFilter" icon="el-icon-search" type="primary" v-waves>查询</el-button>
     </el-row>
 
-    <el-row style="margin-top: 10px margin-bottom: 10px">
+    <el-row style="margin-top: 10px; margin-bottom: 10px">
       <el-button @click="add" type="primary" v-waves>新增商品</el-button>
       <el-button @click="del" type="danger" v-waves>删除商品</el-button>
       <el-button @click="impt" type="success" v-waves>导入商品</el-button>

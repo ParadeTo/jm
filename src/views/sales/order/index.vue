@@ -37,7 +37,7 @@
       <el-button @click="orderTemp" icon="el-icon-tickets" type="success" v-waves>订单模板</el-button>
     </el-row>
 
-    <my-table :cols="cols" :getListApi="getPurchaseOrder" :query="query" ref="table">
+    <my-table :cols="cols" :getListApi="getPurchaseOrderByPage" :query="query" ref="table">
       <el-table-column
         align="center"
         class-name="small-padding fixed-width"
@@ -56,7 +56,7 @@
 
 <script>
 import { mapGetters,mapActions } from 'vuex'
-import { getPurchaseOrder } from '@/api/pdos/supply/purchase'
+import { getPurchaseOrderByPage } from '@/api/pdos/purchase'
 import { parseTime } from '@/utils'
 
 // 改造成公共的组件
@@ -123,7 +123,7 @@ export default {
     orderTemp() {
       this.$router.push({ name: 'salesTemplate' })
     },
-    getPurchaseOrder
+    getPurchaseOrderByPage
   }
 }
 </script>
