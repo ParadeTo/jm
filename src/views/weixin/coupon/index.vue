@@ -62,7 +62,7 @@
     <my-table
       :cols="cols"
       :updateListFunc="updateTableFunc"
-      :hasSelection="true"
+      :multiSelection="true"
       style="margin-top: 20px;"
     >
       <el-table-column slot="action" align="center" label="动作" min-width="100" class-name="small-padding fixed-width">

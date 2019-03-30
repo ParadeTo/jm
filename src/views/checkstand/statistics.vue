@@ -28,7 +28,7 @@
         </el-tab-pane>
         <el-tab-pane label="收银员统计" name="1">
           <my-table
-            :hasSelection="true"
+            :multiSelection="true"
             :cols="statisticsTableCols"
             :updateListFunc="updateStatisticsTableFunc"
           >

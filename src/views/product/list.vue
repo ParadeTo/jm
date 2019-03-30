@@ -35,8 +35,10 @@
     <my-table
       :cols="cols"
       :getListApi="getProductList"
-      :hasSelection="isForSelect"
+      :multiSelection="isForSelect"
       :query="query"
+      :selected="selected"
+      rowKey="productId"
       ref="table"
       @selection-change="handleSelectionChange"
     >
@@ -67,6 +69,9 @@ export default {
     isForSelect: {
       type: Boolean,
       default: false
+    },
+    selected: {
+      type: Array
     }
   },
   data() {

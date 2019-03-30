@@ -1,72 +1,16 @@
 <template>
-  <div class="app-container">
-    <el-form :inline="true">
-      <el-form-item label="订单单号：">
-        2017110814213007
-      </el-form-item>
-      <el-form-item label="供应商：">
-        2017110814213007
-      </el-form-item>
-      <el-form-item label="SKU数：">
-        2017110814213007
-      </el-form-item>
-      <el-form-item label="总数：">
-        2017110814213007
-      </el-form-item>
-      <el-form-item label="总金额：">
-        2017110814213007
-      </el-form-item>
-    </el-form>
-
-    <el-card class="box-card">
-      <el-form :inline="true" :model="formModel" class="demo-form-inline">
-        <el-row>
-          <el-form-item label="供应商商品条码">
-            <el-input v-model="formModel.code" placeholder="" />
-          </el-form-item>
-          <el-form-item label="商品名称">
-            <el-input v-model="formModel.name" placeholder="" />
-          </el-form-item>
-          <el-form-item label="售价">
-            <el-input v-model="formModel.price" placeholder="" />
-          </el-form-item>
-        </el-row>
-
-        <el-row>
-          <el-form-item label="商品品牌">
-            <el-select clearable style="width: 130px" v-model="formModel.brand" placeholder="">
-              <el-option v-for="item in brandList" :key="item.key" :label="item.label" :value="item.key" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="商品数量">
-            <el-input style="width: 80px" v-model="formModel.number" placeholder="" />
-            <el-select clearable style="width: 80px" v-model="formModel.unit" placeholder="单位">
-              <el-option v-for="item in unitList" :key="item.key" :label="item.label" :value="item.key" />
-            </el-select>
-          </el-form-item>
-        </el-row>
-
-        <el-row>
-          <el-form-item label="门店商品信息">
-            --
-          </el-form-item>
-          <el-form-item label="进货价">
-            --
-          </el-form-item>
-        </el-row>
-
-        <el-row>
-          <el-button type="default" @click="del(scope.row)">选择供应商商品</el-button>
-          <el-button type="default" @click="del(scope.row)">匹配门店商品</el-button>
-          <el-button type="primary" @click="del(scope.row)">添加/保存</el-button>
-        </el-row>
-      </el-form>
-    </el-card>
-  </div>
+  <!-- 复用新增模板的页面 -->
+  <template-detail />
 </template>
 
 <script>
+import TemplateDetail from '@/views/sales/template/detail'
+
 export default {
+  components: {
+    TemplateDetail
+  },
+
   data () {
     return {
       formModel: {

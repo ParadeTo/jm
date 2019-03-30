@@ -20,7 +20,7 @@ export default {
     }
   }, {
     path: 'order/add',
-    component: () => import('@/views/sales/order/add'),
+    component: () => import('@/views/sales/order/detail'),
     name: 'salesOrderAdd',
     hidden: true,
     meta: {
@@ -66,7 +66,7 @@ export default {
     }
   }, {
     path: 'template/add',
-    component: () => import('@/views/sales/template/add'),
+    component: () => import('@/views/sales/template/detail'),
     name: 'salesTemplateAdd',
     hidden: true,
     meta: {

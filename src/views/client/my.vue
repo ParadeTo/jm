@@ -14,13 +14,15 @@
     </el-row>
 
     <el-row style="margin: 20px 0;">
-      <el-button type="success" v-waves icon="el-icon-plus" @click="dialogVisible = true">新增客户</el-button>
+      <el-button type="success" v-waves icon="el-icon-plus" @click="dialogVisible = true" v-if="!isForSelect">新增客户</el-button>
       <client-add :dialogVisible="dialogVisible" @close="dialogVisible = false" />
     </el-row>
 
     <my-table
       :cols="cols"
       :getListApi="getMyMemberByPage"
+      :multiSelection="multiSelection"
+      @current-change="handleTableCurrentChange"
     >
       <el-table-column slot="action" align="center" label="动作" min-width="140" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -39,6 +41,17 @@ import { getMyMemberByPage } from '@/api/ma/member'
 export default {
   components: {
     ClientAdd
+  },
+
+  props: {
+    multiSelection: {
+      type: Boolean,
+      default: false
+    },
+    isForSelect: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data () {
@@ -76,6 +89,9 @@ export default {
 
   methods: {
     getMyMemberByPage,
+    handleTableCurrentChange (selection) {
+      this.$emit('current-change', selection)
+    },
     handleFilter () {
 
     },

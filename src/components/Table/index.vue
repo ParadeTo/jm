@@ -2,12 +2,15 @@
   <div>
     <el-table
       :data="listProps || list"
+      :row-key="rowKey"
+      ref="table"
       v-loading="listLoading"
       element-loading-text="loading"
       border
       fit
       highlight-current-row
       @selection-change="handleSelectionChange"
+      @current-change="handleTableCurrentChange"
     >
       <el-table-column
         v-if="hasIndex"
@@ -15,8 +18,9 @@
         width="50">
       </el-table-column>
       <el-table-column
-        v-if="hasSelection"
+        v-if="multiSelection"
         type="selection"
+        :reserve-selection="reserveSelection"
         width="55">
       </el-table-column>
       <el-table-column
@@ -34,7 +38,7 @@
       </el-table-column>
       <slot name="action"></slot>
     </el-table>
-    <pagination :total="total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <pagination :total="total" @size-change="handleSizeChange" @current-change="handlePageChange" />
   </div>
 </template>
 
@@ -54,6 +58,17 @@ export default {
     //   type: Number,
     //   require: true
     // },
+    selected: {
+      type: Array,
+      default: () => []
+    },
+    reserveSelection: {
+      type: Boolean,
+      default: true
+    },
+    rowKey: {
+      type: [String, Function]
+    },
     hasIndex: {
       type: Boolean,
       default: false
@@ -72,11 +87,7 @@ export default {
     getListApi: {
       type: Function
     },
-    hasSelection: {
-      type: Boolean,
-      default: false
-    },
-    hasSelection: {
+    multiSelection: {
       type: Boolean,
       default: false
     },
@@ -96,7 +107,8 @@ export default {
       total: 0,
       currentPage: 1,
       pageSize: 10,
-      listLoading: false
+      listLoading: false,
+      initedPageMap: {}
     }
   },
 
@@ -105,6 +117,15 @@ export default {
   },
 
   methods: {
+    initSelected () {
+      if (this.initedPageMap[this.currentPage]) return
+      this.$set(this.initedPageMap, this.currentPage, true)
+      this.list.forEach(row => {
+        if(this.selected.find(s => s[this.rowKey] === row[this.rowKey])) {
+          this.$refs.table.toggleRowSelection(row, true)
+        }
+      })
+    },
     getValue (col, row) {
       const value = row[col.key]
       return col.transform ? col.transform(value) : value
@@ -112,8 +133,6 @@ export default {
     async updateListFunc () {
       this.listLoading = true
       const { currentPage, pageSize } = this
-      // await this.updateTableFunc({currentPage, pageSize})
-      // this.pageSize = pageSize
       const response = await this.getListApi({ currentPage, pageSize, ...this.query })
       if (response.data.data) {
         this.list = response.data.data.items
@@ -123,15 +142,20 @@ export default {
         this.total = 0
       }
       this.listLoading = false
+      this.initSelected()
     },
     handleSizeChange (size) {
       this.pageSize = size
       this.currentPage = 1
       this.updateListFunc()
     },
-    handleCurrentChange (current) {
+    handlePageChange (current) {
       this.currentPage = current
       this.updateListFunc()
+      this.$emit('page-change', current)
+    },
+    handleTableCurrentChange (data) {
+      this.$emit('current-change', data)
     },
     handleSelectionChange (val) {
       this.$emit('selection-change', val)

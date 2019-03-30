@@ -1,11 +1,12 @@
 <template>
   <div class="app-container">
-    <el-form :inline="true">
-      <el-form-item label="模板名称：">
-        2017110814213007
+    <el-form :model="formModel" label-position="right" label-width="100px">
+      <el-form-item label="模板名称：" prop="name">
+        <el-input style="width: 160px;" v-model="formModel.name" />
       </el-form-item>
-      <el-form-item label="供应商：">
-        广州天河社区贸易有限公司
+      <el-form-item label="门店：">
+        <el-input style="width: 160px;" readonly v-model="formModel.customer.name" />
+        <el-button type="default" @click="pickCustomer">选择门店</el-button>
       </el-form-item>
       <el-form-item label="SKU数：">
         10
@@ -18,51 +19,14 @@
       </el-form-item>
     </el-form>
 
-    <el-card class="box-card">
-      <el-form :inline="true" :model="formModel" class="demo-form-inline">
-        <el-row>
-          <el-form-item label="供应商商品条码">
-            <el-input v-model="formModel.code" placeholder="" />
-          </el-form-item>
-          <el-form-item label="商品名称">
-            <el-input v-model="formModel.name" placeholder="" />
-          </el-form-item>
-          <el-form-item label="售价">
-            <el-input v-model="formModel.price" placeholder="" />
-          </el-form-item>
-        </el-row>
+    <el-button type="default" @click="productDialogVisible=true">选择商品</el-button>
 
-        <el-row>
-          <el-form-item label="商品品牌">
-            <el-select clearable style="width: 130px" v-model="formModel.brand" placeholder="">
-              <el-option v-for="item in brandList" :key="item.key" :label="item.label" :value="item.key" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="商品数量">
-            <el-input style="width: 80px" v-model="formModel.number" placeholder="" />
-            <unit-select v-model="formModel.unit"/>
-          </el-form-item>
-        </el-row>
+    <el-dialog title="选择门店" :visible.sync="customerDialogVisible" width="80%" style="max-height: 90vh;">
+      <my-customer isForSelect @current-change="handleCurrentChange"/>
+    </el-dialog>
 
-        <el-row>
-          <el-form-item label="门店商品信息">
-            --
-          </el-form-item>
-          <el-form-item label="进货价">
-            --
-          </el-form-item>
-        </el-row>
-
-        <el-row>
-          <el-button type="default" @click="dialogVisible=true">选择商品</el-button>
-          <!-- <el-button type="default" @click="del(scope.row)">匹配门店商品</el-button> -->
-          <!-- <el-button type="primary" @click="del(scope.row)">添加/保存</el-button> -->
-        </el-row>
-      </el-form>
-    </el-card>
-
-    <el-dialog title="导入商品" :visible.sync="dialogVisible" width="80%" style="max-height: 90vh;">
-      <product-list isForSelect @selection-change="handleSelectionChange"/>
+    <el-dialog title="导入商品" :visible.sync="productDialogVisible" width="80%" style="max-height: 90vh;">
+      <product-list isForSelect :selected="products" @selection-change="handleSelectionChange"/>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirm">确认</el-button>
         <el-button @click="cancel">取消</el-button>
@@ -95,18 +59,30 @@
 </template>
 
 <script>
+import MyCustomer from '@/views/client/my'
 import ProductList from '@/views/product/list'
 import { productCols } from '@/const/product'
 
 export default {
   components: {
-    ProductList
+    ProductList,
+    MyCustomer
   },
+
+  props: {
+    forOrder: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   data () {
     return {
-      dialogVisible: false,
+      customerDialogVisible: false,
+      productDialogVisible: false,
       products: [],
       formModel: {
+        customer: {},
         code: '',
         brand: '',
         name: '',
@@ -133,8 +109,17 @@ export default {
     cancel () {
 
     },
+    handleCurrentChange (data) {
+      if (data) {
+        this.customerDialogVisible = false
+        this.formModel.customer = data
+      }
+    },
     handleSelectionChange (selection) {
       this.products = selection
+    },
+    pickCustomer () {
+      this.customerDialogVisible = true
     },
     getValue (col, row) {
       const value = row[col.key]
