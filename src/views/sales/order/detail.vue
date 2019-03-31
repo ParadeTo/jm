@@ -1,6 +1,6 @@
 <template>
   <!-- 复用新增模板的页面 -->
-  <template-detail />
+  <template-detail forOrder />
 </template>
 
 <script>

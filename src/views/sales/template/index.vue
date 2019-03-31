@@ -28,6 +28,7 @@
     <my-table
       :cols="cols"
       :getListApi="getPurchaseOrderTemplateByPage"
+      @current-change="handleTableCurrentChange"
       style="margin-top: 20px;"
     >
       <el-table-column slot="action" align="center" label="动作" min-width="100" class-name="small-padding fixed-width">
@@ -44,6 +45,7 @@
 import { getPurchaseOrderTemplateByPage } from '@/api/pdos/template'
 
 export default {
+  props: ['isForSelect'],
   data () {
     return {
       query: {
@@ -79,6 +81,9 @@ export default {
 
   methods: {
     getPurchaseOrderTemplateByPage,
+    handleTableCurrentChange (selection) {
+      this.$emit('current-change', selection)
+    },
     handleFilter () {
 
     },

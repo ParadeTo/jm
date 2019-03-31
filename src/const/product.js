@@ -35,7 +35,7 @@ export const productCols = [
   //   key: 'img'
   // },
   {
-    label: '销售价',
+    label: '价格',
     key: 'price',
     width: '80'
   }

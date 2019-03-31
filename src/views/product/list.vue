@@ -38,7 +38,7 @@
       :multiSelection="isForSelect"
       :query="query"
       :selected="selected"
-      rowKey="productId"
+      rowKey="skuId"
       ref="table"
       @selection-change="handleSelectionChange"
     >

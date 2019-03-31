@@ -78,7 +78,7 @@ export default {
         key: 'orderNo',
         label: '订单单号'
       },{
-        key: 'supplierName',
+        key: 'purchaserName',
         label: '供应商名称'
       },{
         key: 'skus',
@@ -111,11 +111,11 @@ export default {
   computed: mapGetters(['purchaseOrderParams']),
 
   mounted() {
-    !this.purchaseOrderParams&&this.updatePurchaseOrder()
+    !this.purchaseOrderParams && this.updatePurchaseOrderParams()
   },
 
   methods: {
-    ...mapActions(['updatePurchaseOrder']),
+    ...mapActions(['updatePurchaseOrderParams']),
     handleFilter() { this.$refs.table.updateListFunc() },
     addOrder() {
       this.$router.push({ name: 'salesOrderAdd' })

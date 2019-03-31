@@ -71,3 +71,28 @@ export function getPurchaseOrderParams () {
     method: 'get'
   })
 }
+
+// 查询最近一次销售给门店的信息
+export function getLastOrderItem ({
+  purchaserUserId,
+  productNos // Array skuId
+}) {
+  return pdosService({
+    url: '/pdos/pdosDeliveryOrderItem/findLast',
+    method: 'post',
+    data: {
+      purchaserUserId,
+      productNos
+    }
+  })
+}
+
+// 保存销售订单
+export function addPurchaseOrder (data) {
+  return pdosService({
+    url: '/pdos/pdosPurchaseOrder/save',
+    method: 'post',
+    data,
+    showSuccess: true
+  })
+}

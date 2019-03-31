@@ -29,3 +29,21 @@ export function getPurchaseOrderTemplateByPage ({
     }
   })
 }
+
+// 新增订单模板
+export function addPurchaseOrderTemplate (data) {
+  return pdosService({
+    url: '/pdos/pdosOrderTemplate',
+    method: 'post',
+    data,
+    showSuccess: true
+  })
+}
+
+// 订单模板详情
+export function getPurchaseOrderTemplateDetail (id) {
+  return pdosService({
+    url: `/pdos/pdosOrderTemplate/${id}`,
+    method: 'get'
+  })
+}
