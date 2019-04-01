@@ -258,7 +258,8 @@ export default {
           const {
             barCode,
             brandName,
-            productName,
+            productName: skuName,
+            productNo,
             unitName,
             price,
             quantity,
@@ -266,7 +267,8 @@ export default {
           } = item
           return {
             barCode,
-            skuName: productName,
+            skuName,
+            skuId: Number(productNo),
             brandName,
             cateName: '',
             classifyName: '',
@@ -277,6 +279,7 @@ export default {
           }
         })
       }
+      this.templateDialogVisible = false
     },
     handleSelectionChange (selection) {
       if (!this.forOrder) {
