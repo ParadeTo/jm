@@ -20,10 +20,17 @@ export default {
     }
   }, {
     path: 'add',
-    component: () => import('@/views/product/add'),
+    component: () => import('@/views/product/detail'),
     name: 'productAdd',
     meta: {
       title: '新增商品'
+    }
+  }, {
+    path: 'detail/:id',
+    component: () => import('@/views/product/detail'),
+    name: 'productDetail',
+    meta: {
+      title: '商品详情'
     }
   }, {
     path: 'setting',

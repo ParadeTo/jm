@@ -38,3 +38,21 @@ export function saveProduct (data) {
     showSuccess: true
   })
 }
+
+export function editProduct (data) {
+  return productService({
+    url: '/product',
+    method: 'put',
+    data,
+    showLoading: true,
+    showError: true,
+    showSuccess: true
+  })
+}
+
+export function getProductDetail (id) {
+  return productService({
+    url: `/product/${id}`,
+    method: 'get'
+  })
+}

@@ -309,3 +309,37 @@ export function findAncestorInTree (
   }
   return parent
 }
+
+export function deepEq (a, b) {
+  const className = Object.prototype.toString.call(a)
+  if (className !== Object.prototype.toString.call(b)) return false
+
+  switch (className) {
+    case '[object String]':
+    case '[object Number]':
+    case '[object Boolean]':
+    case '[object Null]':
+      return a === b
+  }
+
+  let len
+  if (className === '[object Array]') {
+    len = a.length
+    if (len !== b.length) return false
+    while (len--) {
+      if (!deepEq(a[len], b[len])) return false
+    }
+  } else {
+    const keys = Object.keys(a)
+    let key
+    len = keys.length
+
+    if (Object.keys(b).length !== len) return false
+    while (len--) {
+      key = keys[len]
+      if (!(b.hasOwnProperty(key) && deepEq(a[key], b[key]))) return false
+    }
+  }
+
+  return true
+}

@@ -110,7 +110,9 @@ export default {
     add() {
       this.$router.push({ name: 'productAdd' })
     },
-    view() { },
+    view(row) {
+      this.$router.push({ name: 'productDetail', params: { id: row.productId } })
+    },
     impt() { },
     edit() { },
     del() { },

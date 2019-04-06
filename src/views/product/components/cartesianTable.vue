@@ -10,7 +10,7 @@
     >
       <template slot-scope="scope">
         <el-input v-if="col.input" v-model="scope.row[col.key]" @input="handleInput" />
-        <span v-else>{{scope.row[col.key].attrValueName}}</span>
+        <span v-else>{{cell(scope.row, col)}}</span>
       </template>
     </el-table-column>
   </el-table>
@@ -32,6 +32,9 @@ export default {
   methods: {
     handleInput() {
       console.log(this.list)
+    },
+    cell (row, col) {
+      return row[col.key].attrValueName
     }
   }
 }

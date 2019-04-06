@@ -42,7 +42,7 @@
               @click="dialogVisible = true"
               style="margin-left: 10px"
             >新增分类</el-button>
-            <category-add :dialogVisible="dialogVisible" @close="dialogVisible = false"/>
+            <!-- <category-add :dialogVisible="dialogVisible" @close="dialogVisible = false"/> -->
           </el-row>
         </el-col>
         <!-- <el-col :span="6">上传图片</el-col> -->
@@ -130,10 +130,11 @@
               <div v-for="(attr, index) in attrListSelected" :key="index">
                 <simple-select
                   placeholder="商品规格"
-                  v-model="attr.attr"
+                  :value="attr.attr"
+                  @input="()=>{}"
                   :list="attrList"
                   :valueTrack="{}"
-                  @change="() => handleAttrChange(attr)"
+                  @change="(value) => handleAttrChange(attr, value)"
                 />
                 <simple-select
                   multiple
@@ -143,6 +144,7 @@
                   :valueTrack="{}"
                   @change="() => handleAttrValueChange(attr)"
                 />
+                <i class="el-icon-remove icon" @click="removeAttr(index)" v-if="index!==0" />
               </div>
               <i class="el-icon-circle-plus icon" @click="addAttr">新增规格</i>
             </el-form-item>
@@ -185,12 +187,24 @@
 import { mapGetters, mapActions } from 'vuex'
 import ClassifyAdd from './components/classifyAdd'
 import CartesianTable from './components/cartesianTable'
-import { saveProduct } from '@/api/product/index'
+import { saveProduct, editProduct, getProductDetail } from '@/api/product/index'
 import { getAllCategory } from '@/api/product/category'
 import { getAllBrand } from '@/api/product/brand'
 import { getAllClassify } from '@/api/product/classify'
 import { getAttributeAndValueList } from '@/api/product/attribute'
 import { getUnitList } from '@/api/product/unit'
+import { deepEq } from '@/utils/index'
+
+const MULTI_ATTR_TABLE_COLS = [{
+  label: '条码',
+  minWidth: 180,
+  input: true,
+  key: 'barcode'
+}, {
+  label: '价格',
+  input: true,
+  key: 'price'
+}]
 
 export default {
   components: {
@@ -200,8 +214,20 @@ export default {
 
   data() {
     return {
+      id: null,
       brandList: [],
       classifyList: [],
+      productAttributeList: [],
+    //   [
+    //   {
+    //     "productId": null,
+    //     "attrId": 1
+    //   },
+    //   {
+    //     "productId": null,
+    //     "attrId": 3
+    //   }
+    // ]
       attrList: [],
       attrListSelected: [
         {
@@ -211,10 +237,10 @@ export default {
         }
       ],
       cartesianData: [],
+      originCartesianData: [],
       cartesianCols: [],
       model: {
         name: "",
-        attrValue: "",
         productType: 1,
         owncode: "",
         brand: null,
@@ -259,11 +285,111 @@ export default {
     }
   },
 
+  async mounted () {
+    this.id = Number(this.$route.params.id)
+    if (this.id) this.initDate()
+  },
+
+  computed: mapGetters(["brand"]), // brandList
+
   methods: {
     ...mapActions([
       'updateBrand',
       'updateClassify'
     ]),
+    async initDate () {
+      const loading = this.$loading()
+      const { model } = this
+      const rsp = await getProductDetail(this.id)
+      if (rsp && rsp.data.data) {
+        const {
+          brandId,
+          classifyId,
+          cateId,
+          name,
+          owncode,
+          productType,
+          unitId,
+          productAttributeList,
+          skuList
+        } = rsp.data.data
+        model.cateId = cateId
+        model.classifyId = classifyId
+        model.name = name
+        model.owncode = owncode
+        model.productType = productType
+        model.unitId = unitId
+        await this.updateAccordingToCate(cateId)
+        this.initBrand(brandId)
+        if (productType === 2) {
+          this.productAttributeList = productAttributeList
+          this.initAttrListAndTabelCols(productAttributeList)
+          this.initCartesianData(skuList)
+        }
+      }
+      loading.close()
+    },
+
+    initBrand (brandId) {
+      this.model.brand = this.brand.find(b => b.id === brandId)
+    },
+
+    initAttrListAndTabelCols (productAttributeList) {
+      this.attrListSelected = []
+      productAttributeList.forEach(attribute => {
+        const attr = this.attrList.find(_attr => _attr.id === attribute.attrId)
+        const { attrValueList, name, id } = attr
+        const attrValueListSelected = attrValueList.filter(attrValue =>
+          attribute.attrValueList.includes(attrValue.id)
+        )
+        this.attrListSelected.push({
+          attr,
+          attrValueList,
+          attrValueListSelected
+        })
+        this.cartesianCols.push({
+          label: name,
+          key: id
+        })
+      })
+      this.cartesianCols.push(...MULTI_ATTR_TABLE_COLS)
+    },
+
+    initCartesianData (skuList) {
+      this.cartesianData = skuList.map(sku => {
+        const {
+          price,
+          id: skuId,
+          barcode,
+          attrValueList
+        } = sku
+
+        const row = {
+          price,
+          barcode,
+          id: skuId
+        }
+        for (let i = 0, len = this.cartesianCols.length; i < len; i++) {
+          const col = this.cartesianCols[i]
+          if (this.attrListSelected.find(({ attr }) => attr.id === col.key)) {
+            const {
+              attrId,
+              attrValueId,
+              attrValueName,
+              atrrValueName
+            } = attrValueList.find(attrValue => attrValue.attrId === col.key)
+            row[attrId] = {
+              attrId,
+              attrValueId,
+              attrValueName: attrValueName || atrrValueName
+            }
+          }
+        }
+        return row
+      })
+      this.originCartesianData = this.cartesianData
+    },
+
     onTypeChange() {},
     handleUnitOperation(operation, scope) {
       const len = this.skuReqListBasic.length
@@ -289,12 +415,13 @@ export default {
         ...this.model,
         brandId: id,
         brandName: name,
-        skuReqList: []
+        productAttributeList: this.genProductAttrbuteList(),
+        skuList: []
       }
       delete data.brand
       if (this.model.productType === 1) {
         this.skuReqListBasic.forEach(s => {
-          data.skuReqList.push(s.model)
+          data.skuList.push(s.model)
         })
       } else if (this.model.productType === 2) {
         this.cartesianData.forEach(c => {
@@ -303,15 +430,49 @@ export default {
             price: c.price,
             attrValueList: []
           }
+          if (c.id !== undefined) row.id = c.id
           for (let k in c) {
             if (c[k].attrId) {
               row.attrValueList.push(c[k])
             }
           }
-          data.skuReqList.push(row)
+          data.skuList.push(row)
         })
       }
-      saveProduct(data)
+
+      if (this.id) {
+        data.productId = this.id
+      }
+      debugger
+      this.id
+        ? editProduct(data)
+        : saveProduct(data)
+    },
+    genProductAttrbuteList () {
+      if (!this.id) { // add
+        this.productAttributeList = this.attrListSelected.map(attr => ({
+          productId: null,
+          attrId: attr.attr.id
+        }))
+      } else { // edit
+        this.productAttributeList = this.attrListSelected.map(attr => {
+          const productAttr = this.productAttributeList.find(productAttr =>
+            productAttr.attrId === attr.attr.id
+          )
+          if (productAttr) {
+            return {
+              ...productAttr,
+              attrValueList: attr.attrValueListSelected.map(attrValue => attrValue.id)
+            }
+          } else {
+            return {
+              productId: null,
+              attrId: attr.attr.id
+            }
+          }
+        })
+      }
+      return this.productAttributeList
     },
     cancel() {},
     onChange() {
@@ -320,25 +481,45 @@ export default {
     addAttr() {
       this.attrListSelected.push(
         {
-          attrId: "",
+          attr: null,
           attrValueList: [],
           attrValueListSelected: []
         }
       )
     },
+    removeAttr(index) {
+      this.attrListSelected.splice(index, 1)
+      this.updateCartesianData()
+    },
     handleCateChange(cateId) {
       this.model.brandId = ""
       this.model.classifyId = ""
-      this.updateAttributeList(cateId)
-      this.updateBrand(cateId)
-      this.updateClassify(cateId)
+      this.updateAccordingToCate(cateId)
+    },
+    async updateAccordingToCate (cateId) {
+      await Promise.all([
+        this.updateAttributeList(cateId),
+        this.updateBrand(cateId),
+        this.updateClassify(cateId)
+      ])
     },
     findAttrValue (attrId) {
       const attr = this.attrList.find(attr => attr.id === attrId)
       return attr && attr.attrValueList
     },
-    handleAttrChange(attr) {
-      attr.attrValueList = this.findAttrValue(attr.attr.id)
+    handleAttrChange(attr, value) {
+      const selected = this.attrListSelected.find(_attr =>
+        (_attr && _attr.attr && _attr.attr.id) === (value.id)
+      )
+      if (selected) {
+        this.$message({
+          message: '已选择过该规格',
+          type: 'info'
+        })
+        return
+      }
+      attr.attr = value
+      attr.attrValueList = this.findAttrValue(value.id)
     },
     getCartesian(attrListSelected, list = [], idx = 0, cols = []) {
       const {
@@ -352,16 +533,7 @@ export default {
         key: attrId
       })
       if (attrListSelected.length - 1 === idx) {
-        cols.push({
-          label: '条码',
-          minWidth: 180,
-          input: true,
-          key: 'barcode'
-        }, {
-          label: '价格',
-          input: true,
-          key: 'price'
-        })
+        cols.push(...MULTI_ATTR_TABLE_COLS)
       }
 
       const cartesian = []
@@ -393,10 +565,49 @@ export default {
       return this.getCartesian(attrListSelected, cartesian, idx + 1, cols)
     },
     handleAttrValueChange(attr) {
+      this.updateCartesianData()
+    },
+
+    isRowEqual (a, b) {
+      const aKeys = Object.keys(a).filter(k => !isNaN(k))
+      const bKeys = Object.keys(b).filter(k => !isNaN(k))
+      let key
+      let len = aKeys.length
+
+      if (bKeys.length !== len) return false
+      while (len--) {
+        key = aKeys[len]
+        if (!(b.hasOwnProperty(key) && a[key].attrValueId === b[key].attrValueId)) return false
+      }
+      return true
+    },
+
+    updateCartesianData () {
       const { cartesian, cols } = this.getCartesian(this.attrListSelected)
-      this.cartesianData = cartesian
+      // 修改时候要保留上次的price和barcode
+      this.cartesianData = cartesian.map(newRow => {
+        this.originCartesianData.forEach(oldRow => {
+          // const onlyAttrFieldNew = { ...newRow }
+          // const onlyAttrFieldOld = { ...oldRow }
+
+          // delete onlyAttrFieldNew.barcode
+          // delete onlyAttrFieldNew.price
+          // delete onlyAttrFieldOld.barcode
+          // delete onlyAttrFieldOld.price
+          if (this.isRowEqual(
+            newRow, oldRow
+          )) {
+            debugger
+            newRow.barcode = oldRow.barcode
+            newRow.price = oldRow.price
+            newRow.id = oldRow.id
+          }
+        })
+        return newRow
+      })
       this.cartesianCols = cols
     },
+
     async updateAttributeList(cateId) {
       const { data } = await getAttributeAndValueList({ cateId })
       if (Array.isArray(data.data.items)) this.attrList = data.data.items
