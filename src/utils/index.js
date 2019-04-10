@@ -1,6 +1,7 @@
 /**
  * Created by jiachenpan on 16/11/18.
  */
+export { default as deepmerge } from './deepmerge'
 
 export function parseTime (time, cFormat) {
   if (arguments.length === 0) {
@@ -342,4 +343,24 @@ export function deepEq (a, b) {
   }
 
   return true
+}
+
+export function safeGet (obj, path, fallback) {
+  if (obj === undefined) return fallback
+  if (Array.isArray(path)) {
+    return path.reduce((ob, k) => {
+      return ob && ob[k] ? ob[k] : fallback
+    }, obj)
+  } else if (typeof path === 'string') {
+    let arrKeys = path.split('.')
+    let pathKeys = []
+    let m
+    arrKeys.forEach(k => {
+      if ((m = k.match(/([^[\]]+)|(\[\d+\])/g))) {
+        m = m.map(v => v.replace(/\[(\d+)\]/, '$1'))
+        ;[].push.apply(pathKeys, m)
+      }
+    })
+    return safeGet(obj, pathKeys, fallback)
+  }
 }

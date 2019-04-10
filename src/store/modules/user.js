@@ -1,7 +1,17 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
+import { logout } from '@/api/login'
+import { login, getUserInfo } from '@/api/ma/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { safeGet } from '@/utils/index'
+
+const ROLE_MAP = {
+  STORE: 'shopAdmin',
+  PLATFORM: 'bmsAdmin',
+  SUPPLIER: 'providerAdmin'
+}
 
 const user = {
+  namespaced: true,
+
   state: {
     user: '',
     status: '',
@@ -45,14 +55,13 @@ const user = {
 
   actions: {
     // 用户名登录
-    LoginByUsername ({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+    loginByUsername ({ commit }, { username, password }) {
+      username = username.trim()
       return new Promise((resolve, reject) => {
-        loginByUsername(username, userInfo.password).then(response => {
-          console.log(response)
+        login({ username, password }).then(response => {
           const data = response.data
-          commit('SET_TOKEN', data.token)
-          setToken(response.data.token)
+          commit('SET_TOKEN', data.data)
+          setToken(response.data.data)
           resolve()
         }).catch(error => {
           console.log('err')
@@ -62,24 +71,25 @@ const user = {
     },
 
     // 获取用户信息
-    GetUserInfo ({ commit, state }) {
+    getUserInfo ({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
           if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
             reject(new Error('error'))
           }
-          const data = response.data
+          const data = safeGet(response, 'data.data')
+          const roles = ROLE_MAP['SUPPLIER'/* data.memberType */]
+          commit('SET_ROLES', [ roles ])
+          // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
+          //   commit('SET_ROLES', data.roles.map(role => ROLE_MAP[role.code]))
+          // } else {
+          //   reject(new Error('getInfo: roles must be a non-null array !'))
+          // }
 
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject(new Error('getInfo: roles must be a non-null array !'))
-          }
-
-          commit('SET_NAME', data.name)
+          commit('SET_NAME', data.userName)
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
-          resolve(response)
+          resolve([ roles ])
         }).catch(error => {
           reject(error)
         })
@@ -101,7 +111,7 @@ const user = {
     // },
 
     // 登出
-    LogOut ({ commit, state }) {
+    logOut ({ commit, state }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
@@ -114,8 +124,17 @@ const user = {
       })
     },
 
+    resetToken ({ commit }) {
+      return new Promise(resolve => {
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+        removeToken()
+        resolve()
+      })
+    },
+
     // 前端 登出
-    FedLogOut ({ commit }) {
+    fedLogOut ({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         removeToken()
@@ -124,7 +143,7 @@ const user = {
     },
 
     // 动态修改权限
-    ChangeRoles ({ commit }, role) {
+    changeRoles ({ commit }, role) {
       return new Promise(resolve => {
         commit('SET_TOKEN', role)
         setToken(role)

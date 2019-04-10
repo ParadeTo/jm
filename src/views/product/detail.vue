@@ -193,7 +193,7 @@ import { getAllBrand } from '@/api/product/brand'
 import { getAllClassify } from '@/api/product/classify'
 import { getAttributeAndValueList } from '@/api/product/attribute'
 import { getUnitList } from '@/api/product/unit'
-import { deepEq } from '@/utils/index'
+import { deepEq, deepmerge } from '@/utils/index'
 
 const MULTI_ATTR_TABLE_COLS = [{
   label: '条码',
@@ -205,6 +205,21 @@ const MULTI_ATTR_TABLE_COLS = [{
   input: true,
   key: 'price'
 }]
+
+const UNIT_TYPE = {
+  0: {
+    label: '基本单位',
+    key: 'basic'
+  },
+  1: {
+    label: '辅助单位1',
+    key: 'auxiliary'
+  },
+  2: {
+    label: '辅助单位2',
+    key: 'auxiliary'
+  }
+}
 
 export default {
   components: {
@@ -218,16 +233,6 @@ export default {
       brandList: [],
       classifyList: [],
       productAttributeList: [],
-    //   [
-    //   {
-    //     "productId": null,
-    //     "attrId": 1
-    //   },
-    //   {
-    //     "productId": null,
-    //     "attrId": 3
-    //   }
-    // ]
       attrList: [],
       attrListSelected: [
         {
@@ -241,6 +246,7 @@ export default {
       cartesianCols: [],
       model: {
         name: "",
+        attrValue: "",
         productType: 1,
         owncode: "",
         brand: null,
@@ -249,12 +255,7 @@ export default {
         unitId: "", // 多规格商品需要
         images: ""
       },
-      categoryList: [
-        {
-          key: 0,
-          label: "日用百货"
-        }
-      ],
+      categoryList: [],
       skuReqListBasic: [
         {
           name: "基本单位",
@@ -279,7 +280,8 @@ export default {
           }
         }
       ],
-      attrs: [],
+      originSkuReqListBasic: [],
+      // attrs: [],
       tableLoading: false,
       dialogVisible: false
     }
@@ -311,6 +313,7 @@ export default {
           productType,
           unitId,
           productAttributeList,
+          attrValue,
           skuList
         } = rsp.data.data
         model.cateId = cateId
@@ -319,15 +322,44 @@ export default {
         model.owncode = owncode
         model.productType = productType
         model.unitId = unitId
+        model.attrValue = attrValue
         await this.updateAccordingToCate(cateId)
         this.initBrand(brandId)
         if (productType === 2) {
           this.productAttributeList = productAttributeList
           this.initAttrListAndTabelCols(productAttributeList)
           this.initCartesianData(skuList)
+        } else {
+          this.initSkuReqListBasic(skuList)
         }
       }
       loading.close()
+    },
+
+    initSkuReqListBasic(skuList) {
+      this.skuReqListBasic = skuList.map(({
+        attrValueList,
+        barcode,
+        conversion,
+        id,
+        price,
+        unitId,
+        unitType
+      }) => {
+        return {
+          name: UNIT_TYPE[unitType].label,
+          type: UNIT_TYPE[unitType].key,
+          model: {
+            id,
+            barcode,
+            conversion,
+            price,
+            unitId,
+            unitType
+          }
+        }
+      })
+      this.originSkuReqListBasic = deepmerge(null, this.skuReqListBasic)
     },
 
     initBrand (brandId) {
@@ -393,8 +425,9 @@ export default {
     onTypeChange() {},
     handleUnitOperation(operation, scope) {
       const len = this.skuReqListBasic.length
+      const originLen = this.originSkuReqListBasic.length
       if (operation === "add") {
-        this.skuReqListBasic.push({
+        let sku = {
           name: `辅助单位${len}`,
           type: "auxiliary",
           model: {
@@ -404,7 +437,9 @@ export default {
             unitId: "",
             unitType: len
           }
-        })
+        }
+        if (len < originLen) sku = deepmerge(null, this.originSkuReqListBasic[len])
+        this.skuReqListBasic.push(sku)
       } else {
         this.skuReqListBasic.splice(scope.$index, 1)
       }
@@ -415,7 +450,6 @@ export default {
         ...this.model,
         brandId: id,
         brandName: name,
-        productAttributeList: this.genProductAttrbuteList(),
         skuList: []
       }
       delete data.brand
@@ -424,6 +458,7 @@ export default {
           data.skuList.push(s.model)
         })
       } else if (this.model.productType === 2) {
+        data.productAttributeList = this.genProductAttrbuteList()
         this.cartesianData.forEach(c => {
           const row = {
             barcode: c.barcode,
@@ -443,7 +478,7 @@ export default {
       if (this.id) {
         data.productId = this.id
       }
-      debugger
+
       this.id
         ? editProduct(data)
         : saveProduct(data)
@@ -466,7 +501,8 @@ export default {
             }
           } else {
             return {
-              productId: null,
+              productId: this.id,
+              attrValueList: attr.attrValueListSelected.map(attrValue => attrValue.id),
               attrId: attr.attr.id
             }
           }
@@ -587,17 +623,9 @@ export default {
       // 修改时候要保留上次的price和barcode
       this.cartesianData = cartesian.map(newRow => {
         this.originCartesianData.forEach(oldRow => {
-          // const onlyAttrFieldNew = { ...newRow }
-          // const onlyAttrFieldOld = { ...oldRow }
-
-          // delete onlyAttrFieldNew.barcode
-          // delete onlyAttrFieldNew.price
-          // delete onlyAttrFieldOld.barcode
-          // delete onlyAttrFieldOld.price
           if (this.isRowEqual(
             newRow, oldRow
           )) {
-            debugger
             newRow.barcode = oldRow.barcode
             newRow.price = oldRow.price
             newRow.id = oldRow.id

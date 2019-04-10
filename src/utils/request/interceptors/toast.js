@@ -9,6 +9,7 @@ export default {
   },
   response: {
     onSuccess (rsp) {
+      if (!rsp) return
       const data = rsp.data
       const conf = rsp.config
       const opt = {

@@ -3,6 +3,7 @@ import axios from 'axios'
 // import { getToken } from '@/utils/auth'
 import loadingInterceptor from './interceptors/loading'
 import toastInterceptor from './interceptors/toast'
+import tokenInterceptor from './interceptors/token'
 
 // create an axios instance
 const pdosService = axios.create({
@@ -12,6 +13,7 @@ const pdosService = axios.create({
 
 // interceptors
 ;[
+  tokenInterceptor,
   loadingInterceptor,
   toastInterceptor
 ].forEach(interceptor => {

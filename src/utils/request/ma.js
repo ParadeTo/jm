@@ -1,6 +1,7 @@
 import axios from 'axios'
 import loadingInterceptor from './interceptors/loading'
 import toastInterceptor from './interceptors/toast'
+import tokenInterceptor from './interceptors/token'
 
 // create an axios instance
 const maService = axios.create({
@@ -10,6 +11,7 @@ const maService = axios.create({
 
 // interceptors
 ;[
+  tokenInterceptor,
   loadingInterceptor,
   toastInterceptor
 ].forEach(interceptor => {
