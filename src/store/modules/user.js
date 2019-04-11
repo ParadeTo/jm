@@ -78,7 +78,7 @@ const user = {
             reject(new Error('error'))
           }
           const data = safeGet(response, 'data.data')
-          const roles = ROLE_MAP['SUPPLIER'/* data.memberType */]
+          const roles = ROLE_MAP[data.memberType]
           commit('SET_ROLES', [ roles ])
           // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
           //   commit('SET_ROLES', data.roles.map(role => ROLE_MAP[role.code]))
