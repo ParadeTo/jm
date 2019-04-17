@@ -30,8 +30,8 @@ export default {
       const { data } = await getAllBrand({ cateId })
       Array.isArray(data.data) && commit('UPDATE_BRAND', data.data)
     },
-    async updateClassify ({ commit }, cateId) {
-      const { data } = await getAllClassify({ cateId })
+    async updateClassify ({ commit }, parentId) {
+      const { data } = await getAllClassify({ parentId: -parentId })
       Array.isArray(data.data) && commit('UPDATE_CLASSIFY', data.data)
     }
   },

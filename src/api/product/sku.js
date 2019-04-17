@@ -22,3 +22,10 @@ export function getProductSkuList ({
     maxAge: 5 * 60 // 秒
   })
 }
+
+export function delSku (id) {
+  return productService({
+    url: `/sku/${id}`,
+    method: 'delete'
+  })
+}

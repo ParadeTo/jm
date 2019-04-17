@@ -2,9 +2,9 @@
   <!-- 销售单，！不是销售订单 -->
   <div class="app-container">
     <div class="filter-container">
-        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" placeholder="订单单号" v-model="query.number" />
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" placeholder="销售单单号" v-model="query.number" />
         <el-date-picker
-          placeholder="订单时间"
+          placeholder="销售单时间"
           v-model="query.daterange"
           type="daterange"
           range-separator="至"
@@ -18,15 +18,15 @@
     </div>
 
     <el-row style="margin-bottom: 20px;">
-      <el-button type="primary" v-waves icon="el-icon-plus" @click="addOrder">新增订单</el-button>
+      <el-button type="primary" v-waves icon="el-icon-plus" @click="addSalesTicket">新增销售单</el-button>
       <el-button type="success" v-waves icon="el-icon-tickets" @click="orderTemp">订单模板</el-button>
     </el-row>
 
     <my-table
-      :list="list"
-      :total="total"
-      :updateTableFunc="updateTableFunc"
+      :getListApi="getDeliveryOrderByPage"
+      :query="query"
       :cols="cols"
+      ref="table"
     >
       <el-table-column slot="action" align="center" label="操作" min-width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { getPurchaseOrderByPage } from '@/api/pdos/purchase'
+import { getDeliveryOrderByPage } from '@/api/pdos/delivery'
 
 // 改造成公共的组件
 export default {
@@ -58,48 +58,44 @@ export default {
         label: '全部'
       }],
       cols: [{
-        key: 'code',
-        label: '订单单号'
+        key: 'orderNo',
+        label: '销售单单号'
       }, {
-        key: 'name',
-        label: '供应商名称'
+        key: 'purchaserName',
+        label: '客户名称'
       }, {
-        key: 'sku',
+        key: 'skus',
         label: 'SKU数'
       }, {
-        key: 'number',
+        key: 'quantitys',
         label: '总数量'
       }, {
-        key: 'type',
+        key: '',
+        label: '发货SKU数'
+      }, {
+        key: 'shippedQuantity',
+        label: '发货数量'
+      }, {
+        key: 'amount',
         label: '总金额'
       }, {
-        key: 'name',
-        label: '创建时间'
-      }, {
-        key: 'name',
+        key: 'status',
         label: '订单状态'
       }, {
-        key: 'name',
-        label: '操作'
+        key: '',
+        label: '发货时间'
       }]
     }
   },
 
   methods: {
+    getDeliveryOrderByPage,
     handleFilter () {},
-    addOrder () {
-      this.$router.push({ name: 'cargoOrderAdd' })
+    addSalesTicket () {
+      this.$router.push({ name: 'salesTicketAdd' })
     },
     orderTemp () {
-      this.$router.push({ name: 'cargoOrderTemp' })
-    },
-    async updateTableFunc ({ currentPage, pageSize }) {
-      this.pageSize = pageSize
-      const response = await getPurchaseOrderByPage({ currentPage, pageSize, ...this.query })
-      if (response.data.data) {
-        this.list = response.data.data.items
-        this.total = response.data.data.pageInfo.totalCount
-      }
+      this.$router.push({ name: 'salesTemplate' })
     }
   }
 }

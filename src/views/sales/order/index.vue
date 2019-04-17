@@ -1,5 +1,4 @@
 <template>
-  <!-- todo 这是公共的页面 -->
   <div class="app-container">
     <div class="filter-container">
       <el-input
@@ -37,7 +36,12 @@
       <el-button @click="orderTemp" icon="el-icon-tickets" type="success" v-waves>订单模板</el-button>
     </el-row>
 
-    <my-table :cols="cols" :getListApi="getPurchaseOrderByPage" :query="query" ref="table">
+    <my-table
+      :cols="cols"
+      :getListApi="getPurchaseOrderByPage"
+      :query="query"
+      ref="table"
+    >
       <el-table-column
         align="center"
         class-name="small-padding fixed-width"

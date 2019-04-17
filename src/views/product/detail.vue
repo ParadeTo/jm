@@ -1,6 +1,11 @@
 <template>
   <div class="app-container">
     <el-form label-position="right" label-width="100px" :model="model">
+      <!-- <el-row v-if="isEdit">
+        <el-col :span="4" style="text-align: right;">
+          <el-button @click="delProduct" type="danger" v-waves>删除商品</el-button>
+         </el-col>
+      </el-row> -->
       <el-row>
         <el-col :span="4">
           <h3 class="subtitle">基本信息</h3>
@@ -95,12 +100,12 @@
                 </el-table-column>
                 <el-table-column align="center" label="单位关系">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.model.conversion"/>
+                    <el-input :disabled="scope.row.type==='basic'" v-model="scope.row.model.conversion"/>
                   </template>
                 </el-table-column>
                 <el-table-column align="center" label="价格">
                   <template slot-scope="scope">
-                    <el-input type="number" v-model="scope.row.model.price"/>
+                    <el-input type="number" v-model="scope.row.model.price" />
                   </template>
                 </el-table-column>
                 <el-table-column align="center" label="操作">
@@ -173,7 +178,7 @@
         </el-col>
       </el-row>
 
-      <el-row style="text-align: rigxht">
+      <el-row style="text-align: rigxht" v-if="isEdit">
         <el-col :span="4" :offset="14">
           <el-button type="primary" v-waves @click="save">保存</el-button>
           <el-button type="default" v-waves @click="cancel">取消</el-button>
@@ -192,6 +197,7 @@ import { getAllCategory } from '@/api/product/category'
 import { getAllBrand } from '@/api/product/brand'
 import { getAllClassify } from '@/api/product/classify'
 import { getAttributeAndValueList } from '@/api/product/attribute'
+import { delSku } from '@/api/product/sku'
 import { getUnitList } from '@/api/product/unit'
 import { deepEq, deepmerge } from '@/utils/index'
 
@@ -230,6 +236,7 @@ export default {
   data() {
     return {
       id: null,
+      isEdit: false,
       brandList: [],
       classifyList: [],
       productAttributeList: [],
@@ -253,7 +260,8 @@ export default {
         cateId: "",
         classifyId: "",
         unitId: "", // 多规格商品需要
-        images: ""
+        images: "",
+        remark: ""
       },
       categoryList: [],
       skuReqListBasic: [
@@ -262,7 +270,7 @@ export default {
           type: "basic",
           model: {
             barcode: "",
-            conversion: "",
+            conversion: 1,
             price: "",
             unitId: "",
             unitType: 0
@@ -289,6 +297,7 @@ export default {
 
   async mounted () {
     this.id = Number(this.$route.params.id)
+    if (this.$route.name === 'productEdit') this.isEdit = true
     if (this.id) this.initDate()
   },
 
@@ -299,6 +308,11 @@ export default {
       'updateBrand',
       'updateClassify'
     ]),
+
+    delProduct () {
+      delSku(this.id)
+    },
+
     async initDate () {
       const loading = this.$loading()
       const { model } = this
@@ -314,6 +328,7 @@ export default {
           unitId,
           productAttributeList,
           attrValue,
+          remark,
           skuList
         } = rsp.data.data
         model.cateId = cateId
@@ -323,6 +338,7 @@ export default {
         model.productType = productType
         model.unitId = unitId
         model.attrValue = attrValue
+        model.remark = remark
         await this.updateAccordingToCate(cateId)
         this.initBrand(brandId)
         if (productType === 2) {
@@ -444,7 +460,7 @@ export default {
         this.skuReqListBasic.splice(scope.$index, 1)
       }
     },
-    save() {
+    async save() {
       const { id, name } = this.model.brand
       const data = {
         ...this.model,
@@ -479,9 +495,12 @@ export default {
         data.productId = this.id
       }
 
-      this.id
-        ? editProduct(data)
-        : saveProduct(data)
+      if (this.id) {
+        await editProduct(data)
+      } else {
+        await saveProduct(data)
+      }
+      this.$router.push({ name: 'productList' })
     },
     genProductAttrbuteList () {
       if (!this.id) { // add

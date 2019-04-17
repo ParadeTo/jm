@@ -1,5 +1,6 @@
 <template>
   <simple-select
+    clearable
     placeholder="商品类目"
     :list="category"
     :value="value"

@@ -16,7 +16,7 @@
       <el-button type="primary" v-waves icon="el-icon-plus" @click="dialogVisible=true">新增</el-button>
     </el-row>
 
-    <el-dialog title="新增角色" :visible.sync="dialogVisible">
+    <!-- <el-dialog title="新增角色" :visible.sync="dialogVisible">
       <el-form :inline="true" :rules="rules" ref="dataForm" :model="formModel" label-position="right" label-width="100px" style='margin-left:50px;'>
         <el-form-item label="头像" style="display: block">
           <el-upload
@@ -52,26 +52,26 @@
         <el-button type="primary" @click="add">确认</el-button>
         <el-button @click="dialogVisible = false">取消</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
 
     <my-table
       :cols="cols"
-      :updateListFunc="updateTableFunc"
+      :getListApi="getUserByPage"
       style="margin-top: 20px;"
     >
-      <el-table-column slot="action" align="center" label="动作" min-width="200" class-name="small-padding fixed-width">
+      <!-- <el-table-column slot="action" align="center" label="动作" min-width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="view(scope.row)">查看</el-button>
           <el-button type="text" size="mini" @click="edit(scope.row)">修改</el-button>
           <el-button type="text" size="mini" @click="del(scope.row)">删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </my-table>
   </div>
 </template>
 
 <script>
-
+import { getUserByPage } from '@/api/ma/user'
 
 export default {
   data () {
@@ -121,13 +121,7 @@ export default {
         }]
       }],
       cols: [{
-        key: 'code',
-        label: '编号'
-      }, {
-        key: 'avatar',
-        label: '头像'
-      }, {
-        key: 'username',
+        key: 'name',
         label: '登录名'
       }, {
         key: 'nickname',
@@ -148,7 +142,7 @@ export default {
         key: 'status',
         label: '状态'
       }, {
-        key: 'create_time',
+        key: 'gmtCreated',
         label: '创建时间'
       }],
       formFields: [{
@@ -174,6 +168,7 @@ export default {
   },
 
   methods: {
+    getUserByPage,
     handleFilter () {
 
     },

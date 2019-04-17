@@ -22,3 +22,27 @@ export function getUserInfo () {
     method: 'get'
   })
 }
+
+export function getUserByPage ({
+  currentPage,
+  isCountTotal = true,
+  keyword,
+  orderBy,
+  orderByExp,
+  systemId,
+  pageSize = 900
+}) {
+  return maService({
+    url: '/user/page',
+    method: 'post',
+    data: {
+      currentPage,
+      isCountTotal,
+      keyword,
+      orderBy,
+      orderByExp,
+      systemId,
+      pageSize
+    }
+  })
+}

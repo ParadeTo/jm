@@ -25,7 +25,6 @@
 
     <el-row style="margin-top: 10px; margin-bottom: 10px">
       <el-button @click="add" type="primary" v-waves>新增商品</el-button>
-      <el-button @click="del" type="danger" v-waves>删除商品</el-button>
       <el-button @click="impt" type="success" v-waves>导入商品</el-button>
       <!-- <el-button type="default" v-waves @click="toggleOnOff">上/下架</el-button> -->
       <!-- <el-button type="default" v-waves @click="autoOnOff">自动上下架</el-button> -->
@@ -99,6 +98,8 @@ export default {
     handleCategoryChange(cateId) {
       this.updateBrand(cateId)
       this.updateClassify(cateId)
+      this.query.brandId = ''
+      this.query.classifyId = ''
     },
     handleSelectionChange (selection) {
       this.$emit('selection-change', selection)
@@ -114,7 +115,9 @@ export default {
       this.$router.push({ name: 'productDetail', params: { id: row.productId } })
     },
     impt() { },
-    edit() { },
+    edit(row) {
+      this.$router.push({ name: 'productEdit', params: { id: row.productId } })
+    },
     del() { },
     setting() {
       this.$router.push({ name: 'productSetting' })

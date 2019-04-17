@@ -44,7 +44,7 @@ export default {
         keyword: ''
       },
       cols: [{
-        label: '商品单位名称',
+        label: '单位名称',
         key: 'name'
       }, {
         label: '创建时间',

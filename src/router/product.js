@@ -33,6 +33,13 @@ export default {
       title: '商品详情'
     }
   }, {
+    path: 'detail/:id/edit',
+    component: () => import('@/views/product/detail'),
+    name: 'productEdit',
+    meta: {
+      title: '商品编辑'
+    }
+  }, {
     path: 'setting',
     component: () => import('@/views/product/setting'),
     name: 'productSetting',

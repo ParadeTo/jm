@@ -8,7 +8,7 @@
         label-width="100px"
         style='width: 600px; margin-left:20px;'
       >
-        <el-form-item label="规格名称" prop="name">
+        <el-form-item label="单位名称" prop="name">
           <el-input style="width: 160px;" v-model="formModel.name" :readonly="action==='view'" />
         </el-form-item>
       </el-form>

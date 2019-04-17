@@ -19,14 +19,14 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
         </el-form-item> -->
-        <el-form-item label="名称" prop="name">
-          <el-input style="width: 160px;" v-model="formModel.name" :readonly="view" />
-        </el-form-item>
         <!-- <el-form-item label="所属类目" prop="category">
           <category-select style="width: 130px" v-model="ancestorClassify.id" />
         </el-form-item> -->
         <el-form-item label="上级名称" prop="parent" v-if="parentClassify && parentClassify.name">
           <el-input type="text" readonly v-model="parentClassify.name" />
+        </el-form-item>
+        <el-form-item label="名称" prop="name">
+          <el-input style="width: 160px;" v-model="formModel.name" :readonly="view" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
