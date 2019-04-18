@@ -17,7 +17,6 @@ export default {
         message: rsp.data.msg,
         duration: 3 * 1000
       }
-
       if (code === '0000') {
         conf.showSuccess && Message({
           ...opt,

@@ -12,7 +12,8 @@ export function login ({
       username,
       password,
       sourceType
-    }
+    },
+    showError: true
   })
 }
 

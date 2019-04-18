@@ -244,7 +244,7 @@ export default {
     async handleTemplateChange (data) {
       this.formModel.template = data
       const rsp = await getPurchaseOrderTemplateDetail(data.id) // 得到模板的详情，主要是得到product列表
-      debugger
+      
       if (rsp && rsp.data.data) {
         const {
           orderItems,
@@ -255,7 +255,7 @@ export default {
           id: purchaserUserId,
           name: purchaserName
         }
-        debugger
+        
         this.products = orderItems.map(item => {
           const {
             barCode,
