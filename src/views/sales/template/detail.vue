@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item label="门店：">
         <el-input style="width: 160px;" readonly v-model="formModel.customer.name" />
-        <el-button type="default" @click="pickCustomer">选择门店</el-button>
+        <el-button type="default" @click="pickCustomer" v-if="isEdit">选择门店</el-button>
       </el-form-item>
       <el-form-item label="SKU数：">
         {{products.length}}
@@ -26,8 +26,10 @@
       </el-form-item>
     </el-form>
 
-    <el-button type="default" @click="productDialogVisible=true" :disabled="!formModel.customer.name">选择商品</el-button>
-    <el-button type="primary" @click="save" :disabled="!formModel.customer.name">保存</el-button>
+    <template v-if="isEdit">
+      <el-button type="default" @click="productDialogVisible=true" :disabled="!formModel.customer.name">选择商品</el-button>
+      <el-button type="primary" @click="save" :disabled="!formModel.customer.name">保存</el-button>
+    </template>
 
     <el-dialog title="选择门店" :visible.sync="customerDialogVisible" width="80%" style="max-height: 90vh;">
       <my-customer isForSelect @current-change="handleCustomerChange"/>
@@ -86,7 +88,11 @@ import ProductList from '@/views/product/list'
 import TemplateList from '@/views/sales/template/index'
 import { productCols } from '@/const/product'
 import { getLastOrderItem, addPurchaseOrder } from '@/api/pdos/purchase'
-import { addPurchaseOrderTemplate, getPurchaseOrderTemplateDetail } from '@/api/pdos/template'
+import {
+  addPurchaseOrderTemplate,
+  getPurchaseOrderTemplateDetail,
+  editPurchaseOrderTemplate
+} from '@/api/pdos/template'
 
 export default {
   components: {
@@ -114,6 +120,8 @@ export default {
       })
     }
     return {
+      id: null,
+      isEdit: false,
       customerDialogVisible: false,
       templateDialogVisible: false,
       productDialogVisible: false,
@@ -150,6 +158,12 @@ export default {
      }
   },
 
+  mounted () {
+    this.id = Number(this.$route.params.id)
+    if (this.$route.name === 'salesTemplateEdit') this.isEdit = true
+    if (this.id) this.initTemplate(this.id)
+  },
+
   methods: {
     async save () {
       const { id, name } = this.formModel.customer
@@ -168,6 +182,7 @@ export default {
           }))
         })
       } else {
+        debugger
         const {
           amount,
           quantitys,
@@ -241,20 +256,20 @@ export default {
         if (!formModel.templateName) formModel.templateName = `${formModel.customer.name}-模板`
       }
     },
-    async handleTemplateChange (data) {
-      this.formModel.template = data
-      const rsp = await getPurchaseOrderTemplateDetail(data.id) // 得到模板的详情，主要是得到product列表
-      
+    async initTemplate (id) {
+      const rsp = await getPurchaseOrderTemplateDetail(id) // 得到模板的详情，主要是得到product列表
       if (rsp && rsp.data.data) {
         const {
           orderItems,
           purchaserName,
           purchaserUserId,
+          templateName
         } = rsp.data.data
         this.formModel.customer = {
           id: purchaserUserId,
           name: purchaserName
         }
+        this.formModel.templateName = templateName
         
         this.products = orderItems.map(item => {
           const {
@@ -281,6 +296,10 @@ export default {
           }
         })
       }
+    },
+    handleTemplateChange (data) {
+      this.formModel.template = data
+      this.initTemplate(data.id)
       this.templateDialogVisible = false
     },
     handleSelectionChange (selection) {

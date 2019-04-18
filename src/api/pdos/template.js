@@ -44,6 +44,16 @@ export function addPurchaseOrderTemplate (data) {
 export function getPurchaseOrderTemplateDetail (id) {
   return pdosService({
     url: `/pdos/pdosOrderTemplate/${id}`,
-    method: 'get'
+    method: 'get',
+    showLoading: true
+  })
+}
+
+// 编辑模板
+export function editPurchaseOrderTemplate (data) {
+  return pdosService({
+    url: `/pdos/pdosOrderTemplate`,
+    method: 'put',
+    data
   })
 }

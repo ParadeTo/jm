@@ -5,11 +5,11 @@
         @keyup.enter.native="handleFilter"
         style="width: 200px;"
         placeholder="客户名称"
-        v-model="query.name" />
-      <el-select @change='handleFilter' style="width: 130px" v-model="query.category" placeholder="商品类目">
+        v-model="query.keyword" />
+      <!-- <el-select @change='handleFilter' style="width: 130px" v-model="query.category" placeholder="商品类目">
         <el-option v-for="item in typeList" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
-      </el-select>
+      </el-select> -->
       <el-button type="primary" v-waves icon="el-icon-search" @click="handleFilter">查询</el-button>
     </el-row>
 
@@ -21,7 +21,8 @@
     <my-table
       :cols="cols"
       :getListApi="getMyMemberByPage"
-      :multiSelection="multiSelection"
+      :query="query"
+      ref="table"
       @current-change="handleTableCurrentChange"
     >
       <el-table-column slot="action" align="center" label="动作" min-width="140" class-name="small-padding fixed-width">
@@ -36,7 +37,7 @@
 
 <script>
 import ClientAdd from './components/clientAdd'
-import { getMyMemberByPage } from '@/api/ma/member'
+import { getMyMemberByPage, saveMyMember } from '@/api/ma/member'
 
 export default {
   components: {
@@ -58,8 +59,8 @@ export default {
     return {
       dialogVisible: false,
       query: {
-        name: '',
-        type: '',
+        keyword: ''
+        // type: '',
       },
       typeList: [{
         key: 0,
@@ -93,7 +94,7 @@ export default {
       this.$emit('current-change', selection)
     },
     handleFilter () {
-
+      this.$refs.table.updateListFunc()
     },
     add () {
       this.$router.push({name: 'productAdd'})

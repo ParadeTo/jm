@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form label-position="right" label-width="100px" :model="model">
-      <!-- <el-row v-if="isEdit">
+      <!-- <el-row v-if="isView">
         <el-col :span="4" style="text-align: right;">
           <el-button @click="delProduct" type="danger" v-waves>删除商品</el-button>
          </el-col>
@@ -178,7 +178,7 @@
         </el-col>
       </el-row>
 
-      <el-row style="text-align: rigxht" v-if="isEdit">
+      <el-row style="text-align: rigxht" v-if="!isView">
         <el-col :span="4" :offset="14">
           <el-button type="primary" v-waves @click="save">保存</el-button>
           <el-button type="default" v-waves @click="cancel">取消</el-button>
@@ -236,7 +236,7 @@ export default {
   data() {
     return {
       id: null,
-      isEdit: false,
+      isView: false,
       brandList: [],
       classifyList: [],
       productAttributeList: [],
@@ -258,7 +258,7 @@ export default {
         owncode: "",
         brand: null,
         cateId: "",
-        classifyId: "",
+        classifyId: [],
         unitId: "", // 多规格商品需要
         images: "",
         remark: ""
@@ -295,9 +295,9 @@ export default {
     }
   },
 
-  async mounted () {
+  mounted () {
     this.id = Number(this.$route.params.id)
-    if (this.$route.name === 'productEdit') this.isEdit = true
+    if (this.$route.name === 'productDetail') this.isView = true
     if (this.id) this.initDate()
   },
 
@@ -468,6 +468,7 @@ export default {
         brandName: name,
         skuList: []
       }
+      debugger
       delete data.brand
       if (this.model.productType === 1) {
         this.skuReqListBasic.forEach(s => {
@@ -504,7 +505,9 @@ export default {
     },
     genProductAttrbuteList () {
       if (!this.id) { // add
-        this.productAttributeList = this.attrListSelected.map(attr => ({
+        this.productAttributeList = this.attrListSelected.filter(attr =>
+          attr.attrValueListSelected.length > 0
+        ).map(attr => ({
           productId: null,
           attrId: attr.attr.id
         }))

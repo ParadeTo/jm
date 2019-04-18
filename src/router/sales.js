@@ -73,6 +73,22 @@ export default {
       title: '新增销售模板'
     }
   }, {
+    path: 'template/:id',
+    component: () => import('@/views/sales/template/detail'),
+    name: 'salesTemplateDetail',
+    hidden: true,
+    meta: {
+      title: '销售模板详情'
+    }
+  }, {
+    path: 'template/:id/edit',
+    component: () => import('@/views/sales/template/detail'),
+    name: 'salesTemplateEdit',
+    hidden: true,
+    meta: {
+      title: '编辑销售模板'
+    }
+  }, {
     path: 'refund',
     component: () => import('@/views/sales/refund'),
     name: 'salesRefund',

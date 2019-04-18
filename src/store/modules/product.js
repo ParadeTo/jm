@@ -3,6 +3,17 @@ import { getUnitList } from '@/api/product/unit'
 import { getAllBrand } from '@/api/product/brand'
 import { getAllClassify } from '@/api/product/classify'
 
+const rmEmptyChildren = list => {
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i]
+    if (item.childrenList && item.childrenList.length > 0) {
+      rmEmptyChildren(item.childrenList)
+    } else {
+      delete item.childrenList
+    }
+  }
+}
+
 export default {
   namespace: true,
   state: {
@@ -32,7 +43,10 @@ export default {
     },
     async updateClassify ({ commit }, parentId) {
       const { data } = await getAllClassify({ parentId: -parentId })
-      Array.isArray(data.data) && commit('UPDATE_CLASSIFY', data.data)
+      if (Array.isArray(data.data)) {
+        rmEmptyChildren(data.data)
+        commit('UPDATE_CLASSIFY', data.data)
+      }
     }
   },
   getters: {

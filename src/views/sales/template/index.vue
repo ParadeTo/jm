@@ -33,8 +33,8 @@
     >
       <el-table-column slot="action" align="center" label="动作" min-width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="edit(scope.row)">修改</el-button>
-          <el-button type="primary" size="mini" @click="view(scope.row)">查看</el-button>
+          <el-button circle icon="el-icon-view" @click="view(scope.row)" type="primary"></el-button>
+          <el-button circle icon="el-icon-edit" @click="edit(scope.row)" type="default"></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -90,10 +90,12 @@ export default {
     addOrderTemp () {
       this.$router.push({ name: 'salesTemplateAdd' })
     },
-    edit () {
-
+    view(row) {
+      this.$router.push({ name: 'salesTemplateDetail', params: { id: row.id } })
     },
-    view () {},
+    edit(row) {
+      this.$router.push({ name: 'salesTemplateEdit', params: { id: row.id } })
+    },
     async updateTableFunc ({page, limit}) {
       
     },
