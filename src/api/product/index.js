@@ -1,6 +1,6 @@
 import { productService } from '@/utils/request'
 
-export function getProductList ({
+export async function getProductList ({
   barcode,
   brandId,
   cateId,
@@ -11,7 +11,7 @@ export function getProductList ({
   pageSize,
   productType
 }) {
-  return productService({
+  const rsp = await productService({
     url: '/product/page',
     method: 'post',
     data: {
@@ -26,6 +26,15 @@ export function getProductList ({
       productType
     }
   })
+
+  if (rsp && rsp.data && rsp.data.data) {
+    const data = rsp.data.data
+    data.items.forEach(item => {
+      item.skuPrice = item.pirce
+    })
+  }
+
+  return rsp
 }
 
 export function saveProduct (data) {

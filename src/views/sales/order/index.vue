@@ -50,8 +50,8 @@
         slot="action"
       >
         <template slot-scope="scope">
-          <el-button @click="view(scope.row)" size="mini" type="primary">修改</el-button>
-          <el-button @click="del(scope.row)" size="mini" type="primary">查看</el-button>
+          <el-button circle icon="el-icon-view" @click="view(scope.row)" type="primary"></el-button>
+          <el-button circle icon="el-icon-edit" @click="edit(scope.row)" type="default"></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -126,6 +126,12 @@ export default {
     },
     orderTemp() {
       this.$router.push({ name: 'salesTemplate' })
+    },
+    view(row) {
+      this.$router.push({ name: 'salesOrderDetail', params: { id: row.id } })
+    },
+    edit(row) {
+      this.$router.push({ name: 'salesOrderEdit', params: { id: row.id } })
     },
     getPurchaseOrderByPage
   }

@@ -36,7 +36,7 @@ export const productCols = [
   // },
   {
     label: '价格',
-    key: 'price',
+    key: 'skuPrice',
     width: '80'
   }
   // {

@@ -96,3 +96,22 @@ export function addPurchaseOrder (data) {
     showSuccess: true
   })
 }
+
+// 订单详情
+export function getPurchaseOrderDetail (id) {
+  return pdosService({
+    url: `/pdos/pdosPurchaseOrder/${id}`,
+    method: 'get',
+    showLoading: true
+  })
+}
+
+// 模板生成订单
+export function generatePurchaseOrderByTemplate (id) {
+  return pdosService({
+    url: '/pdos/pdosPurchaseOrder/generate',
+    method: 'post',
+    data: { id },
+    showLoading: true
+  })
+}

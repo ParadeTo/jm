@@ -59,7 +59,7 @@
         </el-col>
         <el-col :span="14">
           <el-form-item label="商品类型">
-            <el-radio-group v-model="model.productType" @change="onTypeChange">
+            <el-radio-group v-model="model.productType">
               <el-radio :label="1">标准商品</el-radio>
               <el-radio :label="2">多规格商品</el-radio>
               <!-- <el-radio :label="3">称重商品</el-radio> -->
@@ -189,7 +189,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import ClassifyAdd from './components/classifyAdd'
 import CartesianTable from './components/cartesianTable'
 import { saveProduct, editProduct, getProductDetail } from '@/api/product/index'
@@ -307,6 +307,11 @@ export default {
     ...mapActions([
       'updateBrand',
       'updateClassify'
+    ]),
+
+    ...mapMutations([
+      'UPDATE_BRAND',
+      'UPDATE_CLASSIFY'
     ]),
 
     delProduct () {
@@ -438,7 +443,6 @@ export default {
       this.originCartesianData = this.cartesianData
     },
 
-    onTypeChange() {},
     handleUnitOperation(operation, scope) {
       const len = this.skuReqListBasic.length
       const originLen = this.originSkuReqListBasic.length
@@ -468,7 +472,6 @@ export default {
         brandName: name,
         skuList: []
       }
-      debugger
       delete data.brand
       if (this.model.productType === 1) {
         this.skuReqListBasic.forEach(s => {
@@ -555,6 +558,11 @@ export default {
       this.updateAccordingToCate(cateId)
     },
     async updateAccordingToCate (cateId) {
+      if (Number(cateId) === 0) {
+        this.UPDATE_BRAND([])
+        this.UPDATE_CLASSIFY([])
+        return
+      }
       await Promise.all([
         this.updateAttributeList(cateId),
         this.updateBrand(cateId),

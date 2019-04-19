@@ -27,12 +27,20 @@ export default {
       title: '新增订单'
     }
   }, {
-    path: 'order/detail/:id',
+    path: 'order/:id',
     component: () => import('@/views/sales/order/detail'),
     name: 'salesOrderDetail',
     hidden: true,
     meta: {
       title: '查看订单'
+    }
+  }, {
+    path: 'order/:id/edit',
+    component: () => import('@/views/sales/order/detail'),
+    name: 'salesOrderEdit',
+    hidden: true,
+    meta: {
+      title: '编辑订单'
     }
   }, {
     path: 'sales-ticket',
@@ -50,7 +58,7 @@ export default {
       title: '新增销售单'
     }
   }, {
-    path: 'sales-ticket/detail/:id',
+    path: 'sales-ticket/:id',
     component: () => import('@/views/sales/sales-ticket/detail'),
     name: 'salesTicketDetail',
     hidden: true,
