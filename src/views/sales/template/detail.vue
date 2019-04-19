@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item label="门店：">
         <el-input style="width: 160px;" readonly v-model="formModel.customer.name" />
-        <el-button type="default" @click="pickCustomer" v-if="isEdit">选择门店</el-button>
+        <el-button type="default" @click="pickCustomer" v-if="!isView">选择门店</el-button>
       </el-form-item>
       <el-form-item label="SKU数：">
         {{products.length}}
@@ -26,7 +26,7 @@
       </el-form-item>
     </el-form>
 
-    <template v-if="isEdit">
+    <template v-if="!isView">
       <el-button type="default" @click="productDialogVisible=true" :disabled="!formModel.customer.name">选择商品</el-button>
       <el-button type="primary" @click="save" :disabled="!formModel.customer.name">保存</el-button>
     </template>
@@ -121,7 +121,7 @@ export default {
     }
     return {
       id: null,
-      isEdit: false,
+      isView: false,
       customerDialogVisible: false,
       templateDialogVisible: false,
       productDialogVisible: false,
@@ -160,7 +160,7 @@ export default {
 
   mounted () {
     this.id = Number(this.$route.params.id)
-    if (this.$route.name === 'salesTemplateEdit') this.isEdit = true
+    if (this.$route.name === 'salesTemplateDetail') this.isView = true
     if (this.id) this.initTemplate(this.id)
   },
 
@@ -182,7 +182,6 @@ export default {
           }))
         })
       } else {
-        debugger
         const {
           amount,
           quantitys,
@@ -225,6 +224,7 @@ export default {
             // ]
         })
       }
+      this.$router.push({ name: 'salesTemplate' })
     },
     async confirm () {
       const productNos = this.cachedProducts.map(p => p.skuId)

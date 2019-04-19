@@ -42,6 +42,8 @@ export function saveMyMember (data) {
   return maService({
     url: '/myMember',
     method: 'post',
-    data
+    data,
+    showLoading: true,
+    showError: true
   })
 }

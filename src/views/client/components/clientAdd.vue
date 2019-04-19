@@ -9,20 +9,26 @@
         label-width="100px"
         style='width: 300px; margin-left:20px;'
       >
+        <el-form-item label="业务类型" prop="businessType">
+          <category-select v-model="formModel.businessType" />
+        </el-form-item>
+        <el-form-item label="经营范围" prop="scopeOfBusiness">
+          <el-input style="width: 160px;" v-model="formModel.scopeOfBusiness" />
+        </el-form-item>
         <el-form-item label="客户名称" prop="name">
           <el-input style="width: 160px;" v-model="formModel.name" />
         </el-form-item>
-        <el-form-item label="联系人" prop="category">
-          <el-input style="width: 160px;" v-model="formModel.name" />
+        <el-form-item label="地址" prop="address">
+          <el-input style="width: 160px;" v-model="formModel.address" />
         </el-form-item>
-        <el-form-item label="联系电话" prop="parent">
-          <el-input style="width: 160px;" v-model="formModel.name" />
+        <el-form-item label="联系人" prop="contacts">
+          <el-input style="width: 160px;" v-model="formModel.contacts" />
         </el-form-item>
-        <el-form-item label="公司地址" prop="parent">
-          <el-input style="width: 160px;" v-model="formModel.name" />
+        <el-form-item label="联系电话" prop="contactNumber">
+          <el-input style="width: 160px;" v-model="formModel.contactNumber" />
         </el-form-item>
-        <el-form-item label="经营范围" prop="parent">
-          <el-input style="width: 160px;" v-model="formModel.name" />
+        <el-form-item label="说明" prop="remark">
+          <el-input style="width: 160px;" v-model="formModel.remark" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -34,53 +40,38 @@
 </template>
 
 <script>
+import { saveMyMember } from '@/api/ma/member'
+import { system } from '@/const'
+import { mapGetters } from 'vuex'
+
 export default {
   props: ['dialogVisible'],
   data () {
     return {
       formModel: {
-        img: '',
+        businessType: '',
+        scopeOfBusiness: '',
         name: '',
-        category: '',
-        parent: ''
+        contacts: '',
+        contactNumber: '',
+        address: '',
+        remark: '',
       },
       rules: {
-        name: [{ required: true, message: '请输入商品名称', trigger: ['blur', 'change'] }],
-        category: [{ required: true, message: '请选择类目', trigger: 'change' }],
-        parent: [{ required: true, message: '请选择上级类目', trigger: 'change' }]
+        // category: [{ required: true, message: '请选择类目', trigger: 'change' }],
+        // parent: [{ required: true, message: '请选择上级类目', trigger: 'change' }]
         // category: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
         // parent: [{ required: true, message: '请输入联系电话', trigger: 'blur' }],
         // address: [{ required: true, message: '请输入地址', trigger: 'blur' }],
         // scope: [{ required: true, message: '请输入经营范围', trigger: 'blur' }],
-      },
-      forFields: [{
-        key: 'name',
-        label: '名称'
-      }, {
-        key: 'category',
-        label: '所属类目'
-      }, {
-        key: 'parent',
-        label: '上级名称'
-      }],
-      categoryList: [{
-        key: 0,
-        label: '全部'
-      }],
-      treeList: [{
-        key: '1',
-        label: '日用百货',
-        level: 0
-      }, {
-        key: '2',
-        label: '衣物清洁',
-        level: 1
-      }, {
-        key: '3',
-        label: '洗涤液',
-        level: 2
-      }]
+      }
     }
+  },
+
+  computed: {
+    ...mapGetters('user', [
+      'userInfo'
+    ])
   },
 
   methods: {
@@ -91,8 +82,17 @@ export default {
       this.setInVisible('cancel')
     },
     confirm () {
-      this.$refs['dataForm'].validate()
-      this.setInVisible('confirm')
+      this.$refs['dataForm'].validate(async valid => {
+        if (valid) {
+          saveMyMember({
+            online: 2,
+            memberId: -1,
+            memberType: system.reversedMap[this.userInfo.memberType],
+            ...this.formModel
+          })
+          this.setInVisible('confirm')
+        }
+      })
     }
   }
 }

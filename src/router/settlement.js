@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '结算管理',
     icon: 'shoppingCard',
-    roles: ['shopAdmin', 'providerAdmin'] // you can set roles in root nav
+    roles: ['STORE', 'SUPPLIER'] // you can set roles in root nav
   },
   children: [{
     path: 'receive',

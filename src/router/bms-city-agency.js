@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '城市代理管理',
     icon: 'lock',
-    roles: ['bmsAdmin']
+    roles: ['PLATFORM']
   },
   children: [{
     path: '',

@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '客户管理',
     icon: 'theme',
-    roles: ['providerAdmin'] // you can set roles in root nav
+    roles: ['SUPPLIER'] // you can set roles in root nav
   },
   children: [{
     path: 'my',

@@ -6,7 +6,7 @@ export default {
   component: Layout,
   redirect: 'home',
   meta: {
-    roles: ['shopAdmin', 'providerAdmin']
+    roles: ['STORE', 'SUPPLIER']
   },
   children: [{
     path: 'home',

@@ -95,7 +95,7 @@ export const constantRouterMap = [
 //   path: '',
 //   component: Layout,
 //   meta: {
-//     roles: ['shopAdmin', 'providerAdmin']
+//     roles: ['STORE', 'SUPPLIER']
 //   },
 //   children: [{
 //     path: 'home',

@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '门店管理',
     icon: 'shoppingCard',
-    roles: ['bmsAdmin'] // you can set roles in root nav
+    roles: ['PLATFORM'] // you can set roles in root nav
   },
   children: [{
     path: '',

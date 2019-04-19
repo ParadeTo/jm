@@ -3,12 +3,6 @@ import { login, getUserInfo } from '@/api/ma/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { safeGet } from '@/utils/index'
 
-const ROLE_MAP = {
-  STORE: 'shopAdmin',
-  PLATFORM: 'bmsAdmin',
-  SUPPLIER: 'providerAdmin'
-}
-
 const user = {
   namespaced: true,
 
@@ -23,7 +17,8 @@ const user = {
     roles: [],
     setting: {
       articlePlatform: []
-    }
+    },
+    userInfo: {}
   },
 
   mutations: {
@@ -50,6 +45,9 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_USER_INFO: (state, userInfo) => {
+      state.userInfo = userInfo
     }
   },
 
@@ -78,7 +76,7 @@ const user = {
             reject(new Error('error'))
           }
           const data = safeGet(response, 'data.data')
-          const roles = ROLE_MAP[data.memberType]
+          const roles = data.memberType
           commit('SET_ROLES', [ roles ])
           // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
           //   commit('SET_ROLES', data.roles.map(role => ROLE_MAP[role.code]))
@@ -86,9 +84,10 @@ const user = {
           //   reject(new Error('getInfo: roles must be a non-null array !'))
           // }
 
-          commit('SET_NAME', data.userName)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
+          // commit('SET_NAME', data.userName)
+          // commit('SET_AVATAR', data.avatar)
+          // commit('SET_INTRODUCTION', data.introduction)
+          commit('SET_USER_INFO', data)
           resolve([ roles ])
         }).catch(error => {
           reject(error)
@@ -157,6 +156,10 @@ const user = {
         })
       })
     }
+  },
+
+  getters: {
+    userInfo: state => state.userInfo
   }
 }
 

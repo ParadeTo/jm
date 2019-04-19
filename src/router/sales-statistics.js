@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '销售统计',
     icon: 'theme',
-    roles: ['bmsAdmin'] // you can set roles in root nav
+    roles: ['PLATFORM'] // you can set roles in root nav
   },
   children: [{
     path: 'daily',

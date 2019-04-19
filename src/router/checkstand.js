@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '收银台',
     icon: 'lock',
-    roles: ['shopAdmin']
+    roles: ['STORE']
   },
   children: [{
     path: 'history',

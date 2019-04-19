@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '城市代理',
     icon: 'lock',
-    roles: ['providerAdmin']
+    roles: ['SUPPLIER']
   },
   children: [{
     path: 'apply',

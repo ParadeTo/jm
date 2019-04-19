@@ -19,8 +19,8 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <span class="username">你好！{{name}}</span>
-          <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
+          <span class="username">你好！{{userInfo.userName}}</span>
+          <img class="user-avatar" :src="'?imageView2/1/w/80/h/80'">
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -62,11 +62,10 @@ export default {
     ThemePicker
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'name',
-      'avatar'
-    ])
+    ...mapGetters('user', [
+      'userInfo'
+    ]),
+    ...mapGetters(['sidebar'])
   },
   methods: {
     toggleSideBar() {

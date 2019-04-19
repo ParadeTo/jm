@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '广告管理',
     icon: 'edit',
-    roles: ['bmsAdmin'] // you can set roles in root nav
+    roles: ['PLATFORM'] // you can set roles in root nav
   },
   children: [{
     path: '',

@@ -9,7 +9,7 @@ export default {
   meta: {
     title: '供应商管理',
     icon: 'edit',
-    roles: ['shopAdmin'] // you can set roles in root nav
+    roles: ['STORE'] // you can set roles in root nav
   },
   children: [{
     path: 'my',

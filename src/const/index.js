@@ -4,6 +4,11 @@ export const system = {
     2: '供应商',
     3: '门店'
   },
+  reversedMap: {
+    PLATFORM: 1,
+    SUPPLIER: 2,
+    STORE: 3
+  },
   list: [{
     id: 1,
     label: '平台'

@@ -34,17 +34,17 @@
       </div> -->
 
       <!-- <div class="tips">
-        <span>门店系统用户 : shopadmin</span>
+        <span>门店系统用户 : STORE</span>
         <span>密码 : 随便填</span>
       </div> -->
-      <div class="tips">
-        <span>供应商系统用户 : provideradmin</span>
+      <!-- <div class="tips">
+        <span>供应商系统用户 : SUPPLIER</span>
         <span>密码 : 随便填</span>
       </div>
       <div class="tips">
-        <span>后台管理系统用户 : bmsadmin</span>
+        <span>后台管理系统用户 : PLATFORM</span>
         <span>密码 : 随便填</span>
-      </div>
+      </div> -->
 
       <!-- <el-button class="thirdparty-button" type="primary" @click="showDialog=true">{{$t('login.thirdparty')}}</el-button> -->
     </el-form>

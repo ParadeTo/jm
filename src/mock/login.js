@@ -15,23 +15,23 @@ const userMap = {
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: 'Normal Editor'
   },
-  shopadmin: {
-    roles: ['shopAdmin'],
-    token: 'shopadmin',
+  STORE: {
+    roles: ['STORE'],
+    token: 'STORE',
     introduction: '我是门店管理员',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: '店员'
   },
-  provideradmin: {
-    roles: ['providerAdmin'],
-    token: 'provideradmin',
+  SUPPLIER: {
+    roles: ['SUPPLIER'],
+    token: 'SUPPLIER',
     introduction: '我是供应商管理员',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: '供应商管理员'
   },
-  bmsadmin: {
-    roles: ['bmsAdmin'],
-    token: 'bmsadmin',
+  PLATFORM: {
+    roles: ['PLATFORM'],
+    token: 'PLATFORM',
     introduction: '系统管理员',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: '系统管理员'
