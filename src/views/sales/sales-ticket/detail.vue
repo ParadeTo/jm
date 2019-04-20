@@ -1,7 +1,8 @@
 <template>
   <common-page
     @save="save"
-    :initData="initTicket"
+    :initFormModel="formModel"
+    :initProducts="products"
     :action="action"
     :afterTemplateChange="afterTemplateChange"
     forOrder
@@ -13,7 +14,7 @@ import CommonPage from '../components/CommonPage.vue'
 import {
   postDeliveryOrder,
   getDeliveryOrderDetail,
-  // generatePurchaseTicketByTemplate
+  generateDeliveryOrderByTemplate
 } from '@/api/pdos/delivery'
 
 // 最近一次销售价costPrice，商品售价skuprice，本次订单价格price
@@ -30,18 +31,23 @@ export default {
 
   data () {
     return {
-      action: ''
+      action: '',
+      id: null,
+      formModel: {},
+      products: []
     }
   },
 
   mounted () {
     const routeName = this.$route.name
     this.action = routeMap[routeName]
+    this.id = Number(this.$route.params.id)
+    if (this.id) this.initTicket()
   },
 
   methods: {
-    async initTicket (id) {
-      const rsp = await getDeliveryOrderDetail(id)
+    async initTicket () {
+      const rsp = await getDeliveryOrderDetail(this.id)
       const formModel = {}
       let products
       if (rsp && rsp.data.data) {
@@ -51,12 +57,14 @@ export default {
           purchaserUserId
         } = rsp.data.data
 
-        formModel.customer = {
-          id: purchaserUserId,
-          name: purchaserName
+        this.formModel = {
+          customer: {
+            id: purchaserUserId,
+            name: purchaserName
+          }
         }
 
-        products = orderItems.map(item => {
+        this.products = orderItems.map(item => {
           const {
             barCode,
             brandName,
@@ -83,21 +91,17 @@ export default {
           }
         })
       }
-      return {
-        formModel,
-        products
-      }
     },
     async afterTemplateChange (template) {
-      const rsp = await generatePurchaseTicketByTemplate(template.id)
+      const rsp = await generateDeliveryOrderByTemplate(template.id)
       if (rsp && rsp.data) {
         this.$router.push({ name: 'salesTicketEdit', params: { id: rsp.data.data } })
       }
     },
-    async save ({ formModel, products, amount, quantitys, id }) {
+    async save ({ formModel, products, amount, quantitys }) {
       const { customer, templateName } = formModel
       await postDeliveryOrder({
-        id,
+        id: this.id,
         purchaserUserId: customer.id,
         purchaserName: customer.name,
         amount: amount,

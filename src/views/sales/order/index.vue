@@ -33,7 +33,7 @@
     </div>
     <el-row style="margin-bottom: 20px;">
       <el-button @click="addOrder" icon="el-icon-plus" type="primary" v-waves>新增订单</el-button>
-      <el-button @click="orderTemp" icon="el-icon-tickets" type="success" v-waves>订单模板</el-button>
+      <!-- <el-button @click="orderTemp" icon="el-icon-tickets" type="success" v-waves>订单模板</el-button> -->
     </el-row>
 
     <my-table
@@ -59,9 +59,9 @@
 </template>
 
 <script>
-import { mapGetters,mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { getPurchaseOrderByPage } from '@/api/pdos/purchase'
-import { parseTime } from '@/utils'
+import { parseTime, safeGet } from '@/utils'
 
 // 改造成公共的组件
 export default {
@@ -98,7 +98,13 @@ export default {
         label: '创建时间'
       },{
         key: 'status',
-        label: '订单状态'
+        label: '订单状态',
+        transform: val => {
+          if (this.purchaseOrderParams) {
+            const item = this.purchaseOrderParams.status.find(s => Number(s.code) === Number(val))
+            return item.desc
+          }
+        }
       }]
     }
   },
@@ -112,14 +118,18 @@ export default {
     }
   },
 
-  computed: mapGetters(['purchaseOrderParams']),
+  computed: mapGetters('pdos', ['purchaseOrderParams']),
 
-  mounted() {
-    !this.purchaseOrderParams && this.updatePurchaseOrderParams()
+  async mounted() {
+    if (!this.purchaseOrderParams) {
+      await this.updatePurchaseOrderParams()
+      this.$refs.table.updateListFunc()
+    }
+    console.log(this.purchaseOrderParams)
   },
 
   methods: {
-    ...mapActions(['updatePurchaseOrderParams']),
+    ...mapActions('pdos', ['updatePurchaseOrderParams']),
     handleFilter() { this.$refs.table.updateListFunc() },
     addOrder() {
       this.$router.push({ name: 'salesOrderAdd' })
@@ -137,7 +147,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>
-

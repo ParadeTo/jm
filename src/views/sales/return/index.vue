@@ -23,16 +23,17 @@
     </el-form>
 
     <el-row style="margin-bottom: 20px;">
-      <el-button type="primary" v-waves icon="el-icon-plus" @click="addRefund">新增退货单</el-button>
+      <el-button type="primary" v-waves icon="el-icon-plus" @click="addReturn">新增退货单</el-button>
     </el-row>
 
     <my-table
       :cols="cols"
-      :updateListFunc="updateTableFunc"
+      :getListApi="getReturnOrderByPage"
     >
       <el-table-column slot="action" align="center" label="操作" min-width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="view(scope.row)">查看</el-button>
+          <el-button circle icon="el-icon-view" @click="view(scope.row)" type="primary"></el-button>
+          <el-button circle icon="el-icon-edit" @click="edit(scope.row)" type="default"></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-
+import { getReturnOrderByPage } from '@/api/pdos/return'
 
 export default {
   data () {
@@ -55,42 +56,46 @@ export default {
         label: '全部'
       }],
       cols: [{
-        key: 'code',
+        key: 'orderNo',
         label: '退货单单号'
       }, {
-        key: 'name',
+        key: 'supplierName',
         label: '供应商名称'
       }, {
-        key: 'provider',
+        key: 'creatorName',
         label: '操作人'
       }, {
-        key: 'sku',
+        key: 'skus',
         label: 'SKU数'
       }, {
-        key: 'number',
+        key: 'quantitys',
         label: '总数量'
       }, {
-        key: 'type',
+        key: 'amount',
         label: '总金额'
       }, {
-        key: 'name',
+        key: 'gmtCreated',
         label: '创建时间'
       }, {
-        key: 'name',
+        key: 'status',
         label: '状态'
       }]
     }
   },
 
   methods: {
+    getReturnOrderByPage,
     handleFilter () {},
     view () {},
-    addRefund () {
-      this.$router.push({ name: 'cargoRefundAdd' })
+    addReturn () {
+      this.$router.push({ name: 'salesReturnAdd' })
     },
-    async updateTableFunc ({page, limit}) {
-      
-    }
+    view(row) {
+      this.$router.push({ name: 'salesReturnDetail', params: { id: row.id } })
+    },
+    edit(row) {
+      this.$router.push({ name: 'salesReturnEdit', params: { id: row.id } })
+    },
   }
 }
 </script>

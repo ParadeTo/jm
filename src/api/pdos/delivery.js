@@ -45,3 +45,22 @@ export function postDeliveryOrder (data) {
     data
   })
 }
+
+export function getDeliveryOrderParams () {
+  return pdosService({
+    url: '/pdos/pdosDeliveryOrder/api/parameters',
+    method: 'get',
+    hideSuccess: true,
+    hideLoading: true
+  })
+}
+
+export function generateDeliveryOrderByTemplate (id) {
+  return pdosService({
+    url: '/pdos/pdosDeliveryOrder/generate',
+    method: 'post',
+    data: { id },
+    hideLoading: true,
+    hideSuccess: true
+  })
+}

@@ -1,7 +1,8 @@
 <template>
   <common-page
     @save="save"
-    :initData="initTemplate"
+    :initFormModel="formModel"
+    :initProducts="products"
     :action="action"
   />
 </template>
@@ -42,21 +43,26 @@ export default {
 
   data () {
     return {
-      action: ''
+      action: '',
+      id: null,
+      formModel: {},
+      products: []
     }
   },
 
   mounted () {
     const routeName = this.$route.name
     this.action = routeMap[routeName]
+    this.id = Number(this.$route.params.id)
+    if (this.id) this.initTemplate()
   },
 
   methods: {
-    async save ({ formModel, products, amount, quantitys, id }) {
+    async save ({ formModel, products, amount, quantitys }) {
       const { customer } = formModel
       const func = this.action === 'edit' ? editPurchaseOrderTemplate : addPurchaseOrderTemplate
       await func({
-        id,
+        id: this.id,
         amount,
         quantitys,
         skus: products.length,
@@ -75,10 +81,8 @@ export default {
       this.$router.push({ name: 'salesTemplate' })
     },
     // 得到模板的详情，主要是得到product列表
-    async initTemplate (id) {
-      const rsp = await getPurchaseOrderTemplateDetail(id)
-      const formModel = {}
-      let products
+    async initTemplate () {
+      const rsp = await getPurchaseOrderTemplateDetail(this.id)
       if (rsp && rsp.data.data) {
         const {
           orderItems,
@@ -87,13 +91,15 @@ export default {
           templateName
         } = rsp.data.data
 
-        formModel.customer = {
-          id: purchaserUserId,
-          name: purchaserName
+        this.formModel = {
+          customer: {
+            id: purchaserUserId,
+            name: purchaserName
+          },
+          templateName
         }
-        formModel.templateName = templateName
 
-        products = orderItems.map(item => {
+        this.products = orderItems.map(item => {
           const {
             barCode,
             brandName,
@@ -119,10 +125,6 @@ export default {
             skuPrice
           }
         })
-      }
-      return {
-        formModel,
-        products
       }
     }
   }

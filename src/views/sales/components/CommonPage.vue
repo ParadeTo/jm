@@ -32,6 +32,7 @@
     <template v-if="action!=='view'">
       <el-button type="default" @click="productDialogVisible=true" :disabled="!formModel.customer.name">选择商品</el-button>
       <el-button type="primary" @click="save" :disabled="!formModel.customer.name">保存</el-button>
+      <slot name="moreOperation"></slot>
     </template>
 
     <el-dialog title="选择门店" :visible.sync="customerDialogVisible" width="80%" style="max-height: 90vh;">
@@ -96,6 +97,7 @@ import {
   getPurchaseOrderTemplateDetail,
   editPurchaseOrderTemplate
 } from '@/api/pdos/template'
+import { deepClone } from '@/utils'
 
 export default {
   components: {
@@ -111,6 +113,12 @@ export default {
     },
     initData: {
       type: Function
+    },
+    initFormModel: {
+      type: Object
+    },
+    initProducts: {
+      type: Array
     },
     action: {
       type: String,
@@ -138,9 +146,9 @@ export default {
       customerDialogVisible: false,
       templateDialogVisible: false,
       productDialogVisible: false,
-      products: this.initProducts || [],
+      products: [],
       cachedProducts: [],
-      formModel: this.initFormModel || {
+      formModel: {
         template: {},
         customer: {},
         code: '',
@@ -149,6 +157,15 @@ export default {
         quantitys: '',
       },
       cols
+    }
+  },
+
+  watch: {
+    initFormModel (val) {
+      this.formModel = { ...this.formModel, ...deepClone(val) }
+    },
+    initProducts (val) {
+      this.products = deepClone(val)
     }
   },
 
@@ -161,33 +178,24 @@ export default {
      }
   },
 
-  async mounted () {
-    this.id = Number(this.$route.params.id)
-    if (this.id) {
-      const { products, formModel } = await this.initData(this.id)
-      this.formModel = {
-        ...this.formModel,
-        ...formModel
-      }
-      this.products = products
-    }
-  },
-
   methods: {
-    async save () {
+    save () {
       const { formModel, products, amount, quantitys, id } = this
-      debugger
-      this.$emit('save', { id, formModel, products, amount, quantitys })
+      this.$emit('save', { formModel, products, amount, quantitys })
     },
-    async confirm () {
-      const productNos = this.cachedProducts.map(p => p.skuId)
+    submit () {
+      this.$emit('submit')
+    },
+    async confirm () { // ! for edit, need to be changed
+      const products = this.products
+      const productNos = products.map(p => p.skuId)
       const rsp = await getLastOrderItem({
         purchaserUserId: this.formModel.customer.id,
         productNos
       })
       if (rsp.data && rsp.data.data) {
         const orderItemInfoList = rsp.data.data
-        this.products = this.cachedProducts.map(p => {
+        this.products = products.map(p => {
           const item = orderItemInfoList.find(item => item.productNo === p.skuId)
           const res = p
           if (item) res.price = item.skuPrice
@@ -209,69 +217,24 @@ export default {
         if (!formModel.templateName) formModel.templateName = `${formModel.customer.name}-模板`
       }
     },
-    // async initTemplate (id) {
-    //   const rsp = await getPurchaseOrderTemplateDetail(id) // 得到模板的详情，主要是得到product列表
-    //   if (rsp && rsp.data.data) {
-    //     const {
-    //       orderItems,
-    //       purchaserName,
-    //       purchaserUserId,
-    //       templateName
-    //     } = rsp.data.data
-    //     this.formModel.customer = {
-    //       id: purchaserUserId,
-    //       name: purchaserName
-    //     }
-    //     this.formModel.templateName = templateName
-        
-    //     this.products = orderItems.map(item => {
-    //       const {
-    //         barCode,
-    //         brandName,
-    //         productName: skuName,
-    //         productNo,
-    //         unitName,
-    //         skuPrice,
-    //         price,
-    //         quantity,
-    //         costPrice
-    //       } = item
-    //       return {
-    //         barCode,
-    //         skuName,
-    //         skuId: Number(productNo),
-    //         brandName,
-    //         cateName: '',
-    //         classifyName: '',
-    //         unitName,
-    //         costPrice,
-    //         price,
-    //         skuPrice,
-    //         quantity,
-    //         price: costPrice
-    //       }
-    //     })
-    //   }
-    // },
     handleTemplateChange (data) {
       this.formModel.template = data
       this.afterTemplateChange(data)
-      // this.initTemplate(data.id)
       this.templateDialogVisible = false
     },
     handleSelectionChange (selection) {
-      if (!this.forOrder) {
+      // if (!this.forOrder) {
         this.products = selection.map(s => ({
           ...s,
           quantity: 1
         }))
-      } else {
-        this.cachedProducts = selection.map(s => ({
-          ...s,
-          price: s.skuPrice,
-          quantity: 1
-        }))
-      }
+      // } else {
+      //   this.cachedProducts = selection.map(s => ({
+      //     ...s,
+      //     price: s.skuPrice,
+      //     quantity: 1
+      //   }))
+      // }
     },
     pickCustomer () {
       this.customerDialogVisible = true

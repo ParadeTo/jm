@@ -1,33 +1,27 @@
 <template>
   <common-page
     @save="save"
-    @submit="submit"
     :initFormModel="formModel"
     :initProducts="products"
     :action="action"
     :afterTemplateChange="afterTemplateChange"
     forOrder
-  >
-    <el-button slot="moreOperation" type="success" @click="submit" v-if="action==='edit' && status===100">提交</el-button>
-  </common-page>
+  />
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
 import CommonPage from '../components/CommonPage.vue'
 import {
-  postPurchaseOrder,
-  getPurchaseOrderDetail,
-  submitPurchaseOrder,
-  generatePurchaseOrderByTemplate
-} from '@/api/pdos/purchase'
+  postReturnOrder,
+  getReturnOrderDetail
+} from '@/api/pdos/return'
 
 // 最近一次销售价costPrice，商品售价skuprice，本次订单价格price
 
 const routeMap = {
-  salesOrderDetail: 'view',
-  salesOrderEdit: 'edit',
-  salesOrderAdd: 'add'
+  salesReturnDetail: 'view',
+  salesReturnEdit: 'edit',
+  salesReturnAdd: 'add'
 }
 export default {
   components: {
@@ -38,7 +32,6 @@ export default {
     return {
       action: '',
       id: null,
-      status: '',
       formModel: {},
       products: []
     }
@@ -46,25 +39,18 @@ export default {
 
   mounted () {
     const routeName = this.$route.name
-    this.id = Number(this.$route.params.id)
     this.action = routeMap[routeName]
+    this.id = Number(this.$route.params.id)
     if (this.id) this.initOrder()
-    if (!this.purchaseOrderParams) {
-      this.updatePurchaseOrderParams()
-    }
   },
 
-  computed: mapGetters('pdos', ['purchaseOrderParams']),
-
   methods: {
-    ...mapActions('pdos', ['updatePurchaseOrderParams']),
     async initOrder () {
-      const rsp = await getPurchaseOrderDetail(this.id)
+      const rsp = await getReturnOrderDetail(this.id)
       const formModel = {}
       let products
       if (rsp && rsp.data.data) {
         const {
-          status,
           orderItems,
           purchaserName,
           purchaserUserId
@@ -76,8 +62,6 @@ export default {
             name: purchaserName
           }
         }
-
-        this.status = status
 
         this.products = orderItems.map(item => {
           const {
@@ -108,14 +92,14 @@ export default {
       }
     },
     async afterTemplateChange (template) {
-      const rsp = await generatePurchaseOrderByTemplate(template.id)
-      if (rsp && rsp.data) {
-        this.$router.push({ name: 'salesOrderEdit', params: { id: rsp.data.data } })
-      }
+      // const rsp = await generatePurchaseOrderByTemplate(template.id)
+      // if (rsp && rsp.data) {
+      //   this.$router.push({ name: 'salesOrderEdit', params: { id: rsp.data.data } })
+      // }
     },
     async save ({ formModel, products, amount, quantitys }) {
       const { customer, templateName } = formModel
-      await postPurchaseOrder({
+      await postReturnOrder({
         id: this.id,
         purchaserUserId: customer.id,
         purchaserName: customer.name,
@@ -129,11 +113,7 @@ export default {
           amount: p.quantity * p.price
         }))
       })
-      this.$router.push({ name: 'salesOrder' })
-    },
-    async submit () {
-      await submitPurchaseOrder(this.id)
-      this.initOrder()
+      this.$router.push({ name: 'salesReturn' })
     }
   }
 }

@@ -105,27 +105,36 @@ export default {
       title: '编辑销售模板'
     }
   }, {
-    path: 'refund',
-    component: () => import('@/views/sales/refund'),
-    name: 'salesRefund',
+    path: 'return',
+    component: () => import('@/views/sales/return'),
+    name: 'salesReturn',
     meta: {
       title: '退货管理'
     }
   }, {
-    path: 'refund/detail/:id',
-    component: () => import('@/views/sales/refund/detail'),
-    name: 'salesRefundDetail',
+    path: 'return/add',
+    component: () => import('@/views/sales/return/detail'),
+    name: 'salesReturnAdd',
+    hidden: true,
+    meta: {
+      title: '新增退货单'
+    }
+  }, {
+    path: 'return/:id',
+    exact: true,
+    component: () => import('@/views/sales/return/detail'),
+    name: 'salesReturnDetail',
     hidden: true,
     meta: {
       title: '退货单详情'
     }
   }, {
-    path: 'refund/add',
-    component: () => import('@/views/sales/refund/detail'),
-    name: 'salesRefundAdd',
+    path: 'return/:id/edit',
+    component: () => import('@/views/sales/return/detail'),
+    name: 'salesReturnEdit',
     hidden: true,
     meta: {
-      title: '新增退货单'
+      title: '编辑退货单'
     }
   }]
 }

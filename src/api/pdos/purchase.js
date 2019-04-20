@@ -102,6 +102,15 @@ export function postPurchaseOrder (data) {
   })
 }
 
+// 提交订单
+export function submitPurchaseOrder (id) {
+  return pdosService({
+    url: '/pdos/pdosPurchaseOrder/submit',
+    method: 'post',
+    data: { id }
+  })
+}
+
 // 修改销售订单
 // export function editPurchaseOrder (data) {
 //   return pdosService({

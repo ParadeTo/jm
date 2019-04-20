@@ -1,12 +1,16 @@
 import { getPurchaseOrderParams } from '@/api/pdos/purchase'
+import { getDeliveryOrderParams } from '@/api/pdos/delivery'
 
 export default {
+  namespaced: true,
   state: {
     purchaseOrderParams: null,
+    deliveryOrderParams: null,
     templateParams: null
   },
   mutations: {
     UPDATE_PURCHASE_ORDER_PARAMS (state, data) { state.purchaseOrderParams = data },
+    UPDATE_DELIVERY_ORDER_PARAMS (state, data) { state.deliveryOrderParams = data },
     UPDATE_TEMPLATE_PARAMS (state, data) { state.templateParams = data }
   },
   actions: {
@@ -14,12 +18,17 @@ export default {
       const { data } = await getPurchaseOrderParams()
       data.data && commit('UPDATE_PURCHASE_ORDER_PARAMS', data.data)
     },
+    async updateDeliveryOrderParams ({ commit }) {
+      const { data } = await getDeliveryOrderParams()
+      data.data && commit('UPDATE_DELIVERY_ORDER_PARAMS', data.data)
+    },
     async updateTemplateParams ({ commit }) {
 
     }
   },
   getters: {
     purchaseOrderParams: state => state.purchaseOrderParams,
+    deliveryOrderParams: state => state.deliveryOrderParams,
     templateParams: state => state.templateParams
   }
 }
