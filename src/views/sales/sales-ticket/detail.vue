@@ -1,20 +1,20 @@
 <template>
   <common-page
-    @save="save"
-    @afterSave="afterFunc"
+    @afterSave="afterSave"
     :id="id"
     :saveFunc="postDeliveryOrder"
     :initFormModel="formModel"
     :initProducts="products"
     :action="action"
+    :editDisabled="status>100"
     :afterTemplateChange="afterTemplateChange"
     forOrder
   >
     <template slot="moreOperation">
-      <el-button type="success" @click="submit" v-if="action==='edit'">提交</el-button>
-      <el-button type="success" @click="send" v-if="action==='edit'">发货</el-button>
-      <el-button type="success" @click="receive" v-if="action==='edit'">收货</el-button>
-      <el-button type="success" @click="returnOrder" v-if="action==='edit'">退回</el-button>
+      <el-button type="success" @click="submit" v-if="action==='edit' && status===100">提交</el-button>
+      <el-button type="success" @click="send" v-else-if="action==='edit' && status===200">发货</el-button>
+      <el-button type="success" @click="receive" v-else-if="action==='edit' && status===300">收货</el-button>
+      <el-button type="success" @click="returnOrder" v-else-if="action==='edit' && status===400">退回</el-button>
     </template>
   </common-page>
 </template>
@@ -47,6 +47,7 @@ export default {
     return {
       action: '',
       id: null,
+      status: '',
       formModel: {},
       products: []
     }
@@ -69,7 +70,8 @@ export default {
         const {
           orderItems,
           purchaserName,
-          purchaserUserId
+          purchaserUserId,
+          status
         } = rsp.data.data
 
         this.formModel = {
@@ -78,7 +80,7 @@ export default {
             name: purchaserName
           }
         }
-
+        this.status = status
         this.products = orderItems
       }
     },

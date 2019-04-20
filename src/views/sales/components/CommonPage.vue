@@ -16,7 +16,7 @@
       </el-form-item>
       <el-form-item label="客户：">
         <el-input style="width: 160px;" readonly v-model="formModel.customer.name" />
-        <el-button type="default" @click="pickCustomer" v-if="action!=='view'">我的客户</el-button>
+        <el-button type="default" @click="pickCustomer" v-if="action!=='view' && !editDisabled">我的客户</el-button>
       </el-form-item>
       <el-form-item label="SKU数：">
         {{products.length}}
@@ -30,8 +30,20 @@
     </el-form>
 
     <template v-if="action!=='view'">
-      <el-button type="default" @click="productDialogVisible=true" :disabled="!formModel.customer.name">选择商品</el-button>
-      <el-button type="primary" @click="save" :disabled="!formModel.customer.name">暂存</el-button>
+      <el-button
+        v-if="!editDisabled"
+        type="default"
+        @click="productDialogVisible=true"
+        :disabled="!formModel.customer.name">
+        选择商品
+      </el-button>
+      <el-button
+        v-if="!editDisabled"
+        type="primary"
+        @click="save"
+        :disabled="!formModel.customer.name">
+        暂存
+      </el-button>
       <slot name="moreOperation"></slot>
     </template>
 
@@ -171,16 +183,21 @@ export default {
     },
     saveFunc: {
       type: Function
+    },
+    editDisabled: {
+      type: Boolean,
+      default: false
     }
   },
 
   data () {
-    const cols = productCols.filter(p => {
-      if (!this.forOrder && p.key === 'skuPrice') return false
-      return true
-    })
+    // const cols = productCols.filter(p => {
+    //   // if (!this.forOrder && p.key === 'skuPrice') return false
+    //   return true
+    // })
+
     if (this.forOrder) {
-      cols.push({
+      productCols.push({
         label: '销售价',
         key: 'price'
       })
@@ -199,7 +216,7 @@ export default {
         templateName: '',
         quantitys: '',
       },
-      cols
+      cols: productCols
     }
   },
 

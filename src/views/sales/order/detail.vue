@@ -8,11 +8,14 @@
     :initProducts="products"
     :action="action"
     :afterTemplateChange="afterTemplateChange"
+    :editDisabled="status>=300"
     forOrder
   >
-    <el-button slot="moreOperation" type="success" @click="submit" v-if="action==='edit' && status===100">提交</el-button>
-    <el-button slot="moreOperation" type="success" @click="verify" v-else-if="action==='edit' && status===200">审核</el-button>
-    <el-button slot="moreOperation" type="success" @click="confirm" v-else-if="action==='edit' && status===300">确认</el-button>
+    <template slot="moreOperation">
+      <el-button type="success" @click="submit" v-if="action==='edit' && status===100">提交</el-button>
+      <el-button type="success" @click="verify" v-else-if="action==='edit' && status===200">审核</el-button>
+      <el-button type="success" @click="confirm" v-else-if="action==='edit' && (status===300||status===400)">确认</el-button>
+    </template>
   </common-page>
 </template>
 
