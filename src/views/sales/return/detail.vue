@@ -6,13 +6,22 @@
     :action="action"
     :afterTemplateChange="afterTemplateChange"
     forOrder
-  />
+  >
+    <template slot="moreOperation">
+      <el-button type="success" @click="submit" v-if="action==='edit'">提交</el-button>
+      <el-button type="success" @click="confirm" v-if="action==='edit'">确认</el-button>
+      <el-button type="success" @click="reject" v-if="action==='edit'">驳回</el-button>
+    </template>
+  </common-page>
 </template>
 
 <script>
 import CommonPage from '../components/CommonPage.vue'
 import {
   postReturnOrder,
+  submitReturnOrder,
+  confirmReturnOrder,
+  rejectReturnOrder,
   getReturnOrderDetail
 } from '@/api/pdos/return'
 
@@ -114,6 +123,18 @@ export default {
         }))
       })
       this.$router.push({ name: 'salesReturn' })
+    },
+    async submit () {
+      await submitReturnOrder(this.id)
+      this.initOrder()
+    },
+    async confirm () {
+      await confirmReturnOrder(this.id)
+      this.initOrder()
+    },
+    async reject () {
+      await rejectReturnOrder(this.id)
+      this.initOrder()
     }
   }
 }

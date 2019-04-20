@@ -6,7 +6,14 @@
     :action="action"
     :afterTemplateChange="afterTemplateChange"
     forOrder
-  />
+  >
+    <template slot="moreOperation">
+      <el-button type="success" @click="submit" v-if="action==='edit'">提交</el-button>
+      <el-button type="success" @click="send" v-if="action==='edit'">发货</el-button>
+      <el-button type="success" @click="receive" v-if="action==='edit'">收货</el-button>
+      <el-button type="success" @click="returnOrder" v-if="action==='edit'">退回</el-button>
+    </template>
+  </common-page>
 </template>
 
 <script>
@@ -14,6 +21,10 @@ import CommonPage from '../components/CommonPage.vue'
 import {
   postDeliveryOrder,
   getDeliveryOrderDetail,
+  submitDeliveryOrder,
+  sendDeliveryOrder,
+  receiveDeliveryOrder,
+  returnDeliveryOrder,
   generateDeliveryOrderByTemplate
 } from '@/api/pdos/delivery'
 
@@ -42,11 +53,11 @@ export default {
     const routeName = this.$route.name
     this.action = routeMap[routeName]
     this.id = Number(this.$route.params.id)
-    if (this.id) this.initTicket()
+    if (this.id) this.initOrder()
   },
 
   methods: {
-    async initTicket () {
+    async initOrder () {
       const rsp = await getDeliveryOrderDetail(this.id)
       const formModel = {}
       let products
@@ -115,6 +126,22 @@ export default {
         }))
       })
       this.$router.push({ name: 'salesTicket' })
+    },
+    async submit () {
+      await submitDeliveryOrder(this.id)
+      this.initOrder()
+    },
+    async send () {
+      await sendDeliveryOrder(this.id)
+      this.initOrder()
+    },
+    async receive () {
+      await receiveDeliveryOrder(this.id)
+      this.initOrder()
+    },
+    async returnOrder () {
+      await returnDeliveryOrder(this.id)
+      this.initOrder()
     }
   }
 }

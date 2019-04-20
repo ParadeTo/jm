@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import { getReturnOrderByPage } from '@/api/pdos/return'
 
 export default {
@@ -78,12 +79,28 @@ export default {
         label: '创建时间'
       }, {
         key: 'status',
-        label: '状态'
+        label: '状态',
+        transform: val => {
+          if (this.returnOrderParams) {
+            const item = this.returnOrderParams.status.find(s => Number(s.code) === Number(val))
+            return item.desc
+          }
+        }
       }]
     }
   },
 
+  computed: mapGetters('pdos', ['returnOrderParams']),
+
+  async mounted() {
+    if (!this.returnOrderParams) {
+      await this.updateReturnOrderParams()
+      this.$refs.table.updateListFunc()
+    }
+  },
+
   methods: {
+    ...mapActions('pdos', ['updateReturnOrderParams']),
     getReturnOrderByPage,
     handleFilter () {},
     view () {},

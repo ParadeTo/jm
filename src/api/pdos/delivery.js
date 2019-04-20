@@ -38,9 +38,45 @@ export function getDeliveryOrderDetail (id) {
 }
 
 // 保存编辑销售单
-export function postDeliveryOrder (data) {
+export function postDeliveryOrder (id) {
   return pdosService({
     url: '/pdos/pdosDeliveryOrder/save',
+    method: 'post',
+    data: { id }
+  })
+}
+
+// 提交
+export function submitDeliveryOrder (id) {
+  return pdosService({
+    url: '/pdos/pdosDeliveryOrder/submit',
+    method: 'post',
+    data: { id }
+  })
+}
+
+// 发货
+export function sendDeliveryOrder (id) {
+  return pdosService({
+    url: '/pdos/pdosDeliveryOrder/send',
+    method: 'post',
+    data: { id }
+  })
+}
+
+// 收货
+export function receiveDeliveryOrder (id) {
+  return pdosService({
+    url: '/pdos/pdosDeliveryOrder/receive',
+    method: 'post',
+    data: { id }
+  })
+}
+
+// 退回
+export function returnDeliveryOrder (data) {
+  return pdosService({
+    url: '/pdos/pdosDeliveryOrder/returned',
     method: 'post',
     data
   })

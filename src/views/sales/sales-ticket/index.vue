@@ -19,7 +19,7 @@
 
     <el-row style="margin-bottom: 20px;">
       <el-button type="primary" v-waves icon="el-icon-plus" @click="addSalesTicket">新增销售单</el-button>
-      <el-button type="success" v-waves icon="el-icon-tickets" @click="orderTemp">订单模板</el-button>
+      <!-- <el-button type="success" v-waves icon="el-icon-tickets" @click="orderTemp">订单模板</el-button> -->
     </el-row>
 
     <my-table
@@ -39,9 +39,9 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import { getDeliveryOrderByPage } from '@/api/pdos/delivery'
 
-// 改造成公共的组件
 export default {
   data () {
     return {
@@ -80,7 +80,13 @@ export default {
         label: '总金额'
       }, {
         key: 'status',
-        label: '订单状态'
+        label: '订单状态',
+        transform: val => {
+          if (this.deliveryOrderParams) {
+            const item = this.deliveryOrderParams.status.find(s => Number(s.code) === Number(val))
+            return item.desc
+          }
+        }
       }, {
         key: '',
         label: '发货时间'
@@ -88,7 +94,17 @@ export default {
     }
   },
 
+  computed: mapGetters('pdos', ['deliveryOrderParams']),
+
+  async mounted() {
+    if (!this.deliveryOrderParams) {
+      await this.updateDeliveryOrderParams()
+      this.$refs.table.updateListFunc()
+    }
+  },
+
   methods: {
+    ...mapActions('pdos', ['updateDeliveryOrderParams']),
     getDeliveryOrderByPage,
     handleFilter () {},
     addSalesTicket () {

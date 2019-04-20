@@ -111,6 +111,24 @@ export function submitPurchaseOrder (id) {
   })
 }
 
+// 审核订单
+export function verifyPurchaseOrder (id) {
+  return pdosService({
+    url: '/pdos/pdosPurchaseOrder/verify',
+    method: 'post',
+    data: { id }
+  })
+}
+
+// 确认订单
+export function confirmPurchaseOrder (id) {
+  return pdosService({
+    url: '/pdos/pdosPurchaseOrder/confirmed',
+    method: 'post',
+    data: { id }
+  })
+}
+
 // 修改销售订单
 // export function editPurchaseOrder (data) {
 //   return pdosService({

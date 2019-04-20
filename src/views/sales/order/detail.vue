@@ -9,6 +9,8 @@
     forOrder
   >
     <el-button slot="moreOperation" type="success" @click="submit" v-if="action==='edit' && status===100">提交</el-button>
+    <el-button slot="moreOperation" type="success" @click="verify" v-else-if="action==='edit' && status===200">审核</el-button>
+    <el-button slot="moreOperation" type="success" @click="confirm" v-else-if="action==='edit' && status===300">确认</el-button>
   </common-page>
 </template>
 
@@ -19,6 +21,8 @@ import {
   postPurchaseOrder,
   getPurchaseOrderDetail,
   submitPurchaseOrder,
+  verifyPurchaseOrder,
+  confirmPurchaseOrder,
   generatePurchaseOrderByTemplate
 } from '@/api/pdos/purchase'
 
@@ -133,6 +137,14 @@ export default {
     },
     async submit () {
       await submitPurchaseOrder(this.id)
+      this.initOrder()
+    },
+    async verify () {
+      await verifyPurchaseOrder(this.id)
+      this.initOrder()
+    },
+    async confirm () {
+      await confirmPurchaseOrder(this.id)
       this.initOrder()
     }
   }

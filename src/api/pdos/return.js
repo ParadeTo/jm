@@ -39,11 +39,47 @@ export function postReturnOrder (data) {
   })
 }
 
+// 提交
+export function submitReturnOrder (id) {
+  return pdosService({
+    url: '/pdos/pdosReturnOrder/submit',
+    method: 'post',
+    data: { id }
+  })
+}
+
+// 确认
+export function confirmReturnOrder (id) {
+  return pdosService({
+    url: '/pdos/pdosReturnOrder/confirm',
+    method: 'post',
+    data: { id }
+  })
+}
+
+// 驳回
+export function rejectReturnOrder (id) {
+  return pdosService({
+    url: '/pdos/pdosReturnOrder/returned',
+    method: 'post',
+    data: { id }
+  })
+}
+
 // 退货单详情
 export function getReturnOrderDetail (id) {
   return pdosService({
     url: `/pdos/pdosReturnOrder/${id}`,
     method: 'get',
     hideSuccess: true
+  })
+}
+
+export function getReturnOrderParams () {
+  return pdosService({
+    url: '/pdos/pdosReturnOrder/api/parameters',
+    method: 'get',
+    hideSuccess: true,
+    hideLoading: true
   })
 }
