@@ -191,13 +191,9 @@ export default {
   },
 
   data () {
-    // const cols = productCols.filter(p => {
-    //   // if (!this.forOrder && p.key === 'skuPrice') return false
-    //   return true
-    // })
-
+    const cols = [...productCols]
     if (this.forOrder) {
-      productCols.push({
+      cols.push({
         label: '销售价',
         key: 'price'
       })
@@ -216,7 +212,7 @@ export default {
         templateName: '',
         quantitys: '',
       },
-      cols: productCols
+      cols
     }
   },
 

@@ -2,18 +2,18 @@
   <!-- 销售单，！不是销售订单 -->
   <div class="app-container">
     <div class="filter-container">
-        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" placeholder="销售单单号" v-model="query.number" />
-        <el-date-picker
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" placeholder="销售单单号" v-model="query.keyword" />
+        <!-- <el-date-picker
           placeholder="销售单时间"
           v-model="query.daterange"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
-        </el-date-picker>
-        <el-select clearable @change='handleFilter' style="width: 130px" v-model="query.status" placeholder="订单状态">
+        </el-date-picker> -->
+        <!-- <el-select clearable @change='handleFilter' style="width: 130px" v-model="query.status" placeholder="订单状态">
           <el-option v-for="item in statusList" :key="item.key" :label="item.label" :value="item.key" />
-        </el-select>
+        </el-select> -->
         <el-button type="primary" v-waves icon="el-icon-search" @click="handleFilter">查询</el-button>
     </div>
 
@@ -49,9 +49,7 @@ export default {
       list: [],
       total: 0,
       query: {
-        number: '',
-        daterange: '',
-        status: ''
+        keyword: ''
       },
       statusList: [{
         key: 0,
@@ -106,7 +104,9 @@ export default {
   methods: {
     ...mapActions('pdos', ['updateDeliveryOrderParams']),
     getDeliveryOrderByPage,
-    handleFilter () {},
+    handleFilter () {
+      this.$refs.table.updateListFunc()
+    },
     addSalesTicket () {
       this.$router.push({ name: 'salesTicketAdd' })
     },

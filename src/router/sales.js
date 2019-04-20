@@ -16,7 +16,7 @@ export default {
     component: () => import('@/views/sales/order'),
     name: 'salesOrder',
     meta: {
-      title: '订单管理'
+      title: '销售订单'
     }
   }, {
     path: 'order/add',
@@ -24,7 +24,7 @@ export default {
     name: 'salesOrderAdd',
     hidden: true,
     meta: {
-      title: '新增订单'
+      title: '新增销售订单'
     }
   }, {
     path: 'order/:id',
@@ -32,7 +32,7 @@ export default {
     name: 'salesOrderDetail',
     hidden: true,
     meta: {
-      title: '查看订单'
+      title: '查看销售订单'
     }
   }, {
     path: 'order/:id/edit',
@@ -40,14 +40,14 @@ export default {
     name: 'salesOrderEdit',
     hidden: true,
     meta: {
-      title: '编辑订单'
+      title: '编辑销售订单'
     }
   }, {
     path: 'sales-ticket',
     component: () => import('@/views/sales/sales-ticket'),
     name: 'salesTicket',
     meta: {
-      title: '销售单管理'
+      title: '销售单'
     }
   }, {
     path: 'sales-ticket/add',
@@ -109,7 +109,7 @@ export default {
     component: () => import('@/views/sales/return'),
     name: 'salesReturn',
     meta: {
-      title: '退货管理'
+      title: '退货单'
     }
   }, {
     path: 'return/add',

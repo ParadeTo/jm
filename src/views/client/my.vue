@@ -25,17 +25,18 @@
       ref="table"
       @current-change="handleTableCurrentChange"
     >
-      <el-table-column slot="action" align="center" label="动作" min-width="140" class-name="small-padding fixed-width">
+      <!-- <el-table-column slot="action" align="center" label="动作" min-width="140" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="view(scope.row)">查看</el-button>
           <el-button type="default" size="mini" @click="edit(scope.row)">修改</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </my-table>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import ClientAdd from './components/clientAdd'
 import { getMyMemberByPage, saveMyMember } from '@/api/ma/member'
 
@@ -79,16 +80,30 @@ export default {
         label: '行业',
         key: 'scopeOfBusiness'
       }, {
-        label: '类型',
-        key: 'businessType'
+        label: '经营范围',
+        key: 'businessType',
+        transform: val => {
+          debugger
+          // this.category && this.category.find()
+        }
       }, {
-        label: '应付',
-        key: 'img'
+        label: '地址',
+        key: 'address'
+      }, {
+        label: '备注',
+        key: 'remark'
       }]
     }
   },
 
+  computed: mapGetters('product', ['category']),
+
+  mounted () {
+    if(!this.category) this.updateCategory()
+  },
+
   methods: {
+    ...mapActions('product', ['updateCategory']),
     getMyMemberByPage,
     handleTableCurrentChange (selection) {
       this.$emit('current-change', selection)
