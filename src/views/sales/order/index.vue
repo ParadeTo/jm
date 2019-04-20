@@ -125,7 +125,6 @@ export default {
       await this.updatePurchaseOrderParams()
       this.$refs.table.updateListFunc()
     }
-    console.log(this.purchaseOrderParams)
   },
 
   methods: {

@@ -1,6 +1,9 @@
 <template>
   <common-page
     @save="save"
+    @afterSave="afterFunc"
+    :id="id"
+    :saveFunc="postDeliveryOrder"
     :initFormModel="formModel"
     :initProducts="products"
     :action="action"
@@ -57,6 +60,7 @@ export default {
   },
 
   methods: {
+    postDeliveryOrder,
     async initOrder () {
       const rsp = await getDeliveryOrderDetail(this.id)
       const formModel = {}
@@ -75,32 +79,7 @@ export default {
           }
         }
 
-        this.products = orderItems.map(item => {
-          const {
-            barCode,
-            brandName,
-            productName: skuName,
-            productNo,
-            unitName,
-            skuPrice,
-            price,
-            quantity,
-            costPrice
-          } = item
-          return {
-            barCode,
-            skuName,
-            skuId: Number(productNo),
-            brandName,
-            cateName: '',
-            classifyName: '',
-            unitName,
-            price,
-            quantity,
-            costPrice,
-            skuPrice
-          }
-        })
+        this.products = orderItems
       }
     },
     async afterTemplateChange (template) {
@@ -109,22 +88,25 @@ export default {
         this.$router.push({ name: 'salesTicketEdit', params: { id: rsp.data.data } })
       }
     },
-    async save ({ formModel, products, amount, quantitys }) {
-      const { customer, templateName } = formModel
-      await postDeliveryOrder({
-        id: this.id,
-        purchaserUserId: customer.id,
-        purchaserName: customer.name,
-        amount: amount,
-        orderItems: products.map(p => ({
-          productNo: p.skuId,
-          productName: p.skuName,
-          specification: p.unitName,
-          quantity: p.quantity,
-          price: p.price,
-          amount: p.quantity * p.price
-        }))
-      })
+    // async save ({ formModel, products, amount, quantitys }) {
+    //   const { customer, templateName } = formModel
+    //   await postDeliveryOrder({
+    //     id: this.id,
+    //     purchaserUserId: customer.id,
+    //     purchaserName: customer.name,
+    //     amount: amount,
+    //     orderItems: products.map(p => ({
+    //       productNo: p.skuId,
+    //       productName: p.skuName,
+    //       specification: p.unitName,
+    //       quantity: p.quantity,
+    //       price: p.price,
+    //       amount: p.quantity * p.price
+    //     }))
+    //   })
+    //   this.$router.push({ name: 'salesTicket' })
+    // },
+    afterSave () {
       this.$router.push({ name: 'salesTicket' })
     },
     async submit () {

@@ -14,9 +14,9 @@
         <el-input style="width: 160px;" readonly v-model="formModel.template.templateName" />
         <el-button type="default" @click="pickTemplate">选择模板</el-button>
       </el-form-item>
-      <el-form-item label="门店：">
+      <el-form-item label="客户：">
         <el-input style="width: 160px;" readonly v-model="formModel.customer.name" />
-        <el-button type="default" @click="pickCustomer" v-if="action!=='view'">我的用户</el-button>
+        <el-button type="default" @click="pickCustomer" v-if="action!=='view'">我的客户</el-button>
       </el-form-item>
       <el-form-item label="SKU数：">
         {{products.length}}
@@ -31,7 +31,7 @@
 
     <template v-if="action!=='view'">
       <el-button type="default" @click="productDialogVisible=true" :disabled="!formModel.customer.name">选择商品</el-button>
-      <el-button type="primary" @click="save" :disabled="!formModel.customer.name">保存</el-button>
+      <el-button type="primary" @click="save" :disabled="!formModel.customer.name">暂存</el-button>
       <slot name="moreOperation"></slot>
     </template>
 
@@ -90,7 +90,6 @@
 import MyCustomer from '@/views/client/my'
 import ProductList from '@/views/product/list'
 import TemplateList from '@/views/sales/template/index'
-import { productCols } from '@/const/product'
 import { getLastOrderItem } from '@/api/pdos/purchase'
 import {
   addPurchaseOrderTemplate,
@@ -98,6 +97,45 @@ import {
   editPurchaseOrderTemplate
 } from '@/api/pdos/template'
 import { deepClone } from '@/utils'
+
+const productCols = [
+  {
+    label: '条码',
+    key: 'barCode',
+    minWidth: '120'
+  },
+  {
+    label: '商品图片',
+    key: 'images'
+  },
+  {
+    label: '商品名称',
+    key: 'productName',
+    minWidth: '150'
+  },
+  {
+    label: '商品品牌',
+    key: 'brandName'
+  },
+  {
+    label: '商品类目',
+    key: 'cateName'
+  },
+  // {
+  //   label: '商品分类',
+  //   key: 'classifyName'
+  // },
+  {
+    label: '单位',
+    key: 'unitName',
+    width: '80'
+  },
+  {
+    label: '价格',
+    key: 'skuPrice',
+    width: '80'
+  }
+]
 
 export default {
   components: {
@@ -107,6 +145,9 @@ export default {
   },
 
   props: {
+    id: {
+      type: Number
+    },
     forOrder: {
       type: Boolean,
       default: false
@@ -127,6 +168,9 @@ export default {
     afterTemplateChange: {
       type: Function,
       default: () => {}
+    },
+    saveFunc: {
+      type: Function
     }
   },
 
@@ -142,7 +186,6 @@ export default {
       })
     }
     return {
-      id: null,
       customerDialogVisible: false,
       templateDialogVisible: false,
       productDialogVisible: false,
@@ -179,9 +222,35 @@ export default {
   },
 
   methods: {
-    save () {
+    async save () {
       const { formModel, products, amount, quantitys, id } = this
       this.$emit('save', { formModel, products, amount, quantitys })
+      if (this.saveFunc) {
+        const { customer } = formModel
+        await this.saveFunc({
+          id: this.id,
+          amount,
+          quantitys,
+          skus: products.length,
+          templateType: 1,
+          purchaserUserId: customer.id,
+          purchaserName: customer.name,
+          templateName: formModel.templateName,
+          orderItems: products.map(p => {
+            const obj = {
+              ...p,
+              barCode: p.barcode,
+              quantity: p.quantity,
+              price: p.skuPrice || p.price,
+              amount: p.quantity * (p.skuPrice || p.price)
+            }
+            if (!obj.productNo) obj.productNo = p.skuId
+            if (!obj.productName) obj.productName = p.skuName
+            return obj
+          })
+        })
+      }
+      this.$emit('afterSave')
     },
     submit () {
       this.$emit('submit')
@@ -226,6 +295,9 @@ export default {
       // if (!this.forOrder) {
         this.products = selection.map(s => ({
           ...s,
+          barCode: s.barcode,
+          productNo: s.skuId,
+          productName: s.skuName,
           quantity: 1
         }))
       // } else {

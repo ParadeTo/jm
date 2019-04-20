@@ -1,8 +1,10 @@
 <template>
   <common-page
-    @save="save"
+    @afterSave="afterSave"
     @submit="submit"
+    :id="id"
     :initFormModel="formModel"
+    :saveFunc="postPurchaseOrder"
     :initProducts="products"
     :action="action"
     :afterTemplateChange="afterTemplateChange"
@@ -62,6 +64,7 @@ export default {
 
   methods: {
     ...mapActions('pdos', ['updatePurchaseOrderParams']),
+    postPurchaseOrder,
     async initOrder () {
       const rsp = await getPurchaseOrderDetail(this.id)
       const formModel = {}
@@ -83,32 +86,33 @@ export default {
 
         this.status = status
 
-        this.products = orderItems.map(item => {
-          const {
-            barCode,
-            brandName,
-            productName: skuName,
-            productNo,
-            unitName,
-            skuPrice,
-            price,
-            quantity,
-            costPrice
-          } = item
-          return {
-            barCode,
-            skuName,
-            skuId: Number(productNo),
-            brandName,
-            cateName: '',
-            classifyName: '',
-            unitName,
-            price,
-            quantity,
-            costPrice,
-            skuPrice
-          }
-        })
+        this.products = orderItems
+        // .map(item => {
+        //   const {
+        //     barCode,
+        //     brandName,
+        //     productName: skuName,
+        //     productNo,
+        //     unitName,
+        //     skuPrice,
+        //     price,
+        //     quantity,
+        //     costPrice
+        //   } = item
+        //   return {
+        //     barCode,
+        //     skuName,
+        //     skuId: Number(productNo),
+        //     brandName,
+        //     cateName: '',
+        //     classifyName: '',
+        //     unitName,
+        //     price,
+        //     quantity,
+        //     costPrice,
+        //     skuPrice
+        //   }
+        // })
       }
     },
     async afterTemplateChange (template) {
@@ -117,22 +121,25 @@ export default {
         this.$router.push({ name: 'salesOrderEdit', params: { id: rsp.data.data } })
       }
     },
-    async save ({ formModel, products, amount, quantitys }) {
-      const { customer, templateName } = formModel
-      await postPurchaseOrder({
-        id: this.id,
-        purchaserUserId: customer.id,
-        purchaserName: customer.name,
-        amount: amount,
-        orderItems: products.map(p => ({
-          productNo: p.skuId,
-          productName: p.skuName,
-          specification: p.unitName,
-          quantity: p.quantity,
-          price: p.price,
-          amount: p.quantity * p.price
-        }))
-      })
+    // async save ({ formModel, products, amount, quantitys }) {
+    //   const { customer, templateName } = formModel
+    //   await postPurchaseOrder({
+    //     id: this.id,
+    //     purchaserUserId: customer.id,
+    //     purchaserName: customer.name,
+    //     amount: amount,
+    //     orderItems: products.map(p => ({
+    //       productNo: p.skuId,
+    //       productName: p.skuName,
+    //       specification: p.unitName,
+    //       quantity: p.quantity,
+    //       price: p.price,
+    //       amount: p.quantity * p.price
+    //     }))
+    //   })
+    //   this.$router.push({ name: 'salesOrder' })
+    // },
+    afterSave () {
       this.$router.push({ name: 'salesOrder' })
     },
     async submit () {

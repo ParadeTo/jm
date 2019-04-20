@@ -1,6 +1,8 @@
 <template>
   <common-page
-    @save="save"
+    @afterSave="afterSave"
+    :saveFunc="postReturnOrder"
+    :id="id"
     :initFormModel="formModel"
     :initProducts="products"
     :action="action"
@@ -54,6 +56,7 @@ export default {
   },
 
   methods: {
+    postReturnOrder,
     async initOrder () {
       const rsp = await getReturnOrderDetail(this.id)
       const formModel = {}
@@ -72,32 +75,7 @@ export default {
           }
         }
 
-        this.products = orderItems.map(item => {
-          const {
-            barCode,
-            brandName,
-            productName: skuName,
-            productNo,
-            unitName,
-            skuPrice,
-            price,
-            quantity,
-            costPrice
-          } = item
-          return {
-            barCode,
-            skuName,
-            skuId: Number(productNo),
-            brandName,
-            cateName: '',
-            classifyName: '',
-            unitName,
-            price,
-            quantity,
-            costPrice,
-            skuPrice
-          }
-        })
+        this.products = orderItems
       }
     },
     async afterTemplateChange (template) {
@@ -107,21 +85,23 @@ export default {
       // }
     },
     async save ({ formModel, products, amount, quantitys }) {
-      const { customer, templateName } = formModel
-      await postReturnOrder({
-        id: this.id,
-        purchaserUserId: customer.id,
-        purchaserName: customer.name,
-        amount: amount,
-        orderItems: products.map(p => ({
-          productNo: p.skuId,
-          productName: p.skuName,
-          specification: p.unitName,
-          quantity: p.quantity,
-          price: p.price,
-          amount: p.quantity * p.price
-        }))
-      })
+      // const { customer, templateName } = formModel
+      // await postReturnOrder({
+      //   id: this.id,
+      //   purchaserUserId: customer.id,
+      //   purchaserName: customer.name,
+      //   amount: amount,
+      //   orderItems: products.map(p => ({
+      //     productNo: p.skuId,
+      //     productName: p.skuName,
+      //     specification: p.unitName,
+      //     quantity: p.quantity,
+      //     price: p.price,
+      //     amount: p.quantity * p.price
+      //   }))
+      // })
+    },
+    afterSave () {
       this.$router.push({ name: 'salesReturn' })
     },
     async submit () {

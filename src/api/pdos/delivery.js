@@ -38,11 +38,11 @@ export function getDeliveryOrderDetail (id) {
 }
 
 // 保存编辑销售单
-export function postDeliveryOrder (id) {
+export function postDeliveryOrder (data) {
   return pdosService({
     url: '/pdos/pdosDeliveryOrder/save',
     method: 'post',
-    data: { id }
+    data
   })
 }
 

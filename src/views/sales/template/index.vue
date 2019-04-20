@@ -2,9 +2,9 @@
   <div class="app-container">
     <el-form :inline="true" :model="query" class="demo-form-inline">
       <el-form-item label="模板名称">
-        <el-input v-model="query.code" placeholder="" />
+        <el-input v-model="query.keyword" placeholder="" />
       </el-form-item>
-      <el-form-item label="订单时间">
+      <!-- <el-form-item label="订单时间">
         <el-date-picker
           v-model="query.daterange"
           type="daterange"
@@ -12,12 +12,12 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期">
         </el-date-picker>
-      </el-form-item>
-      <el-form-item label="客户">
+      </el-form-item> -->
+      <!-- <el-form-item label="客户">
         <el-select clearable @change='handleFilter' style="width: 130px" v-model="query.cashier" placeholder="">
           <el-option v-for="item in statusList" :key="item.key" :label="item.label" :value="item.key" />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-button type="primary" v-waves icon="el-icon-search" @click="handleFilter">查询</el-button>
     </el-form>
 
@@ -28,8 +28,10 @@
     <my-table
       :cols="cols"
       :getListApi="getPurchaseOrderTemplateByPage"
+      :query="query"
       @current-change="handleTableCurrentChange"
       style="margin-top: 20px;"
+      ref="table"
     >
       <el-table-column slot="action" align="center" label="动作" min-width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -49,9 +51,7 @@ export default {
   data () {
     return {
       query: {
-        code: '',
-        daterange: '',
-        status: ''
+        keyword: ''
       },
       statusList: [{
         key: 0,
@@ -85,7 +85,7 @@ export default {
       this.$emit('current-change', selection)
     },
     handleFilter () {
-
+      this.$refs.table.updateListFunc()
     },
     addOrderTemp () {
       this.$router.push({ name: 'salesTemplateAdd' })
@@ -95,10 +95,7 @@ export default {
     },
     edit(row) {
       this.$router.push({ name: 'salesTemplateEdit', params: { id: row.id } })
-    },
-    async updateTableFunc ({page, limit}) {
-      
-    },
+    }
   }
 }
 </script>
