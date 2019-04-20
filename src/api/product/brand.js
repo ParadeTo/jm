@@ -10,7 +10,9 @@ export function getAllBrand ({
     params: {
       cateId,
       keyword
-    }
+    },
+    hideLoading: true,
+    hideSuccess: true
   })
 }
 

@@ -12,7 +12,9 @@ export function getAllClassify ({
       cateId,
       parentId,
       keyword
-    }
+    },
+    hideLoading: true,
+    hideSuccess: true
   })
 }
 

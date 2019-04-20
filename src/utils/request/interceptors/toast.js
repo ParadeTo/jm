@@ -18,12 +18,12 @@ export default {
         duration: 3 * 1000
       }
       if (code === '0000') {
-        conf.showSuccess && Message({
+        !conf.hideSuccess && Message({
           ...opt,
           type: 'success'
         })
       } else {
-        (conf.showError || code === '401') && Message({
+        (!conf.hideError || code === '401') && Message({
           ...opt,
           type: 'error'
         })

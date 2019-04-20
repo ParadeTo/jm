@@ -10,7 +10,9 @@ export function getAttributeList ({
     data: {
       cateId,
       keyword
-    }
+    },
+    hideLoading: true,
+    hideSuccess: true
   })
 }
 

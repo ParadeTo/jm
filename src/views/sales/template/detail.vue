@@ -12,12 +12,18 @@ import MyCustomer from '@/views/client/my'
 import ProductList from '@/views/product/list'
 import TemplateList from '@/views/sales/template/index'
 import { productCols } from '@/const/product'
-import { getLastOrderItem, addPurchaseOrder } from '@/api/pdos/purchase'
+import { getLastOrderItem } from '@/api/pdos/purchase'
 import {
   addPurchaseOrderTemplate,
+  editPurchaseOrderTemplate,
   getPurchaseOrderTemplateDetail,
-  editPurchaseOrderTemplate
 } from '@/api/pdos/template'
+
+const routeMap = {
+  salesTemplateDetail: 'view',
+  salesTemplateEdit: 'edit',
+  salesTemplateAdd: 'add'
+}
 
 export default {
   components: {
@@ -41,13 +47,16 @@ export default {
   },
 
   mounted () {
-    if (this.$route.name === 'salesTemplateDetail') this.action = 'view'
+    const routeName = this.$route.name
+    this.action = routeMap[routeName]
   },
 
   methods: {
-    async save ({ formModel, products, amount, quantitys }) {
+    async save ({ formModel, products, amount, quantitys, id }) {
       const { customer } = formModel
-      await addPurchaseOrderTemplate({
+      const func = this.action === 'edit' ? editPurchaseOrderTemplate : addPurchaseOrderTemplate
+      await func({
+        id,
         amount,
         quantitys,
         skus: products.length,
@@ -59,8 +68,8 @@ export default {
           productNo: p.skuId,
           productName: p.skuName,
           quantity: p.quantity,
-          price: p.skuPrice,
-          amount: p.quantity * p.skuPrice
+          price: p.skuPrice || p.price,
+          amount: p.quantity * (p.skuPrice || p.price)
         }))
       })
       this.$router.push({ name: 'salesTemplate' })
@@ -115,29 +124,7 @@ export default {
         formModel,
         products
       }
-    },
-    handleTemplateChange (data) {
-      this.formModel.template = data
-      this.initTemplate(data.id)
-      this.templateDialogVisible = false
-    },
-    pickCustomer () {
-      this.customerDialogVisible = true
-    },
-    pickTemplate () {
-      this.templateDialogVisible = true
-    },
-    getValue (col, row) {
-      const value = row[col.key]
-      return col.transform ? col.transform(value) : value
-    },
+    }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.field {
-  margin-right: 15px;
-}
-
-</style>

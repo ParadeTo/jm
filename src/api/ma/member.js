@@ -22,7 +22,9 @@ export function getMyMemberByPage ({
       systemId,
       pageSize,
       name
-    }
+    },
+    hideLoading: true,
+    hideSuccess: true
   })
 }
 
@@ -42,8 +44,6 @@ export function saveMyMember (data) {
   return maService({
     url: '/myMember',
     method: 'post',
-    data,
-    showLoading: true,
-    showError: true
+    data
   })
 }

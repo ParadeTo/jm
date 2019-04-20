@@ -13,14 +13,17 @@ export function login ({
       password,
       sourceType
     },
-    showError: true
+    hideLoading: true,
+    hideSuccess: true
   })
 }
 
 export function getUserInfo () {
   return maService({
     url: '/currentUser',
-    method: 'get'
+    method: 'get',
+    hideLoading: true,
+    hideSuccess: true
   })
 }
 
@@ -44,6 +47,8 @@ export function getUserByPage ({
       orderByExp,
       systemId,
       pageSize
-    }
+    },
+    hideLoading: true,
+    hideSuccess: true
   })
 }

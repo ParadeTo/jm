@@ -33,7 +33,7 @@ function tryHideFullScreenLoading () {
 export default {
   request: {
     onSuccess (req) {
-      req.showLoading && showFullScreenLoading()
+      !req.hideLoading && showFullScreenLoading()
       return req
     },
     onError () {}

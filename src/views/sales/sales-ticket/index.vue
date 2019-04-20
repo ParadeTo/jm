@@ -30,8 +30,8 @@
     >
       <el-table-column slot="action" align="center" label="操作" min-width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="view(scope.row)">修改</el-button>
-          <el-button type="primary" size="mini" @click="del(scope.row)">查看</el-button>
+          <el-button circle icon="el-icon-view" @click="view(scope.row)" type="primary"></el-button>
+          <el-button circle icon="el-icon-edit" @click="edit(scope.row)" type="default"></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -93,6 +93,12 @@ export default {
     handleFilter () {},
     addSalesTicket () {
       this.$router.push({ name: 'salesTicketAdd' })
+    },
+    view(row) {
+      this.$router.push({ name: 'salesTicketDetail', params: { id: row.id } })
+    },
+    edit(row) {
+      this.$router.push({ name: 'salesTicketEdit', params: { id: row.id } })
     },
     orderTemp () {
       this.$router.push({ name: 'salesTemplate' })

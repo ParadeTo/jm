@@ -24,16 +24,18 @@ export async function getProductList ({
       orderByClause,
       pageSize,
       productType
-    }
+    },
+    hideLoading: true,
+    hideSuccess: true
   })
 
+  //! hack, rm it when be add skuPrice
   if (rsp && rsp.data && rsp.data.data) {
     const data = rsp.data.data
     data.items.forEach(item => {
-      item.skuPrice = item.pirce
+      item.skuPrice = item.price
     })
   }
-
   return rsp
 }
 
@@ -41,10 +43,7 @@ export function saveProduct (data) {
   return productService({
     url: '/product',
     method: 'post',
-    data,
-    showLoading: true,
-    showError: true,
-    showSuccess: true
+    data
   })
 }
 
@@ -52,16 +51,14 @@ export function editProduct (data) {
   return productService({
     url: '/product',
     method: 'put',
-    data,
-    showLoading: true,
-    showError: true,
-    showSuccess: true
+    data
   })
 }
 
 export function getProductDetail (id) {
   return productService({
     url: `/product/${id}`,
-    method: 'get'
+    method: 'get',
+    hideSuccess: true
   })
 }

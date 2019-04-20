@@ -8,6 +8,8 @@ export function getAllCategory ({
     method: 'get',
     params: {
       keyword
-    }
+    },
+    hideLoading: true,
+    hideSuccess: true
   })
 }

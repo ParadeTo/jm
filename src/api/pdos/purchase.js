@@ -61,14 +61,18 @@ export function getPurchaseOrderByPage ({
       gmtCreatedBegin,
       gmtCreatedEnd,
       ...rest
-    }
+    },
+    hideLoading: true,
+    hideSuccess: true
   })
 }
 
 export function getPurchaseOrderParams () {
   return pdosService({
     url: '/pdos/pdosPurchaseOrder/api/parameters',
-    method: 'get'
+    method: 'get',
+    hideSuccess: true,
+    hideLoading: true
   })
 }
 
@@ -83,26 +87,36 @@ export function getLastOrderItem ({
     data: {
       purchaserUserId,
       productNos
-    }
+    },
+    hideLoading: true,
+    hideSuccess: true
   })
 }
 
-// 保存销售订单
-export function addPurchaseOrder (data) {
+// 保存修改销售订单
+export function postPurchaseOrder (data) {
   return pdosService({
     url: '/pdos/pdosPurchaseOrder/save',
     method: 'post',
-    data,
-    showSuccess: true
+    data
   })
 }
+
+// 修改销售订单
+// export function editPurchaseOrder (data) {
+//   return pdosService({
+//     url: '/pdos/pdosPurchaseOrder/save',
+//     method: 'put',
+//     data
+//   })
+// }
 
 // 订单详情
 export function getPurchaseOrderDetail (id) {
   return pdosService({
     url: `/pdos/pdosPurchaseOrder/${id}`,
     method: 'get',
-    showLoading: true
+    hideSuccess: true
   })
 }
 
@@ -112,6 +126,7 @@ export function generatePurchaseOrderByTemplate (id) {
     url: '/pdos/pdosPurchaseOrder/generate',
     method: 'post',
     data: { id },
-    showLoading: true
+    hideLoading: true,
+    hideSuccess: true
   })
 }

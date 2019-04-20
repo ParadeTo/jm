@@ -11,7 +11,7 @@
 <script>
 import CommonPage from '../components/CommonPage.vue'
 import {
-  addPurchaseOrder,
+  postPurchaseOrder,
   getPurchaseOrderDetail,
   generatePurchaseOrderByTemplate
 } from '@/api/pdos/purchase'
@@ -94,9 +94,10 @@ export default {
         this.$router.push({ name: 'salesOrderEdit', params: { id: rsp.data.data } })
       }
     },
-    async save ({ formModel, products, amount, quantitys }) {
+    async save ({ formModel, products, amount, quantitys, id}) {
       const { customer, templateName } = formModel
-      await addPurchaseOrder({
+      await postPurchaseOrder({
+        id,
         purchaserUserId: customer.id,
         purchaserName: customer.name,
         amount: amount,

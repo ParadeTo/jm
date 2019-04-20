@@ -90,7 +90,7 @@ import MyCustomer from '@/views/client/my'
 import ProductList from '@/views/product/list'
 import TemplateList from '@/views/sales/template/index'
 import { productCols } from '@/const/product'
-import { getLastOrderItem, addPurchaseOrder } from '@/api/pdos/purchase'
+import { getLastOrderItem } from '@/api/pdos/purchase'
 import {
   addPurchaseOrderTemplate,
   getPurchaseOrderTemplateDetail,
@@ -175,8 +175,9 @@ export default {
 
   methods: {
     async save () {
-      const { formModel, products, amount, quantitys } = this
-      this.$emit('save', { formModel, products, amount, quantitys })
+      const { formModel, products, amount, quantitys, id } = this
+      debugger
+      this.$emit('save', { id, formModel, products, amount, quantitys })
     },
     async confirm () {
       const productNos = this.cachedProducts.map(p => p.skuId)

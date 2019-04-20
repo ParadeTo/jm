@@ -22,6 +22,26 @@ export function getDeliveryOrderByPage ({
       orderNo,
       gmtCreatedBegin,
       gmtCreatedEnd
-    }
+    },
+    hideSuccess: true,
+    hideLoading: true
+  })
+}
+
+// 销售单详情
+export function getDeliveryOrderDetail (id) {
+  return pdosService({
+    url: `/pdos/pdosDeliveryOrder/${id}`,
+    method: 'get',
+    hideSuccess: true
+  })
+}
+
+// 保存编辑销售单
+export function postDeliveryOrder (data) {
+  return pdosService({
+    url: '/pdos/pdosDeliveryOrder/save',
+    method: 'post',
+    data
   })
 }

@@ -26,7 +26,9 @@ export function getPurchaseOrderTemplateByPage ({
       gmtCreatedBegin,
       gmtCreatedEnd,
       ...rest
-    }
+    },
+    hideLoading: true,
+    hideSuccess: true
   })
 }
 
@@ -35,8 +37,7 @@ export function addPurchaseOrderTemplate (data) {
   return pdosService({
     url: '/pdos/pdosOrderTemplate',
     method: 'post',
-    data,
-    showSuccess: true
+    data
   })
 }
 
@@ -45,7 +46,7 @@ export function getPurchaseOrderTemplateDetail (id) {
   return pdosService({
     url: `/pdos/pdosOrderTemplate/${id}`,
     method: 'get',
-    showLoading: true
+    hideSuccess: true
   })
 }
 

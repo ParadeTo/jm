@@ -51,7 +51,7 @@ export default {
     }
   }, {
     path: 'sales-ticket/add',
-    component: () => import('@/views/sales/sales-ticket/add'),
+    component: () => import('@/views/sales/sales-ticket/detail'),
     name: 'salesTicketAdd',
     hidden: true,
     meta: {
@@ -64,6 +64,14 @@ export default {
     hidden: true,
     meta: {
       title: '查看销售单'
+    }
+  }, {
+    path: 'sales-ticket/:id/edit',
+    component: () => import('@/views/sales/sales-ticket/detail'),
+    name: 'salesTicketEdit',
+    hidden: true,
+    meta: {
+      title: '编辑销售单'
     }
   }, {
     path: 'template',
