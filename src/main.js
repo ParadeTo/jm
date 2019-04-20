@@ -22,6 +22,7 @@ import './mock' // simulation data
 import * as filters from './filters' // global filters
 
 import waves from './directive/waves' // 水波纹指令
+import ConstPlugin from './plugins/const'
 waves.install(Vue)
 
 Vue.use(Element, {
@@ -33,6 +34,9 @@ Vue.use(Element, {
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
+
+// plugins
+Vue.use(ConstPlugin)
 
 Vue.config.productionTip = false
 

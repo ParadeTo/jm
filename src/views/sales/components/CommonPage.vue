@@ -42,7 +42,7 @@
         type="primary"
         @click="save"
         :disabled="!formModel.customer.name">
-        暂存
+        {{ forOrder ? '暂存' : '保存' }}
       </el-button>
       <slot name="moreOperation"></slot>
     </template>
@@ -129,10 +129,10 @@ const productCols = [
     label: '商品品牌',
     key: 'brandName'
   },
-  {
-    label: '商品类目',
-    key: 'cateName'
-  },
+  // {
+  //   label: '商品类目',
+  //   key: 'cateName'
+  // },
   // {
   //   label: '商品分类',
   //   key: 'classifyName'

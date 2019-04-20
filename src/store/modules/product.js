@@ -15,7 +15,7 @@ const rmEmptyChildren = list => {
 }
 
 export default {
-  namespaced: true,
+  // namespaced: true,
   state: {
     category: [],
     unit: [],

@@ -18,14 +18,15 @@ export default {
     SimpleSelect
   },
   props: ['value'],
-  computed: mapGetters(['category']),
-  mounted() {
-    if (this.category.length === 0) this.updateCategory();
+  data () {
+    return {
+      category: []
+    }
+  },
+  async mounted () {
+    this.category = await this.$getCategory()
   },
   methods: {
-    ...mapActions([
-      'updateCategory'
-    ]),
     onChange(value) {
       this.$emit('change', value);
     }

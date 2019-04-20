@@ -91,7 +91,7 @@ export function getDeliveryOrderParams () {
   })
 }
 
-export function generateDeliveryOrderByTemplate (id) {
+export function generateDeliveryOrder (id) {
   return pdosService({
     url: '/pdos/pdosDeliveryOrder/generate',
     method: 'post',

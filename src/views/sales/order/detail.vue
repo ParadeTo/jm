@@ -12,9 +12,16 @@
     forOrder
   >
     <template slot="moreOperation">
-      <el-button type="success" @click="submit" v-if="action==='edit' && status===100">提交</el-button>
-      <el-button type="success" @click="verify" v-else-if="action==='edit' && status===200">审核</el-button>
-      <el-button type="success" @click="confirm" v-else-if="action==='edit' && (status===300||status===400)">确认</el-button>
+      <el-button type="success" @click="submit" v-if="action==='edit' && status===100">
+        提交
+      </el-button>
+      <el-button type="success" @click="verify" v-else-if="action==='edit' && status===200 && hasPermission">
+        审核
+      </el-button>
+      <el-button type="success" @click="generate"
+        v-else-if="action==='edit' && (status===300||status===400) && hasPermission">
+        生成销售单
+      </el-button>
     </template>
   </common-page>
 </template>
@@ -30,6 +37,7 @@ import {
   confirmPurchaseOrder,
   generatePurchaseOrderByTemplate
 } from '@/api/pdos/purchase'
+import { generateDeliveryOrder } from '@/api/pdos/delivery'
 
 // 最近一次销售价costPrice，商品售价skuprice，本次订单价格price
 
@@ -38,6 +46,8 @@ const routeMap = {
   salesOrderEdit: 'edit',
   salesOrderAdd: 'add'
 }
+
+const verifyRoles = ['master', 'stockman']
 export default {
   components: {
     CommonPage
@@ -63,7 +73,13 @@ export default {
     }
   },
 
-  computed: mapGetters('pdos', ['purchaseOrderParams']),
+  computed: {
+    ...mapGetters('pdos', ['purchaseOrderParams']),
+    ...mapGetters('user', ['userInfo']),
+    hasPermission () {
+      return this.userInfo.roles.find(role => verifyRoles.includes(role.code))
+    }
+  },
 
   methods: {
     ...mapActions('pdos', ['updatePurchaseOrderParams']),
@@ -147,15 +163,15 @@ export default {
     },
     async submit () {
       await submitPurchaseOrder(this.id)
-      this.initOrder()
+      this.$router.push({ name: 'salesOrder' })
     },
     async verify () {
       await verifyPurchaseOrder(this.id)
-      this.initOrder()
+      this.$router.push({ name: 'salesOrder' })
     },
-    async confirm () {
-      await confirmPurchaseOrder(this.id)
-      this.initOrder()
+    async generate () {
+      await generateDeliveryOrder(this.id)
+      this.$router.push({ name: 'salesOrder' })
     }
   }
 }

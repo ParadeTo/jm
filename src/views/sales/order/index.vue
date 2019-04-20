@@ -7,14 +7,14 @@
         style="width: 200px;"
         v-model="query.orderNo"
       />
-      <el-date-picker
+      <!-- <el-date-picker
         end-placeholder="结束日期"
         placeholder="订单时间"
         range-separator="至"
         start-placeholder="开始日期"
         type="daterange"
         v-model="daterange"
-      ></el-date-picker>
+      ></el-date-picker> -->
       <el-select
         @change="handleFilter"
         clearable

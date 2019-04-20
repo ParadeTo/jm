@@ -58,6 +58,7 @@ export default {
 
   data () {
     return {
+      category: [],
       dialogVisible: false,
       query: {
         keyword: ''
@@ -83,8 +84,8 @@ export default {
         label: '经营范围',
         key: 'businessType',
         transform: val => {
-          debugger
-          // this.category && this.category.find()
+          const item = this.category.find(c => Number(c.id) === Number(val))
+          return item && item.name
         }
       }, {
         label: '地址',
@@ -98,8 +99,8 @@ export default {
 
   computed: mapGetters('product', ['category']),
 
-  mounted () {
-    if(!this.category) this.updateCategory()
+  async mounted () {
+    this.category = await this.$getCategory()
   },
 
   methods: {
