@@ -27,8 +27,8 @@ import {
   submitDeliveryOrder,
   sendDeliveryOrder,
   receiveDeliveryOrder,
-  returnDeliveryOrder,
-  generateDeliveryOrderByTemplate
+  returnDeliveryOrder
+  // generateDeliveryOrderByTemplate
 } from '@/api/pdos/delivery'
 
 // 最近一次销售价costPrice，商品售价skuprice，本次订单价格price
@@ -84,12 +84,12 @@ export default {
         this.products = orderItems
       }
     },
-    async afterTemplateChange (template) {
-      const rsp = await generateDeliveryOrderByTemplate(template.id)
-      if (rsp && rsp.data) {
-        this.$router.push({ name: 'salesTicketEdit', params: { id: rsp.data.data } })
-      }
-    },
+    // async afterTemplateChange (template) {
+    //   const rsp = await generateDeliveryOrderByTemplate(template.id)
+    //   if (rsp && rsp.data) {
+    //     this.$router.push({ name: 'salesTicketEdit', params: { id: rsp.data.data } })
+    //   }
+    // },
     // async save ({ formModel, products, amount, quantitys }) {
     //   const { customer, templateName } = formModel
     //   await postDeliveryOrder({
@@ -113,19 +113,19 @@ export default {
     },
     async submit () {
       await submitDeliveryOrder(this.id)
-      this.initOrder()
+      this.$router.push({ name: 'salesTicket' })
     },
     async send () {
       await sendDeliveryOrder(this.id)
-      this.initOrder()
+      this.$router.push({ name: 'salesTicket' })
     },
     async receive () {
       await receiveDeliveryOrder(this.id)
-      this.initOrder()
+      this.$router.push({ name: 'salesTicket' })
     },
     async returnOrder () {
       await returnDeliveryOrder(this.id)
-      this.initOrder()
+      this.$router.push({ name: 'salesTicket' })
     }
   }
 }

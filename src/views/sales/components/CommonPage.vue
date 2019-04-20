@@ -254,8 +254,8 @@ export default {
               ...p,
               barCode: p.barcode,
               quantity: p.quantity,
-              price: p.skuPrice || p.price,
-              amount: p.quantity * (p.skuPrice || p.price)
+              price: p.price || p.skuPrice,
+              amount: p.quantity * (p.price || p.skuPrice)
             }
             if (!obj.productNo) obj.productNo = p.skuId
             if (!obj.productName) obj.productName = p.skuName

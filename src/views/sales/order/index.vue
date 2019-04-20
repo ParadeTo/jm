@@ -88,10 +88,10 @@ export default {
         key: 'skus',
         label: 'SKU数'
       },{
-        key: 'amount',
+        key: 'quantitys',
         label: '总数量'
       },{
-        key: 'fee',
+        key: 'amount',
         label: '总金额'
       },{
         key: 'gmtCreated',
