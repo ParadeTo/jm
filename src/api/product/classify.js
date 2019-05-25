@@ -13,7 +13,6 @@ export function getAllClassify ({
       parentId,
       keyword
     },
-    hideLoading: true,
     hideSuccess: true
   })
 }

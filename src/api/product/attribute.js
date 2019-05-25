@@ -28,7 +28,9 @@ export function getAttributeAndValueList ({
       cateId,
       currentPage,
       pageSize
-    }
+    },
+    hideSuccess: true,
+    hideLoading: true
   })
 }
 
@@ -67,6 +69,7 @@ export function editAttribute ({
 export function getAttribute (id) {
   return productService({
     url: `/attribute/${id}`,
-    method: 'get'
+    method: 'get',
+    hideSuccess: true
   })
 }

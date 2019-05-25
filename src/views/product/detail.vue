@@ -7,10 +7,10 @@
          </el-col>
       </el-row> -->
       <el-row>
-        <el-col :span="4">
+        <el-col :span="3">
           <h3 class="subtitle">基本信息</h3>
         </el-col>
-        <el-col :span="14">
+        <el-col :span="17">
           <el-row>
             <el-col :span="12">
               <el-form-item label="商品名称">
@@ -41,12 +41,12 @@
                 <brand-select v-model="model.brand" :valueTrack="{}"/>
               </el-form-item>
             </el-col>
-            <el-button
+            <!-- <el-button
               type="primary"
               v-waves
               @click="dialogVisible = true"
               style="margin-left: 10px"
-            >新增分类</el-button>
+            >新增分类</el-button> -->
             <!-- <category-add :dialogVisible="dialogVisible" @close="dialogVisible = false"/> -->
           </el-row>
         </el-col>
@@ -54,10 +54,10 @@
       </el-row>
 
       <el-row>
-        <el-col :span="4">
+        <el-col :span="3">
           <h3 class="subtitle">商品类型</h3>
         </el-col>
-        <el-col :span="14">
+        <el-col :span="17">
           <el-form-item label="商品类型">
             <el-radio-group v-model="model.productType">
               <el-radio :label="1">标准商品</el-radio>
@@ -161,10 +161,10 @@
       </el-row>
 
       <el-row>
-        <el-col :span="4">
+        <el-col :span="3">
           <h3 class="subtitle">其他信息</h3>
         </el-col>
-        <el-col :span="14">
+        <el-col :span="17">
           <!-- <el-form-item label="自动上下架">
             <el-switch
               v-model
@@ -429,7 +429,7 @@ export default {
               attrId,
               attrValueId,
               attrValueName,
-              atrrValueName
+              atrrValueName // 后端写错了一个字段，但是看样子他们是不打算改了
             } = attrValueList.find(attrValue => attrValue.attrId === col.key)
             row[attrId] = {
               attrId,

@@ -34,14 +34,17 @@ export function getBrandListByPage ({
       orderBy,
       orderByExp,
       pageSize
-    }
+    },
+    hideSuccess: true,
+    hideLoading: true
   })
 }
 
 export function getBrand (id) {
   return productService({
     url: `/brand/${id}`,
-    method: 'get'
+    method: 'get',
+    hideSuccess: true
   })
 }
 

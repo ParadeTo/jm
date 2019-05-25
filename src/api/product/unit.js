@@ -18,14 +18,18 @@ export function getUnitList ({
       orderBy,
       orderByExp,
       pageSize
-    }
+    },
+    hideSuccess: true,
+    hideLoading: true
   })
 }
 
 export function getUnit (id) {
   return productService({
     url: `/unit/${id}`,
-    method: 'get'
+    method: 'get',
+    hideSuccess: true,
+    hideLoading: true
   })
 }
 

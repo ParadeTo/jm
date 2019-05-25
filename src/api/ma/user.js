@@ -18,6 +18,22 @@ export function login ({
   })
 }
 
+export function register (data) {
+  return maService({
+    url: '/register',
+    method: 'post',
+    data
+  })
+}
+
+export function genVercode (identity) {
+  return maService({
+    url: '/genVercode',
+    method: 'get',
+    params: { identity }
+  })
+}
+
 export function getUserInfo () {
   return maService({
     url: '/currentUser',

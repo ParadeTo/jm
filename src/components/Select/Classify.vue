@@ -1,6 +1,7 @@
 <template>
   <el-cascader
     placeholder="商品分类"
+    expand-trigger="click"
     :options="classify"
     :value="valueArr"
     :props="{label: 'name', value: 'id', children: 'childrenList'}"
@@ -26,6 +27,7 @@ export default {
   },
   methods: {
     onChange(value) {
+      console.log(value)
       this.$emit("input", value[value.length - 1]);
     },
     findPath (id, children) {

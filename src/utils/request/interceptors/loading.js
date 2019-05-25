@@ -43,8 +43,9 @@ export default {
       tryHideFullScreenLoading()
       return rsp
     },
-    onError () {
+    onError (error) {
       tryHideFullScreenLoading()
+      return Promise.reject(error)
     }
   }
 }

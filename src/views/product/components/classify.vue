@@ -77,9 +77,9 @@ export default {
         this.tree = rsp.data.data
       }
     },
-    onClose () {
+    onClose (type) {
       this.dialogVisible = false
-      this.refreshTree()
+      type === 'confirm' && this.refreshTree()
     },
     add (row) {
       this.action = 'add'

@@ -14,8 +14,8 @@
         v-model="query.barcode"
       />
       <category-select @change="handleCategoryChange" v-model="query.cateId"/>
-      <brand-select @change="handleFilter" v-model="query.brandId"/>
       <classify-select @change="handleFilter" v-model="query.classifyId"/>
+      <brand-select @change="handleFilter" v-model="query.brandId"/>
       <!-- <el-select @change='handleFilter' style="width: 130px" v-model="query.status" placeholder="上/下架">
         <el-option v-for="item in statusList" :key="item.key" :label="item.label" :value="item.key">
         </el-option>

@@ -26,6 +26,7 @@ export function getProductSkuList ({
 export function delSku (id) {
   return productService({
     url: `/sku/${id}`,
-    method: 'delete'
+    method: 'delete',
+    hideSuccess: true
   })
 }

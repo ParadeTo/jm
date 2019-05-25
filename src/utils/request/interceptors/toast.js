@@ -5,7 +5,15 @@ export default {
     onSuccess (req) {
       return req
     },
-    onError () {}
+    onError (error) {
+      console.log('err' + error) // for debug
+      Message({
+        message: error.message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      return Promise.reject(error)
+    }
   },
   response: {
     onSuccess (rsp) {
@@ -35,7 +43,7 @@ export default {
       Message({
         message: error.message,
         type: 'error',
-        duration: 5 * 1000
+        duration: 3 * 1000
       })
       return Promise.reject(error)
     }

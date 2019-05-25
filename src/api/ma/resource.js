@@ -20,7 +20,9 @@ export function getResourceByPage ({
       orderByExp,
       systemId,
       pageSize
-    }
+    },
+    hideSuccess: true,
+    hideLoading: true
   })
 }
 
@@ -34,7 +36,9 @@ export function getResourceTree ({
     params: {
       parentId,
       systemId
-    }
+    },
+    hideSuccess: true,
+    hideLoading: true
   })
 }
 
