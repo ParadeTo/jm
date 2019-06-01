@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-dialog title="添加员工" :visible="dialogVisible" width="440px" @close="cancel">
-      <div v-if="step===0">
         <el-form
           ref="dataForm"
           :rules="rules"
@@ -10,21 +9,25 @@
           label-width="100px"
           style='width: 300px; margin-left:20px;'
         >
-          <el-form-item label="手机号" prop="phone">
-            <el-input style="width: 195px;" v-model="formModel.phone" />
+          <el-form-item label="姓名" prop="name">
+            <el-input style="width: 195px;" v-model="formModel.name" />
+          </el-form-item>
+          <el-form-item label="手机号" prop="identity">
+            <el-input style="width: 195px;" v-model="formModel.identity" />
           </el-form-item>
           <el-form-item label="验证码" prop="captcha">
-            <el-input style="width: 80px;" v-model="formModel.captcha" />
+            <el-input style="width: 80px;" v-model="formModel.smsCode" />
             <el-button type="primary" v-waves @click="getCaptcha">获取验证码</el-button>
+          </el-form-item>
+          <el-form-item label="角色" prop="roleId">
+            <role-select v-model="formModel.roleId"/>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer" style="text-align: right;">
-          <el-button type="primary" @click="step=1">下一步</el-button>
+          <el-button type="primary" @click="confirm" :loading="loading">确定</el-button>
           <el-button @click="cancel">返回</el-button>
         </div>
-      </div>
-      <div v-else>
-        <el-form
+        <!-- <el-form
           ref="dataForm"
           :rules="rules"
           :model="formModel"
@@ -39,28 +42,33 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer" style="text-align: right;">
-          <el-button type="primary" @click="complete">完成</el-button>
-          <el-button @click="step=0">返回</el-button>
-        </div>
-      </div>
+          <el-button type="primary" @click="complete" :loading="loading">完成</el-button>
+          <el-button @click="cancel">返回</el-button>
+        </div> -->
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { addMember } from '@/api/ma/user'
+import { genVercode } from "@/api/ma/user";
+
 export default {
   props: ['dialogVisible'],
   data () {
     return {
-      step: 0,
+      loading: false,
       formModel: {
-        phone: '',
-        captcha: ''
+        identity: '',
+        smsCode: '',
+        roleId: '',
+        name: ''
       },
       rules: {
-        name: [{ required: true, message: '请输入商品名称', trigger: ['blur', 'change'] }],
-        category: [{ required: true, message: '请选择类目', trigger: 'change' }],
-        parent: [{ required: true, message: '请选择上级类目', trigger: 'change' }]
+        name: [{ required: true, message: '请输入名字', trigger: ['blur', 'change'] }],
+        smsCode: [{ required: true, message: '请输入验证码', trigger: 'change' }],
+        identity: [{ required: true, message: '请输入手机号', trigger: 'change' }]
+        // : [{ required: true, message: '请输入手机号', trigger: 'change' }]
         // category: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
         // parent: [{ required: true, message: '请输入联系电话', trigger: 'blur' }],
         // address: [{ required: true, message: '请输入地址', trigger: 'blur' }],
@@ -97,8 +105,8 @@ export default {
   },
 
   methods: {
-    complete () {
-
+    getCaptcha () {
+      genVercode(this.formModel.identity)
     },
     setInVisible (type) {
       this.$emit('close', type)
@@ -107,7 +115,14 @@ export default {
       this.setInVisible('cancel')
     },
     confirm () {
-      this.$refs['dataForm'].validate()
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          addMember(this.formModel)
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
       this.setInVisible('confirm')
     }
   }

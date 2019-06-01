@@ -187,13 +187,18 @@ export default {
             smsCode,
             repassword
           } = this.registerForm
-          await register({
+          this.$store.dispatch('user/register', {
             identity: tel,
             name,
             password,
             repassword,
             smsCode,
             sourceType: 'web'
+          }).then(() => {
+            this.loading = false
+            this.$router.push({ path: '/' })
+          }).catch(() => {
+            this.loading = false
           })
         } else {
           console.log("error submit!!");

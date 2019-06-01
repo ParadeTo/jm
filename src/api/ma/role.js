@@ -40,3 +40,11 @@ export function addRole ({
     showSuccess: true
   })
 }
+
+export function getAllRoles () {
+  return maService({
+    url: '/role/all',
+    method: 'get',
+    hideSuccess: true
+  })
+}

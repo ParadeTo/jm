@@ -9,6 +9,7 @@ import BrandSelect from './Select/Brand'
 import ClassifySelect from './Select/Classify'
 import SystemSelect from './Select/System'
 import ResourceTypeSelect from './Select/ResourceType'
+import RoleSelect from './Select/Role'
 
 Vue.component('my-table', MyTabel)
 Vue.component('tree-table', TreeTabel)
@@ -20,3 +21,4 @@ Vue.component('brand-select', BrandSelect)
 Vue.component('classify-select', ClassifySelect)
 Vue.component('system-select', SystemSelect)
 Vue.component('resource-type-select', ResourceTypeSelect)
+Vue.component('role-select', RoleSelect)

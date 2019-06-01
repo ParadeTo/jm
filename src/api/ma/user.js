@@ -1,10 +1,6 @@
-import { maService } from '@/utils/request'
+import {maService} from '@/utils/request'
 
-export function login ({
-  username,
-  password,
-  sourceType = 'web'
-}) {
+export function login({username, password, sourceType = 'web'}) {
   return maService({
     url: '/login',
     method: 'post',
@@ -18,23 +14,40 @@ export function login ({
   })
 }
 
-export function register (data) {
+export function register({identity, name, password, repassword, smsCode}) {
   return maService({
     url: '/register',
     method: 'post',
-    data
+    data: {
+      sourceType: 'web',
+      identity,
+      name,
+      password,
+      repassword,
+      smsCode
+    }
   })
 }
 
-export function genVercode (identity) {
+export function logout(token) {
+  return maService({
+    url: '/logout',
+    method: 'post',
+    params: {
+      token
+    }
+  })
+}
+
+export function genVercode(identity) {
   return maService({
     url: '/genVercode',
     method: 'get',
-    params: { identity }
+    params: {identity}
   })
 }
 
-export function getUserInfo () {
+export function getUserInfo() {
   return maService({
     url: '/currentUser',
     method: 'get',
@@ -43,7 +56,7 @@ export function getUserInfo () {
   })
 }
 
-export function getUserByPage ({
+export function getUserByPage({
   currentPage,
   isCountTotal = true,
   keyword,
@@ -66,5 +79,42 @@ export function getUserByPage ({
     },
     hideLoading: true,
     hideSuccess: true
+  })
+}
+
+// 员工列表
+export function queryUsersByMemberId({
+  currentPage,
+  pageSize
+}) {
+  return maService({
+    url: '/user/queryUsersByMemberId',
+    method: 'post',
+    data: {
+      currentPage,
+      isCountTotal: true,
+      pageSize
+    },
+    hideLoading: true,
+    hideSuccess: true
+  })
+}
+
+// 新增员工
+export function addMember ({
+  name,
+  identity,
+  smsCode,
+  roleId
+}) {
+  return maService({
+    url: '/user/addUser2Member',
+    method: 'post',
+    data: {
+      name,
+      identity,
+      smsCode,
+      roleId
+    }
   })
 }

@@ -1,7 +1,7 @@
-import { logout } from '@/api/login'
-import { login, getUserInfo } from '@/api/ma/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { safeGet } from '@/utils/index'
+import {logout, register} from '@/api/ma/user'
+import {login, getUserInfo} from '@/api/ma/user'
+import {getToken, setToken, removeToken} from '@/utils/auth'
+import {safeGet} from '@/utils/index'
 
 const user = {
   namespaced: true,
@@ -52,46 +52,74 @@ const user = {
   },
 
   actions: {
+    // 注册
+    register({commit}, {identity, name, password, repassword, smsCode}) {
+      return new Promise((resolve, reject) => {
+        register({
+          identity,
+          name,
+          password,
+          repassword,
+          smsCode
+        })
+          .then(response => {
+            const data = response.data
+            commit('SET_TOKEN', data.data)
+            setToken(response.data.data)
+            resolve()
+          })
+          .catch(error => {
+            console.log('err')
+            reject(error)
+          })
+      })
+    },
+
     // 用户名登录
-    loginByUsername ({ commit }, { username, password }) {
+    loginByUsername({commit}, {username, password}) {
       username = username.trim()
       return new Promise((resolve, reject) => {
-        login({ username, password }).then(response => {
-          const data = response.data
-          commit('SET_TOKEN', data.data)
-          setToken(response.data.data)
-          resolve()
-        }).catch(error => {
-          console.log('err')
-          reject(error)
-        })
+        login({username, password})
+          .then(response => {
+            const data = response.data
+            commit('SET_TOKEN', data.data)
+            setToken(response.data.data)
+            resolve()
+          })
+          .catch(error => {
+            console.log('err')
+            reject(error)
+          })
       })
     },
 
     // 获取用户信息
-    getUserInfo ({ commit, state }) {
+    getUserInfo({commit, state}) {
       return new Promise((resolve, reject) => {
-        getUserInfo(state.token).then(response => {
-          if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
-            reject(new Error('error'))
-          }
-          const data = safeGet(response, 'data.data')
-          const roles = data.memberType
-          commit('SET_ROLES', [ roles ])
-          // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-          //   commit('SET_ROLES', data.roles.map(role => ROLE_MAP[role.code]))
-          // } else {
-          //   reject(new Error('getInfo: roles must be a non-null array !'))
-          // }
+        getUserInfo(state.token)
+          .then(response => {
+            if (!response.data) {
+              // 由于mockjs 不支持自定义状态码只能这样hack
+              reject(new Error('error'))
+            }
+            const data = safeGet(response, 'data.data')
+            const roles = data.memberType
+            commit('SET_ROLES', [roles])
+            // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
+            //   commit('SET_ROLES', data.roles.map(role => ROLE_MAP[role.code]))
+            // } else {
+            //   reject(new Error('getInfo: roles must be a non-null array !'))
+            // }
 
-          // commit('SET_NAME', data.userName)
-          // commit('SET_AVATAR', data.avatar)
-          // commit('SET_INTRODUCTION', data.introduction)
-          commit('SET_USER_INFO', data)
-          resolve([ roles ])
-        }).catch(error => {
-          reject(error)
-        })
+            // commit('SET_NAME', data.userName)
+            // commit('SET_AVATAR', data.avatar)
+            // commit('SET_INTRODUCTION', data.introduction)
+            commit('SET_USER_INFO', data)
+            resolve([roles])
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
 
@@ -110,20 +138,22 @@ const user = {
     // },
 
     // 登出
-    logOut ({ commit, state }) {
+    logOut({commit, state}) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          removeToken()
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+        logout(state.token)
+          .then(() => {
+            commit('SET_TOKEN', '')
+            commit('SET_ROLES', [])
+            removeToken()
+            resolve()
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
 
-    resetToken ({ commit }) {
+    resetToken({commit}) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
@@ -133,7 +163,7 @@ const user = {
     },
 
     // 前端 登出
-    fedLogOut ({ commit }) {
+    fedLogOut({commit}) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         removeToken()
@@ -142,7 +172,7 @@ const user = {
     },
 
     // 动态修改权限
-    changeRoles ({ commit }, role) {
+    changeRoles({commit}, role) {
       return new Promise(resolve => {
         commit('SET_TOKEN', role)
         setToken(role)

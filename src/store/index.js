@@ -7,6 +7,7 @@ import tagsView from './modules/tagsView'
 import user from './modules/user'
 import product from './modules/product'
 import pdos from './modules/pdos'
+import role from './modules/role'
 import getters from './getters'
 
 Vue.use(Vuex)
@@ -19,6 +20,7 @@ const store = new Vuex.Store({
     tagsView,
     pdos,
     product,
+    role,
     user
   },
   getters
