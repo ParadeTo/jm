@@ -1,5 +1,6 @@
 <template>
   <simple-select
+    clearable
     placeholder="商品品牌"
     :list="brand"
     :value="value"

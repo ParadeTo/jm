@@ -15,6 +15,7 @@
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="view(scope.row)">查看</el-button>
           <el-button type="default" size="mini" @click="edit(scope.row)">修改</el-button>
+          <el-button type="danger" size="mini" @click="del(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -30,7 +31,7 @@
 
 <script>
 import StandardAdd from './standardAdd'
-import { getAttributeAndValueList } from '@/api/product/attribute'
+import { getAttributeAndValueList, delAttribute } from '@/api/product/attribute'
 
 export default {
   components: {
@@ -69,6 +70,10 @@ export default {
       this.dialogVisible = true
       this.action = 'edit'
       this.attributeId = row.id
+    },
+    async del (row) {
+      const rsp = await delAttribute(row.id)
+      this.$refs.table.updateListFunc()
     },
     handleCateChange () {
       this.$refs.table.updateListFunc()

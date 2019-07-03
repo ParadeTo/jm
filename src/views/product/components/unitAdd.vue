@@ -7,13 +7,14 @@
         label-position="right"
         label-width="100px"
         style='width: 600px; margin-left:20px;'
+        :rules="rules"
       >
         <el-form-item label="单位名称" prop="name">
           <el-input style="width: 160px;" v-model="formModel.name" :readonly="action==='view'" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" v-if="action!=='view'">
-        <el-button type="primary" @click="confirm">确认</el-button>
+        <el-button type="primary" @click="confirm" :disabled="!formModel.name">确认</el-button>
         <el-button @click="cancel">取消</el-button>
       </div>
     </el-dialog>

@@ -60,3 +60,10 @@ export function editUnit ({
     showSuccess: true
   })
 }
+
+export function delUnit (id) {
+  return productService({
+    url: `/unit/${id}`,
+    method: 'delete'
+  })
+}

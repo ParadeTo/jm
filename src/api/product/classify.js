@@ -46,3 +46,10 @@ export function addClassify ({
     }
   })
 }
+
+export function delClassify (id) {
+  return productService({
+    url: `/classify/${id}`,
+    method: 'delete'
+  })
+}

@@ -77,3 +77,10 @@ export function editBrand ({
     showSuccess: true
   })
 }
+
+export function delBrand (id) {
+  return productService({
+    url: `/brand/${id}`,
+    method: 'delete'
+  })
+}

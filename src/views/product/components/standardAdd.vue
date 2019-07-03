@@ -7,8 +7,9 @@
         label-position="right"
         label-width="100px"
         style='width: 600px; margin-left:20px;'
+        :rules="rules"
       >
-        <el-form-item label="类别" prop="name" v-if="action==='add'">
+        <el-form-item label="类别" v-if="action==='add'">
           <category-select v-model="formModel.cateId" />
         </el-form-item>
         <el-form-item label="规格名称" prop="name">
@@ -21,21 +22,24 @@
         </el-form-item> -->
         <el-form-item :label="action==='view' ? '规格值' : '添加规格值'">
           <el-row :key="index" v-for="(attr, index) in attrValueList" style="margin-top: 10px;">
-            <el-col :span="12">
+            <el-col :span="10">
               值：<el-input style="width: 160px;" v-model="attr.name" :readonly="action==='view'" />
             </el-col>
-            <el-col :span="12">
+            <el-col :span="10">
               排序:
               <el-select style="width: 130px" v-model="attr.orderNo" :disabled="action==='view'">
                 <el-option v-for="item in rankList" :key="item" :label="item" :value="item" />
               </el-select>
+            </el-col>
+            <el-col :span="4" v-if="index !== 0">
+              <i class="el-icon-remove icon" @click="delAttr(index)" v-if="action!=='view'" />
             </el-col>
           </el-row>
           <i class="el-icon-circle-plus icon" @click="addAttr" v-if="action!=='view'">新增规格值</i>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" v-if="action!=='view'">
-        <el-button type="primary" @click="confirm">确认</el-button>
+        <el-button type="primary" @click="confirm" :disabled="disabled">确认</el-button>
         <el-button @click="cancel">取消</el-button>
       </div>
     </el-dialog>
@@ -55,7 +59,7 @@ export default {
         name: '',
       },
       rules: {
-        name: [{ required: true, message: '请输入商品名称', trigger: ['blur', 'change'] }],
+        name: [{ required: true, message: '请输入规格名称', trigger: ['blur', 'change'] }],
         // category: [{ required: true, message: '请选择类目', trigger: 'change' }],
         // parent: [{ required: true, message: '请选择上级类目', trigger: 'change' }]
         // category: [{ required: true, message: '请输入联系人', trigger: 'blur' }],
@@ -119,6 +123,9 @@ export default {
   computed: {
     title() {
       return {'edit':'修改','add':'新增','view':'查看'}[this.action] + '商品规格'
+    },
+    disabled () {
+      return !this.formModel.cateId || !this.formModel.name || this.attrValueList.some(attr => !attr.name)
     }
   },
 
@@ -126,8 +133,11 @@ export default {
     addAttr () {
       this.attrValueList.push({
         name: '',
-        rank: 1
+        orderNo: 1
       })
+    },
+    delAttr (index) {
+      this.attrValueList.splice(index, 1)
     },
     setInVisible (type) {
       this.$emit('close', type)

@@ -20,7 +20,8 @@ export function getRoleByPage ({
       orderByExp,
       systemId,
       pageSize
-    }
+    },
+    hideSuccess: true,
   })
 }
 

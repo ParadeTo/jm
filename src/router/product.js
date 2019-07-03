@@ -22,6 +22,7 @@ export default {
     path: 'add',
     component: () => import('@/views/product/detail'),
     name: 'productAdd',
+    hidden: true,
     meta: {
       title: '新增商品'
     }
@@ -29,6 +30,7 @@ export default {
     path: 'detail/:id',
     component: () => import('@/views/product/detail'),
     name: 'productDetail',
+    hidden: true,
     meta: {
       title: '商品详情'
     }
@@ -36,6 +38,7 @@ export default {
     path: 'detail/:id/edit',
     component: () => import('@/views/product/detail'),
     name: 'productEdit',
+    hidden: true,
     meta: {
       title: '商品编辑'
     }

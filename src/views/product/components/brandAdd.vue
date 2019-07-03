@@ -7,8 +7,9 @@
         label-position="right"
         label-width="100px"
         style='width: 600px; margin-left:20px;'
+        :rules="rules"
       >
-        <el-form-item label="图片" prop="img">
+        <!-- <el-form-item label="图片" prop="img">
           <el-upload
             style="width:300px;"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -17,7 +18,7 @@
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="类别" prop="name" v-if="action==='add'">
           <category-select v-model="formModel.cateId" />
         </el-form-item>
@@ -26,7 +27,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" v-if="action!=='view'">
-        <el-button type="primary" @click="confirm">确认</el-button>
+        <el-button type="primary" @click="confirm" :disabled="disabled">确认</el-button>
         <el-button @click="cancel">取消</el-button>
       </div>
     </el-dialog>
@@ -109,6 +110,9 @@ export default {
   computed: {
     title() {
       return {'edit':'修改','add':'新增','view':'查看'}[this.action] + '商品规格'
+    },
+    disabled () {
+      return !this.formModel.cateId || !this.formModel.name
     }
   },
 

@@ -1,5 +1,22 @@
 export const productCols = [
   {
+    label: '商品类目',
+    key: 'cateName'
+  },
+  {
+    label: '商品分类',
+    key: 'classifyName'
+  },
+  {
+    label: '商品品牌',
+    key: 'brandName'
+  },
+  {
+    label: '商品名称',
+    key: 'skuName',
+    minWidth: '150'
+  },
+  {
     label: '条码',
     key: 'barcode',
     minWidth: '120'
@@ -9,24 +26,7 @@ export const productCols = [
     key: 'images'
   },
   {
-    label: '商品名称',
-    key: 'skuName',
-    minWidth: '150'
-  },
-  {
-    label: '商品品牌',
-    key: 'brandName'
-  },
-  {
-    label: '商品类目',
-    key: 'cateName'
-  },
-  {
-    label: '商品分类',
-    key: 'classifyName'
-  },
-  {
-    label: '单位',
+    label: '基本单位',
     key: 'unitName',
     width: '80'
   },
@@ -35,7 +35,7 @@ export const productCols = [
   //   key: 'img'
   // },
   {
-    label: '价格',
+    label: '基本单位的价格',
     key: 'skuPrice',
     width: '80'
   }

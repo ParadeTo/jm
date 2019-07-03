@@ -20,8 +20,9 @@
       <el-table-column label="操作" width="200">
         <template slot-scope="scope" v-if="scope.row.id !== -1">
           <el-button type="text" @click="add(scope.row)">新增子类</el-button>
-          <el-button type="text" @click="edit(scope.row)" v-if="scope.row.id !== -1">修改</el-button>
-          <el-button type="text" @click="view(scope.row)" v-if="scope.row.id !== -1">查看</el-button>
+          <el-button type="text" @click="edit(scope.row)" v-if="scope.row.parentId !== null">修改</el-button>
+          <el-button type="text" @click="del(scope.row)" v-if="scope.row.parentId !== null">删除</el-button>
+          <el-button type="text" @click="view(scope.row)">查看</el-button>
         </template>
       </el-table-column>
     </tree-table>
@@ -40,7 +41,7 @@
 
 <script>
 import ClassifyAdd from './classifyAdd'
-import { getAllClassify } from '@/api/product/classify'
+import { getAllClassify, delClassify } from '@/api/product/classify'
 import { findParentInTree, findAncestorInTree } from '@/utils'
 
 export default {
@@ -80,6 +81,9 @@ export default {
     onClose (type) {
       this.dialogVisible = false
       type === 'confirm' && this.refreshTree()
+    },
+    async del (row) {
+      const rsp = await delClassify(row.id)
     },
     add (row) {
       this.action = 'add'

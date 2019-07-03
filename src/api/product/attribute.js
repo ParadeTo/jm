@@ -73,3 +73,10 @@ export function getAttribute (id) {
     hideSuccess: true
   })
 }
+
+export function delAttribute (id) {
+  return productService({
+    url: `/attribute/${id}`,
+    method: 'delete'
+  })
+}

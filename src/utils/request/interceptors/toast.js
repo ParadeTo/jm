@@ -22,7 +22,7 @@ export default {
       const code = data.code
       const conf = rsp.config
       const opt = {
-        message: rsp.data.msg,
+        message: rsp.data.msg || "成功！",
         duration: 3 * 1000
       }
       if (code === '0000') {

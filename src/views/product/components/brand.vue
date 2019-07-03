@@ -15,6 +15,7 @@
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="view(scope.row)">查看</el-button>
           <el-button type="default" size="mini" @click="edit(scope.row)">修改</el-button>
+          <el-button type="danger" size="mini" @click="del(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -30,7 +31,7 @@
 
 <script>
 import BrandAdd from './brandAdd'
-import { getBrandListByPage } from '@/api/product/brand'
+import { getBrandListByPage, delBrand } from '@/api/product/brand'
 
 export default {
   components: {
@@ -43,10 +44,12 @@ export default {
       query: {
         keyword: ''
       },
-      cols: [{
-        label: '品牌图片',
-        key: 'images'
-      }, {
+      cols: [
+      //   {
+      //   label: '品牌图片',
+      //   key: 'images'
+      // }, 
+      {
         label: '商品单位名称',
         key: 'name'
       }, {
@@ -79,6 +82,10 @@ export default {
       this.dialogVisible = true
       this.action = 'edit'
       this.brandId = row.id
+    },
+    async del (row) {
+      await delBrand(row.id)
+      this.$refs.table.updateListFunc()
     },
     onClose (type) {
       if (type === 'confirm') {

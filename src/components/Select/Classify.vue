@@ -1,5 +1,6 @@
 <template>
   <el-cascader
+    clearable
     placeholder="商品分类"
     expand-trigger="click"
     :options="classify"

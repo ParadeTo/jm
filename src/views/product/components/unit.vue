@@ -15,6 +15,7 @@
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="view(scope.row)">查看</el-button>
           <el-button type="default" size="mini" @click="edit(scope.row)">修改</el-button>
+          <el-button type="danger" size="mini" @click="del(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -30,7 +31,7 @@
 
 <script>
 import UnitAdd from './unitAdd'
-import { getUnitList } from '@/api/product/unit'
+import { getUnitList, delUnit } from '@/api/product/unit'
 
 export default {
   components: {
@@ -73,6 +74,10 @@ export default {
       this.dialogVisible = true
       this.action = 'edit'
       this.unitId = row.id
+    },
+    async del (row) {
+      const rsp = await delUnit(row.id)
+      this.$refs.table.updateListFunc()
     },
     onClose (type) {
       if (type === 'confirm') {
