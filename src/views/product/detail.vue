@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form label-position="right" label-width="100px" :model="model">
+    <el-form label-position="right" label-width="100px" :model="model" :rules="rules" ref="form">
       <!-- <el-row v-if="isView">
         <el-col :span="4" style="text-align: right;">
           <el-button @click="delProduct" type="danger" v-waves>删除商品</el-button>
@@ -13,12 +13,12 @@
         <el-col :span="17">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="商品类目">
+              <el-form-item label="商品类目" prop="cateId">
                 <category-select v-model="model.cateId" @change="handleCateChange" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="商品分类">
+              <el-form-item label="商品分类" prop="classifyId">
                 <classify-select v-model="model.classifyId" />
               </el-form-item>
             </el-col>
@@ -30,7 +30,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="商品名称">
+              <el-form-item label="商品名称" prop="name">
                 <el-input v-model="model.name"></el-input>
               </el-form-item>
             </el-col>
@@ -39,7 +39,7 @@
             <el-col :span="12">
               <el-form-item label="商品编码">
                 <el-input v-model="model.owncode"></el-input>
-              </el-form-item>ƒ
+              </el-form-item>
             </el-col>
             <!-- <el-button
               type="primary"
@@ -268,10 +268,19 @@ export default {
         owncode: "",
         brand: null,
         cateId: "",
-        classifyId: [],
+        classifyId: "",
         unitId: "", // 多规格商品需要
         images: "",
         remark: ""
+      },
+      rules: {
+        cateId: [{ required: true, message: "请选择商品类目" }],
+        name: [{ required: true, message: "请填写商品名称" }],
+        classifyId: [
+          {
+            message: "请选择商品分类"
+          }
+        ]
       },
       categoryList: [],
       skuReqListBasic: [
@@ -467,46 +476,51 @@ export default {
       }
     },
     async save() {
-      const { id, name } = this.model.brand;
-      const data = {
-        ...this.model,
-        brandId: id,
-        brandName: name,
-        skuList: []
-      };
-      delete data.brand;
-      if (this.model.productType === 1) {
-        this.skuReqListBasic.forEach(s => {
-          data.skuList.push(s.model);
-        });
-      } else if (this.model.productType === 2) {
-        data.productAttributeList = this.genProductAttrbuteList();
-        this.cartesianData.forEach(c => {
-          const row = {
-            barcode: c.barcode,
-            price: c.price,
-            attrValueList: []
-          };
-          if (c.id !== undefined) row.id = c.id;
-          for (let k in c) {
-            if (c[k].attrId) {
-              row.attrValueList.push(c[k]);
+      try {
+        await this.$refs.form.validate();
+        const { id, name } = this.model.brand;
+        const data = {
+          ...this.model,
+          brandId: id,
+          brandName: name,
+          skuList: []
+        };
+        delete data.brand;
+        if (this.model.productType === 1) {
+          this.skuReqListBasic.forEach(s => {
+            data.skuList.push(s.model);
+          });
+        } else if (this.model.productType === 2) {
+          data.productAttributeList = this.genProductAttrbuteList();
+          this.cartesianData.forEach(c => {
+            const row = {
+              barcode: c.barcode,
+              price: c.price,
+              attrValueList: []
+            };
+            if (c.id !== undefined) row.id = c.id;
+            for (let k in c) {
+              if (c[k].attrId) {
+                row.attrValueList.push(c[k]);
+              }
             }
-          }
-          data.skuList.push(row);
-        });
-      }
+            data.skuList.push(row);
+          });
+        }
 
-      if (this.id) {
-        data.productId = this.id;
-      }
+        if (this.id) {
+          data.productId = this.id;
+        }
 
-      if (this.id) {
-        await editProduct(data);
-      } else {
-        await saveProduct(data);
+        if (this.id) {
+          await editProduct(data);
+        } else {
+          await saveProduct(data);
+        }
+        this.$router.push({ name: "productList" });
+      } catch (err) {
+        console.log(err);
       }
-      this.$router.push({ name: "productList" });
     },
     genProductAttrbuteList() {
       if (!this.id) {
@@ -544,7 +558,7 @@ export default {
       return this.productAttributeList;
     },
     back() {
-      this.$router.push({ name: 'productList' })
+      this.$router.push({ name: "productList" });
     },
     onChange() {
       console.log(this.unitList);
