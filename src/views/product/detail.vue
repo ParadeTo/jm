@@ -18,7 +18,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="商品分类" prop="classifyId">
+              <el-form-item label="商品分类">
                 <classify-select v-model="model.classifyId" />
               </el-form-item>
             </el-col>
@@ -182,8 +182,9 @@
       </el-row>
 
       <el-row style="text-align: rigxht" v-if="!isView">
-        <el-col :span="4" :offset="14">
-          <el-button type="primary" v-waves @click="save">保存</el-button>
+        <el-col :span="5" :offset="14">
+          <el-button type="success" v-waves @click="add" v-if="id===null">保存新增</el-button>
+          <el-button type="primary" v-waves @click="saveAndNavigate">保存</el-button>
           <el-button type="default" v-waves @click="back">返回列表</el-button>
         </el-col>
       </el-row>
@@ -207,6 +208,7 @@ import { getAttributeAndValueList } from "@/api/product/attribute";
 import { delSku } from "@/api/product/sku";
 import { getUnitList } from "@/api/product/unit";
 import { deepEq, deepmerge } from "@/utils/index";
+import { deepClone } from '@/utils'
 
 const MULTI_ATTR_TABLE_COLS = [
   {
@@ -237,6 +239,39 @@ const UNIT_TYPE = {
   }
 };
 
+const defaultSkuReqListBasic = [
+  {
+    name: "基本单位",
+    type: "basic",
+    model: {
+      barcode: "",
+      conversion: 1,
+      price: "",
+      unitId: "",
+      unitType: 0
+    }
+  },
+  {
+    name: `辅助单位1`,
+    type: "auxiliary",
+    model: {
+      barcode: "",
+      conversion: "",
+      price: "",
+      unitId: "",
+      unitType: 1
+    }
+  }
+]
+
+const defaultAttrListSelected = [
+  {
+    attr: null,
+    attrValueList: [],
+    attrValueListSelected: []
+  }
+]
+
 export default {
   components: {
     ClassifyAdd,
@@ -251,13 +286,7 @@ export default {
       classifyList: [],
       productAttributeList: [],
       attrList: [],
-      attrListSelected: [
-        {
-          attr: null,
-          attrValueList: [],
-          attrValueListSelected: []
-        }
-      ],
+      attrListSelected: deepClone(defaultAttrListSelected),
       cartesianData: [],
       originCartesianData: [],
       cartesianCols: [],
@@ -275,7 +304,7 @@ export default {
       },
       rules: {
         cateId: [{ required: true, message: "请选择商品类目" }],
-        name: [{ required: true, message: "请填写商品名称" }],
+        name: [{ required: true, message: "请填写商品名称", trigger: ['blur'] }],
         classifyId: [
           {
             message: "请选择商品分类"
@@ -283,30 +312,7 @@ export default {
         ]
       },
       categoryList: [],
-      skuReqListBasic: [
-        {
-          name: "基本单位",
-          type: "basic",
-          model: {
-            barcode: "",
-            conversion: 1,
-            price: "",
-            unitId: "",
-            unitType: 0
-          }
-        },
-        {
-          name: `辅助单位1`,
-          type: "auxiliary",
-          model: {
-            barcode: "",
-            conversion: "",
-            price: "",
-            unitId: "",
-            unitType: 1
-          }
-        }
-      ],
+      skuReqListBasic: deepClone(defaultSkuReqListBasic),
       originSkuReqListBasic: [],
       // attrs: [],
       tableLoading: false,
@@ -315,7 +321,8 @@ export default {
   },
 
   mounted() {
-    this.id = Number(this.$route.params.id);
+    if (this.$route.params.id !== undefined)
+      this.id = this.id = Number(this.$route.params.id);
     if (this.$route.name === "productDetail") this.isView = true;
     if (this.id) this.initDate();
   },
@@ -517,10 +524,26 @@ export default {
         } else {
           await saveProduct(data);
         }
-        this.$router.push({ name: "productList" });
       } catch (err) {
         console.log(err);
       }
+    },
+    async add() {
+      await this.save();
+      // reset
+      this.model.name = ''
+      this.model.owncode = ''
+      this.model.attrValue = ''
+      this.model.remark = ''
+      this.model.unitId = ''
+      this.cartesianData = []
+      this.cartesianCols = []
+      this.skuReqListBasic = deepClone(defaultSkuReqListBasic)
+      this.attrListSelected = deepClone(defaultAttrListSelected)
+    },
+    async saveAndNavigate() {
+      await this.save();
+      this.$router.push({ name: "productList" });
     },
     genProductAttrbuteList() {
       if (!this.id) {
