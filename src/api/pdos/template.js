@@ -58,3 +58,11 @@ export function editPurchaseOrderTemplate (data) {
     data
   })
 }
+
+// 删除模板
+export function delPurchaseOrderTemplate (id) {
+  return pdosService({
+    url: `/pdos/pdosOrderTemplate/${id}`,
+    method: 'delete'
+  })
+}

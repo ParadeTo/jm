@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapGetters,mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { getProductList } from "@/api/product/index"
 import { productCols } from '@/const/product'
 
@@ -103,7 +103,6 @@ export default {
     },
     handleSelectionChange (selection) {
       this.$emit('selection-change', selection)
-      console.log(selection)
     },
     handleFilter() {
       this.$refs.table.updateListFunc()

@@ -116,6 +116,12 @@ export default {
     this.updateListFunc()
   },
 
+  watch: {
+    selected () {
+      this.initSelected()
+    }
+  },
+
   methods: {
     initSelected () {
       if (this.initedPageMap[this.currentPage]) return

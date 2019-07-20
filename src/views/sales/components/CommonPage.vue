@@ -44,7 +44,19 @@
         :disabled="!formModel.customer.name">
         {{ forOrder ? '暂存' : '保存' }}
       </el-button>
+      <el-button
+        type="default"
+        @click="goBack">
+        取消
+      </el-button>
       <slot name="moreOperation"></slot>
+    </template>
+    <template v-else>
+      <el-button
+        type="default"
+        @click="goBack">
+        返回列表
+      </el-button>
     </template>
 
     <el-dialog title="选择门店" :visible.sync="customerDialogVisible" width="80%" style="max-height: 90vh;">
@@ -65,35 +77,46 @@
 
     <el-card style="margin-top: 20px;">
       <el-table
-      :data="products"
-      element-loading-text="loading"
-      border
-      fit
-      highlight-current-row
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column
-        type="index"
-        width="50">
-      </el-table-column>
-      <el-table-column :key="k" v-for="(col, k) in cols" align="center" :label="col.label">
-        <template slot-scope="scope">
-          <img :src="scope.row[col.key]" v-if="col.img">
-          <el-input v-else-if="col.key === 'price'" v-model="scope.row.price" />
-          <span v-else>{{getValue(col, scope.row)}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        class-name="small-padding fixed-width"
-        label="数量"
-        min-width="80"
+        :data="products"
+        element-loading-text="loading"
+        border
+        fit
+        highlight-current-row
+        @selection-change="handleSelectionChange"
       >
-        <template slot-scope="scope">
-          <el-input type="number" v-model="scope.row.quantity" min="1" />
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column
+          type="index"
+          width="50">
+        </el-table-column>
+        <el-table-column :key="k" v-for="(col, k) in cols" align="center" :label="col.label">
+          <template slot-scope="scope">
+            <img :src="scope.row[col.key]" v-if="col.img">
+            <el-input v-else-if="col.key === 'price'" v-model="scope.row.price" />
+            <span v-else>{{getValue(col, scope.row)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          class-name="small-padding fixed-width"
+          label="数量"
+          min-width="80"
+        >
+          <template slot-scope="scope">
+            <!-- <el-input type="number" v-model="scope.row.quantity" min="1" /> -->
+            <el-input type="number" v-model="scope.row.quantity" />
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          class-name="small-padding fixed-width"
+          label="动作"
+          min-width="80"
+        >
+          <template slot-scope="scope">
+            <el-button circle icon="el-icon-delete" @click="del(scope.row)" type="danger" />
+          </template>
+        </el-table-column>
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -235,6 +258,9 @@ export default {
   },
 
   methods: {
+    goBack () {
+      this.$router.go(-1)
+    },
     async save () {
       const { formModel, products, amount, quantitys, id } = this
       this.$emit('save', { formModel, products, amount, quantitys })
@@ -264,6 +290,7 @@ export default {
         })
       }
       this.$emit('afterSave')
+      this.$router.go(-1)
     },
     submit () {
       this.$emit('submit')
@@ -331,6 +358,11 @@ export default {
       const value = row[col.key]
       return col.transform ? col.transform(value) : value
     },
+    del (row) {
+      const index = this.products.findIndex(p => p.skuId === row.skuId)
+      // debugger
+      this.products.splice(index, 1)
+    }
   }
 }
 </script>

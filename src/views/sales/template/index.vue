@@ -37,6 +37,7 @@
         <template slot-scope="scope">
           <el-button circle icon="el-icon-view" @click="view(scope.row)" type="primary"></el-button>
           <el-button circle icon="el-icon-edit" @click="edit(scope.row)" type="default"></el-button>
+          <el-button circle icon="el-icon-delete" @click="del(scope.row)" type="danger"></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-import { getPurchaseOrderTemplateByPage } from '@/api/pdos/template'
+import { getPurchaseOrderTemplateByPage, delPurchaseOrderTemplate } from '@/api/pdos/template'
 
 export default {
   props: ['isForSelect'],
@@ -62,7 +63,7 @@ export default {
         label: '模板名称'
       }, {
         key: 'supplierName',
-        label: '供应商名称'
+        label: '客户名称' // 后面可能还得改
       }, {
         key: 'skus',
         label: 'SKU数'
@@ -95,6 +96,13 @@ export default {
     },
     edit(row) {
       this.$router.push({ name: 'salesTemplateEdit', params: { id: row.id } })
+    },
+    async del(row) {
+      try {
+        await this.$confirm('确认删除?', '提示')
+        await delPurchaseOrderTemplate(row.id)
+        this.$refs.table.updateListFunc()
+      } catch (e) {}
     }
   }
 }

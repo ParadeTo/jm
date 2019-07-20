@@ -97,14 +97,14 @@ export default {
     }
   },
 
-  computed: mapGetters('product', ['category']),
+  // computed: mapGetters('product', ['category']),
 
   async mounted () {
     this.category = await this.$getCategory()
   },
 
   methods: {
-    ...mapActions('product', ['updateCategory']),
+    // ...mapActions('product', ['updateCategory']),
     getMyMemberByPage,
     handleTableCurrentChange (selection) {
       this.$emit('current-change', selection)

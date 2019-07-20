@@ -12,6 +12,37 @@ export default {
     roles: ['SUPPLIER'] // you can set roles in root nav
   },
   children: [{
+    path: 'template',
+    component: () => import('@/views/sales/template'),
+    name: 'salesTemplate',
+    meta: {
+      title: '销售订单模板'
+    }
+  }, {
+    path: 'template/add',
+    component: () => import('@/views/sales/template/detail'),
+    name: 'salesTemplateAdd',
+    hidden: true,
+    meta: {
+      title: '新增销售模板'
+    }
+  }, {
+    path: 'template/:id',
+    component: () => import('@/views/sales/template/detail'),
+    name: 'salesTemplateDetail',
+    hidden: true,
+    meta: {
+      title: '销售模板详情'
+    }
+  }, {
+    path: 'template/:id/edit',
+    component: () => import('@/views/sales/template/detail'),
+    name: 'salesTemplateEdit',
+    hidden: true,
+    meta: {
+      title: '编辑销售模板'
+    }
+  }, {
     path: 'order',
     component: () => import('@/views/sales/order'),
     name: 'salesOrder',
@@ -74,42 +105,11 @@ export default {
       title: '编辑销售单'
     }
   }, {
-    path: 'template',
-    component: () => import('@/views/sales/template'),
-    name: 'salesTemplate',
-    meta: {
-      title: '销售模板'
-    }
-  }, {
-    path: 'template/add',
-    component: () => import('@/views/sales/template/detail'),
-    name: 'salesTemplateAdd',
-    hidden: true,
-    meta: {
-      title: '新增销售模板'
-    }
-  }, {
-    path: 'template/:id',
-    component: () => import('@/views/sales/template/detail'),
-    name: 'salesTemplateDetail',
-    hidden: true,
-    meta: {
-      title: '销售模板详情'
-    }
-  }, {
-    path: 'template/:id/edit',
-    component: () => import('@/views/sales/template/detail'),
-    name: 'salesTemplateEdit',
-    hidden: true,
-    meta: {
-      title: '编辑销售模板'
-    }
-  }, {
     path: 'return',
     component: () => import('@/views/sales/return'),
     name: 'salesReturn',
     meta: {
-      title: '退货单'
+      title: '销售退货单'
     }
   }, {
     path: 'return/add',
