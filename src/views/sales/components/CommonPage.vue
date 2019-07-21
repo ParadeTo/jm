@@ -90,9 +90,20 @@
         </el-table-column>
         <el-table-column :key="k" v-for="(col, k) in cols" align="center" :label="col.label">
           <template slot-scope="scope">
-            <img :src="scope.row[col.key]" v-if="col.img">
-            <el-input v-else-if="col.key === 'price'" v-model="scope.row.price" />
+            <img :src="scope.row[col.key]" v-if="col.type === 'img'">
+            <span v-else-if="col.render">{{col.render(scope.row)}}</span>
+            <el-input type="number" :min="0" v-else-if="col.type === 'input'" v-model="scope.row[col.key]" />
             <span v-else>{{getValue(col, scope.row)}}</span>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column
+          align="center"
+          class-name="small-padding fixed-width"
+          label="数量"
+          min-width="80"
+        >
+          <template slot-scope="scope">
+            <el-input type="number" v-model="scope.row.quantity" />
           </template>
         </el-table-column>
         <el-table-column
@@ -102,10 +113,9 @@
           min-width="80"
         >
           <template slot-scope="scope">
-            <!-- <el-input type="number" v-model="scope.row.quantity" min="1" /> -->
             <el-input type="number" v-model="scope.row.quantity" />
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           align="center"
           class-name="small-padding fixed-width"
@@ -168,7 +178,13 @@ const productCols = [
   {
     label: '价格',
     key: 'skuPrice',
-    width: '80'
+    width: '80',
+    type: 'input'
+  },
+  {
+    label: '数量',
+    key: 'quantity',
+    type: 'input'
   }
 ]
 
@@ -216,10 +232,18 @@ export default {
   data () {
     const cols = [...productCols]
     if (this.forOrder) {
-      cols.push({
-        label: '销售价',
-        key: 'price'
+      cols.forEach(col => {
+        if (col.key === 'skuPrice') col.type = null
       })
+      cols.push(...[{
+        label: '销售价',
+        key: 'price',
+        type: 'input'
+      }, {
+        label: '金额',
+        key: 'skuAmount',
+        render: (row) => row.price * row.quantity
+      }])
     }
     return {
       customerDialogVisible: false,

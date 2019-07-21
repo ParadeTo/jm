@@ -32,7 +32,7 @@
       <el-button @click="handleFilter" icon="el-icon-search" type="primary" v-waves>查询</el-button>
     </div>
     <el-row style="margin-bottom: 20px;">
-      <el-button @click="addOrder" icon="el-icon-plus" type="primary" v-waves>新增订单</el-button>
+      <el-button @click="addOrder" icon="el-icon-plus" type="primary" v-waves>新增销售订单</el-button>
       <!-- <el-button @click="orderTemp" icon="el-icon-tickets" type="success" v-waves>订单模板</el-button> -->
     </el-row>
 
@@ -83,7 +83,7 @@ export default {
         label: '订单单号'
       },{
         key: 'purchaserName',
-        label: '供应商名称'
+        label: '客户名称'
       },{
         key: 'skus',
         label: 'SKU数'

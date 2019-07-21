@@ -2,7 +2,7 @@
   <!-- 销售单，！不是销售订单 -->
   <div class="app-container">
     <div class="filter-container">
-        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" placeholder="销售单单号" v-model="query.keyword" />
+        <el-input @keyup.enter.native="handleFilter" style="width: 200px;" placeholder="销售单号、客户名称关键字搜索" v-model="query.keyword" />
         <!-- <el-date-picker
           placeholder="销售单时间"
           v-model="query.daterange"
@@ -86,8 +86,11 @@ export default {
           }
         }
       }, {
-        key: '',
-        label: '发货时间'
+        key: 'gmtModified',
+        label: '操作时间'
+      }, {
+        key: 'creatorName',
+        label: '操作者'
       }]
     }
   },

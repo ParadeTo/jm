@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-row>
+    <el-row style="margin-bottom: 10px;">
       <el-input
         @keyup.enter.native="handleFilter"
         placeholder="关键字"
@@ -23,7 +23,7 @@
       <el-button @click="handleFilter" icon="el-icon-search" type="primary" v-waves>查询</el-button>
     </el-row>
 
-    <el-row style="margin-top: 10px; margin-bottom: 10px">
+    <el-row style="margin-bottom: 10px;" v-if="!isForSelect">
       <el-button @click="add" type="primary" v-waves>新增商品</el-button>
       <el-button @click="impt" type="success" v-waves>导入商品</el-button>
       <!-- <el-button type="default" v-waves @click="toggleOnOff">上/下架</el-button> -->
@@ -51,7 +51,7 @@
         <template slot-scope="scope">
           <!-- <i class="el-icon-view" @click="view(scope.row)" /> -->
           <el-button circle icon="el-icon-view" @click="view(scope.row)" type="primary"></el-button>
-          <el-button circle icon="el-icon-edit" @click="edit(scope.row)" type="default"></el-button>
+          <el-button circle icon="el-icon-edit" @click="edit(scope.row)" type="default" v-if="!isForSelect"></el-button>
         </template>
       </el-table-column>
     </my-table>
