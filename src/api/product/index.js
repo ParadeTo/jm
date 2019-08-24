@@ -10,7 +10,7 @@ export async function getProductList ({
   orderByClause, // { "orderBy" : "xxx", "orderByExp" : "DESC"}
   pageSize,
   productType
-}) {
+}, { hideLoading = true, hideSuccess = true } = {}) {
   const rsp = await productService({
     url: '/product/page',
     method: 'post',
@@ -25,8 +25,8 @@ export async function getProductList ({
       pageSize,
       productType
     },
-    hideLoading: true,
-    hideSuccess: true
+    hideLoading,
+    hideSuccess
   })
 
   //! hack, rm it when be add skuPrice

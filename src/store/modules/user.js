@@ -189,7 +189,10 @@ const user = {
   },
 
   getters: {
-    userInfo: state => state.userInfo
+    userInfo: state => state.userInfo,
+    isMaster: state => {
+      return safeGet(state.userInfo, 'roles', []).includes(role => role.code === 'master')
+    }
   }
 }
 

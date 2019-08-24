@@ -47,3 +47,26 @@ export function saveMyMember (data) {
     data
   })
 }
+
+export function delMyMember (id) {
+  return maService({
+    url: `/myMember/${id}`,
+    method: 'delete'
+  })
+}
+
+export function getMyMember (id) {
+  return maService({
+    url: `/myMember/${id}`,
+    method: 'get',
+    hideSuccess: true
+  })
+}
+
+export function editMyMember (data) {
+  return maService({
+    url: `/myMember`,
+    method: 'put',
+    data
+  })
+}

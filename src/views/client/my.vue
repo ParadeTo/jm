@@ -14,8 +14,8 @@
     </el-row>
 
     <el-row style="margin: 20px 0;">
-      <el-button type="success" v-waves icon="el-icon-plus" @click="dialogVisible = true" v-if="!isForSelect">新增客户</el-button>
-      <client-add :dialogVisible="dialogVisible" @close="dialogVisible = false" />
+      <el-button type="success" v-waves icon="el-icon-plus" @click="add" v-if="!isForSelect">新增客户</el-button>
+      <client-add :id="myMemberId" :action="action" :dialogVisible="dialogVisible" @close="dialogVisible = false" />
     </el-row>
 
     <my-table
@@ -25,12 +25,13 @@
       ref="table"
       @current-change="handleTableCurrentChange"
     >
-      <!-- <el-table-column slot="action" align="center" label="动作" min-width="140" class-name="small-padding fixed-width">
+      <el-table-column slot="action" align="center" label="动作" min-width="50" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="view(scope.row)">查看</el-button>
-          <el-button type="default" size="mini" @click="edit(scope.row)">修改</el-button>
+          <el-button circle icon="el-icon-edit" @click="edit(scope.row)" type="primary" />
+          <el-button circle icon="el-icon-delete" @click="del(scope.row)" type="danger" />
+          <!-- <el-button type="danger" size="mini" @click="edit(scope.row)">删除</el-button> -->
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </my-table>
   </div>
 </template>
@@ -38,7 +39,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import ClientAdd from './components/clientAdd'
-import { getMyMemberByPage, saveMyMember } from '@/api/ma/member'
+import { getMyMemberByPage, saveMyMember, delMyMember, getMyMember } from '@/api/ma/member'
 
 export default {
   components: {
@@ -60,6 +61,8 @@ export default {
     return {
       category: [],
       dialogVisible: false,
+      myMemberId: null,
+      action: 'save',
       query: {
         keyword: ''
         // type: '',
@@ -113,13 +116,17 @@ export default {
       this.$refs.table.updateListFunc()
     },
     add () {
-      this.$router.push({name: 'productAdd'})
+      this.action = 'add'
+      this.dialogVisible = true
     },
-    view () {
-
+    async del (row) {
+      await delMyMember(row.id)
+      this.$refs.table.updateListFunc()
     },
-    edit () {
-
+    edit (row) {
+      this.dialogVisible = true
+      this.action = 'edit'
+      this.myMemberId = row.id
     },
     setting () {
       this.$router.push({ name: 'productSetting' })

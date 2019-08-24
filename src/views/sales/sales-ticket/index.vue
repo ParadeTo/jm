@@ -79,9 +79,11 @@ export default {
       }, {
         key: 'status',
         label: '订单状态',
-        transform: val => {
+        transform: (val, row) => {
           if (this.deliveryOrderParams) {
             const item = this.deliveryOrderParams.status.find(s => Number(s.code) === Number(val))
+            // 暂存状态仅自己或超级管理员可见
+            if (item.name === 'SAVE' && !(row.creator === this.userInfo.userId || this.isMaster)) return ''
             return item.desc
           }
         }
@@ -95,7 +97,10 @@ export default {
     }
   },
 
-  computed: mapGetters('pdos', ['deliveryOrderParams']),
+  computed: {
+    ...mapGetters('pdos', ['deliveryOrderParams']),
+    ...mapGetters('user', ['userInfo', 'isMaster'])
+  },
 
   async mounted() {
     if (!this.deliveryOrderParams) {

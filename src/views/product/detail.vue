@@ -69,7 +69,7 @@
           <!-- 标准商品 -->
           <div v-if="model.productType===1">
             <el-form-item label="商品规格">
-              <el-input v-model="model.attrValue" />
+              <el-input v-model="model.attrValue" placeholder="输入规格，如：重量、容量"/>
             </el-form-item>
             <el-form-item label="辅助单位">
               <el-table
@@ -108,7 +108,7 @@
                 </el-table-column>
                 <el-table-column align="center" label="价格">
                   <template slot-scope="scope">
-                    <el-input type="number" v-model="scope.row.model.price" />
+                    <el-input type="number" min="0" v-model="scope.row.model.price" />
                   </template>
                 </el-table-column>
                 <el-table-column align="center" label="操作">
@@ -250,18 +250,18 @@ const defaultSkuReqListBasic = [
       unitId: "",
       unitType: 0
     }
-  },
-  {
-    name: `辅助单位1`,
-    type: "auxiliary",
-    model: {
-      barcode: "",
-      conversion: "",
-      price: "",
-      unitId: "",
-      unitType: 1
-    }
   }
+  // {
+  //   name: `辅助单位1`,
+  //   type: "auxiliary",
+  //   model: {
+  //     barcode: "",
+  //     conversion: "",
+  //     price: "",
+  //     unitId: "",
+  //     unitType: 1
+  //   }
+  // }
 ]
 
 const defaultAttrListSelected = [

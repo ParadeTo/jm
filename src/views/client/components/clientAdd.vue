@@ -40,12 +40,12 @@
 </template>
 
 <script>
-import { saveMyMember } from '@/api/ma/member'
+import { saveMyMember, getMyMember, editMyMember } from '@/api/ma/member'
 import { system } from '@/const'
 import { mapGetters } from 'vuex'
 
 export default {
-  props: ['dialogVisible'],
+  props: ['dialogVisible', 'id', 'action'],
   data () {
     return {
       formModel: {
@@ -74,6 +74,26 @@ export default {
     ])
   },
 
+  watch: {
+    async dialogVisible (val) {
+      if (this.action === 'add') {
+        this.formModel = {
+          businessType: '',
+          scopeOfBusiness: '',
+          name: '',
+          contacts: '',
+          contactNumber: '',
+          address: '',
+          remark: '',
+        }
+      }
+      if (val && this.action !== 'add') {
+        const rsp = await getMyMember(this.id)
+        this.formModel = rsp.data.data
+      }
+    }
+  },
+
   methods: {
     setInVisible (type) {
       this.$emit('close', type)
@@ -83,15 +103,20 @@ export default {
     },
     confirm () {
       this.$refs['dataForm'].validate(async valid => {
-        if (valid) {
-          saveMyMember({
-            online: 2,
-            memberId: -1,
-            memberType: system.reversedMap[this.userInfo.memberType],
-            ...this.formModel
-          })
-          this.setInVisible('confirm')
+        const { formModel, id, action } = this
+        if (action === 'edit') {
+          await editMyMember({ id, ...formModel })
+        } else {
+          if (valid) {
+            await saveMyMember({
+              online: 2,
+              memberId: -1,
+              memberType: system.reversedMap[this.userInfo.memberType],
+              ...this.formModel
+            })
+          }
         }
+        this.setInVisible('confirm')
       })
     }
   }

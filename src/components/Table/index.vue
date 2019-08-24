@@ -134,7 +134,7 @@ export default {
     },
     getValue (col, row) {
       const value = row[col.key]
-      return col.transform ? col.transform(value) : value
+      return col.transform ? col.transform(value, row) : value
     },
     async updateListFunc () {
       this.listLoading = true
