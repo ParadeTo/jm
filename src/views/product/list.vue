@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { getProductList } from "@/api/product/index"
 import { productCols } from '@/const/product'
 
@@ -94,12 +94,23 @@ export default {
   },
 
   methods: {
+    ...mapMutations(["UPDATE_BRAND", "UPDATE_CLASSIFY"]),
     ...mapActions(['updateBrand','updateClassify']),
     handleCategoryChange(cateId) {
-      this.updateBrand(cateId)
-      this.updateClassify(cateId)
       this.query.brandId = ''
       this.query.classifyId = ''
+      this.updateAccordingToCate(cateId);
+    },
+    async updateAccordingToCate(cateId) {
+      if (Number(cateId) === 0) {
+        this.UPDATE_BRAND([]);
+        this.UPDATE_CLASSIFY([]);
+        return;
+      }
+      await Promise.all([
+        this.updateBrand(cateId),
+        this.updateClassify(cateId)
+      ]);
     },
     handleSelectionChange (selection) {
       this.$emit('selection-change', selection)

@@ -74,7 +74,7 @@ export default {
         identity: [
           {
             required: true,
-            message: "请输入手机号",
+            // message: "请输入手机号",
             validator: (rule, value, callback) => {
               if (!/^[1][3,4,5,7,8][0-9]{9}$/.test(value)) {
                 callback(new Error("请输入正确的手机号"))
@@ -132,8 +132,13 @@ export default {
   },
 
   methods: {
-    getCaptcha() {
-      genVercode(this.formModel.identity);
+    async getCaptcha() {
+      try {
+        await this.$refs.dataForm.validateField('identity')
+        genVercode(this.formModel.identity)
+      } catch (e) {
+        console.log(e)
+      }
     },
     setInVisible(type) {
       this.$emit("close", type);

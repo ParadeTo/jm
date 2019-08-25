@@ -70,3 +70,19 @@ export function editMyMember (data) {
     data
   })
 }
+
+export function editMember (data) {
+  return maService({
+    url: `/member`,
+    method: 'put',
+    data
+  })
+}
+
+export function getMember (id) {
+  return maService({
+    url: `/member/${id}`,
+    method: 'get',
+    hideSuccess: true
+  })
+}

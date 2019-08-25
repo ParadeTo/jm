@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     onChange(value) {
-      console.log(value)
       this.$emit("input", value[value.length - 1]);
     },
     findPath (id, children) {

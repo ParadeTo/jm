@@ -181,10 +181,10 @@
         </el-col>
       </el-row>
 
-      <el-row style="text-align: rigxht" v-if="!isView">
+      <el-row style="text-align: rigxht">
         <el-col :span="5" :offset="14">
-          <el-button type="success" v-waves @click="add" v-if="id===null">保存新增</el-button>
-          <el-button type="primary" v-waves @click="saveAndNavigate">保存</el-button>
+          <el-button type="success" v-waves @click="add" v-if="!isView && id===null">保存新增</el-button>
+          <el-button v-if="!isView" type="primary" v-waves @click="saveAndNavigate">保存</el-button>
           <el-button type="default" v-waves @click="back">返回列表</el-button>
         </el-col>
       </el-row>
