@@ -8,16 +8,21 @@
     :initProducts="products"
     :action="action"
     :afterTemplateChange="afterTemplateChange"
-    :editDisabled="status>=300"
+    :editDisabled="status>=300 && status!==400"
     forOrder
   >
     <template slot="moreOperation">
       <el-button type="success" @click="submit" v-if="action==='edit' && status===100">
         提交
       </el-button>
-      <el-button type="success" @click="verify" v-else-if="action==='edit' && status===200 && hasPermission">
-        审核
-      </el-button>
+      <template v-else-if="action==='edit' && status===200 && hasPermission">
+        <el-button type="success" @click="verify">
+          审核
+        </el-button>
+        <el-button type="danger" @click="reject">
+          驳回
+        </el-button>
+      </template>
       <el-button type="success" @click="generate"
         v-else-if="action==='edit' && (status===300||status===400) && hasPermission">
         生成销售单
@@ -95,7 +100,6 @@ export default {
           purchaserName,
           purchaserUserId
         } = rsp.data.data
-
         this.formModel = {
           customer: {
             id: purchaserUserId,
@@ -166,7 +170,11 @@ export default {
       this.$router.push({ name: 'salesOrder' })
     },
     async verify () {
-      await verifyPurchaseOrder(this.id)
+      await verifyPurchaseOrder({ id: this.id, status: 300 })
+      this.$router.push({ name: 'salesOrder' })
+    },
+    async reject () {
+      await verifyPurchaseOrder({ id: this.id, status: 400 })
       this.$router.push({ name: 'salesOrder' })
     },
     async generate () {

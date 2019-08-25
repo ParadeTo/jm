@@ -112,18 +112,19 @@ export function submitPurchaseOrder (id) {
 }
 
 // 审核订单
-export function verifyPurchaseOrder (id) {
+// status参数可以是300已审核  400已驳回
+export function verifyPurchaseOrder ({ id, status }) {
   return pdosService({
     url: '/pdos/pdosPurchaseOrder/verify',
     method: 'post',
-    data: { id }
+    data: { id, status }
   })
 }
 
-// 确认订单
+// 完成订单
 export function confirmPurchaseOrder (id) {
   return pdosService({
-    url: '/pdos/pdosPurchaseOrder/confirmed',
+    url: '/pdos/pdosPurchaseOrder/complate',
     method: 'post',
     data: { id }
   })
