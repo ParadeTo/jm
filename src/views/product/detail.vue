@@ -485,7 +485,7 @@ export default {
     async save() {
       try {
         await this.$refs.form.validate();
-        const { id, name } = this.model.brand;
+        const { id, name } = this.model.brand || {};
         const data = {
           ...this.model,
           brandId: id,
@@ -494,9 +494,18 @@ export default {
         };
         delete data.brand;
         if (this.model.productType === 1) {
-          this.skuReqListBasic.forEach(s => {
-            data.skuList.push(s.model);
-          });
+          for (let i = 0, len = this.skuReqListBasic.length; i < len; i++) {
+            const item = this.skuReqListBasic[i]
+            if (!item.unitId) {
+              this.$message({
+                message: '请选择单位',
+                type: 'error',
+                duration: 3 * 1000
+              })
+              return
+            }
+            data.skuList.push(item.model);
+          }
         } else if (this.model.productType === 2) {
           data.productAttributeList = this.genProductAttrbuteList();
           this.cartesianData.forEach(c => {

@@ -1,7 +1,7 @@
 <template>
   <simple-select
     clearable
-    placeholder="商品类目"
+    placeholder="请选择商品类目"
     :list="category"
     :value="value"
     @input="$listeners.input"

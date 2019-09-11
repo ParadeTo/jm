@@ -89,7 +89,7 @@
             <span v-else-if="col.render">{{col.render(scope.row)}}</span>
             <el-input
               type="number"
-              :min="0"
+              :min="1"
               v-else-if="col.type === 'input'"
               v-model="scope.row[col.key]"
             />
@@ -440,7 +440,7 @@ export default {
         this.productFormModel.skuId &&
         !this.products.find(p => +p.skuId === +this.productFormModel.skuId)
       )
-        this.products.push(this.productFormModel)
+        this.products.push(deepClone(this.productFormModel))
     },
     pickCustomer() {
       this.customerDialogVisible = true;

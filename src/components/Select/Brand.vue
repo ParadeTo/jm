@@ -1,7 +1,7 @@
 <template>
   <simple-select
     clearable
-    placeholder="商品品牌"
+    placeholder="请选择商品品牌"
     :list="brand"
     :value="value"
     :valueTrack="valueTrack"

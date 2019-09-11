@@ -16,7 +16,7 @@ export default {
     component: () => import('@/views/setting/shop'),
     name: 'settingShop',
     meta: {
-      title: '门店设置'
+      title: '基本信息'
     }
   }, {
     path: 'shop/basic',

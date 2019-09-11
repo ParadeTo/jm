@@ -1,7 +1,7 @@
 <template>
   <el-cascader
     clearable
-    placeholder="商品分类"
+    placeholder="请选择商品分类"
     expand-trigger="click"
     :options="classify"
     :value="valueArr"

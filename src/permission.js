@@ -29,6 +29,10 @@ router.beforeEach((to, from, next) => {
           // const roles = res.data.roles // note: roles must be a array! such as: ['editor','develop']
           store.dispatch('permission/generateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+            // 是否跳转到填写基本信息页面
+            if (to.path.startsWith('/sales') && store.getters['user/userInfo'].memberStatus === 2) {
+              next({ path: '/setting/shop/basic' })
+            }
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
           })
         }).catch((err) => {

@@ -6,7 +6,7 @@
           <svg-icon icon-class="shop" class-name="card-icon" />
           <div class="text">
             <p>基本信息</p>
-            <p>（未填写）</p>
+            <p v-if="userInfo.memberStatus === 2">（未填写）</p>
           </div>
         </div>
       </el-card>
@@ -37,12 +37,17 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   methods: {
     to(name) {
       console.log(name)
       this.$router.push({name})
     }
+  },
+  computed: {
+    ...mapGetters('user', ['userInfo'])
   }
 }
 </script>
