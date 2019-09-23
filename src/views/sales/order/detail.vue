@@ -24,7 +24,7 @@
         </el-button>
       </template>
       <el-button type="success" @click="generate"
-        v-else-if="action==='edit' && (status===300||status===400) && hasPermission">
+        v-else-if="action==='edit' && (status===300) && hasPermission">
         生成销售单
       </el-button>
     </template>
